@@ -8,15 +8,18 @@ jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   Version: '14.0',
 }));
 
-// Mock React Native Testing Library host component detection
+// Mock React Native Testing Library to avoid Platform.OS issues
 jest.mock('@testing-library/react-native', () => {
   const RTL = jest.requireActual('@testing-library/react-native');
   return {
     ...RTL,
-    // Override the host component detection to avoid Platform.OS issue
-    detectHostComponentNames: jest.fn(() => ({
-      hostComponentNames: new Set(['View', 'Text', 'TouchableOpacity', 'TextInput', 'ScrollView']),
-    })),
+    render: component => {
+      // Ensure Platform is available before rendering
+      if (!global.Platform) {
+        global.Platform = { OS: 'ios' };
+      }
+      return RTL.render(component);
+    },
   };
 });
 
