@@ -107,6 +107,9 @@ export const COLORS = {
   shadow: BASE_COLORS.blackTransparent30,
   shadowLight: BASE_COLORS.blackTransparent10,
   shadowDark: BASE_COLORS.blackTransparent50,
+
+  // Card Colors
+  card: BASE_COLORS.darkGray,
 } as const;
 
 // ========== GRADIENTS ==========

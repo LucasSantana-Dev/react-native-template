@@ -14,7 +14,6 @@ import { useThemeColors } from '@/context/theme-context';
 import { useFormData } from '@/hooks/use-form-data';
 import { isValidEmail } from '@/lib/utils/brazilian';
 
-
 // ========== LOGIN FORM TYPES ==========
 interface LoginForm {
   email: string;
@@ -43,13 +42,7 @@ export default function LoginScreen() {
   };
 
   // Form management
-  const {
-    formState,
-    setFieldValue,
-    setFieldTouched,
-    handleSubmit,
-    resetForm,
-  } = useFormData<LoginForm>({
+  const { formState, setFieldValue, setFieldTouched, handleSubmit } = useFormData<LoginForm>({
     initialValues: {
       email: '',
       password: '',
@@ -171,12 +164,7 @@ export default function LoginScreen() {
               Não tem uma conta?
             </Text>
 
-            <Button
-              variant="outline"
-              size="lg"
-              fullWidth
-              onPress={handleRegister}
-            >
+            <Button variant="outline" size="lg" fullWidth onPress={handleRegister}>
               Criar conta
             </Button>
           </Card.Body>

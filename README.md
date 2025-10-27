@@ -49,6 +49,15 @@ A modern, well-structured React Native template built with Expo, TypeScript, and
 - **Breakpoint System**: xs, sm, md, lg, xl breakpoints
 - **Device Detection**: Phone, tablet, desktop detection
 
+### ⚡ Performance Optimization
+
+- **Lazy Loading**: Screen and component-level code splitting with React.lazy()
+- **List Virtualization**: FlatList and FlashList for optimal scroll performance
+- **Image Optimization**: Progressive loading with blurhash placeholders
+- **Bundle Analysis**: Tools for monitoring and optimizing bundle size
+- **Memory Management**: Efficient resource cleanup and state management
+- **Performance Monitoring**: Real-time metrics tracking and profiling
+
 ### 🔧 Development Tools
 
 - **Git Hooks**: Pre-commit linting, commit message validation, pre-push type checking
@@ -136,6 +145,48 @@ A modern, well-structured React Native template built with Expo, TypeScript, and
    # Web browser
    npx expo start --web
    ```
+
+## ⚡ Performance Features
+
+### Lazy Loading Implementation
+
+This template includes comprehensive lazy loading strategies for optimal performance:
+
+- **Screen-level lazy loading** for heavy screens (Profile, Explore, Home)
+- **Component-level lazy loading** for feature-specific components
+- **Image lazy loading** with progressive loading and blurhash placeholders
+- **List virtualization** with FlatList and FlashList for large datasets
+
+### Performance Monitoring
+
+Built-in performance tracking and monitoring:
+
+```bash
+# Analyze bundle size
+npm run bundle:analyze
+
+# Get performance statistics
+npm run bundle:stats
+
+# Check file sizes
+npm run bundle:size
+
+# Run performance tests
+npm run test:performance
+```
+
+### Performance Targets
+
+- **Bundle Size**: < 2MB initial bundle
+- **Load Time**: < 2s Time to Interactive
+- **Memory Usage**: < 70MB average
+- **Scroll Performance**: 60 FPS on all lists
+
+For detailed performance optimization guides, see:
+
+- [Lazy Loading Guide](docs/performance/lazy-loading.md)
+- [Performance Optimization Guide](docs/performance/optimization-guide.md)
+- [Code Examples](docs/examples/lazy-loading-examples.tsx)
 
 ## 🏗️ Architecture Overview
 

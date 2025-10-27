@@ -58,7 +58,7 @@ export const DocumentationCard: React.FC = React.memo(() => {
       <Card.Body>
         <Text style={titleStyle}>📚 Documentação</Text>
         <View style={linkContainerStyle}>
-          {DOCUMENTATION_LINKS.map(link => (
+          {DOCUMENTATION_LINKS.map((link) => (
             <Button
               key={link.title}
               variant="ghost"
@@ -78,5 +78,7 @@ export const DocumentationCard: React.FC = React.memo(() => {
     </Card>
   );
 });
+
+export default DocumentationCard;
 
 DocumentationCard.displayName = 'DocumentationCard';

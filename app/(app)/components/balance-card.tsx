@@ -44,22 +44,10 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({ balance, onInvest, onT
             gap: 12,
           }}
         >
-          <Button
-            variant="outline"
-            size="md"
-            icon="📈"
-            onPress={onInvest}
-            style={{ flex: 1 }}
-          >
+          <Button variant="outline" size="md" icon="📈" onPress={onInvest} style={{ flex: 1 }}>
             Investir
           </Button>
-          <Button
-            variant="outline"
-            size="md"
-            icon="💸"
-            onPress={onTransfer}
-            style={{ flex: 1 }}
-          >
+          <Button variant="outline" size="md" icon="💸" onPress={onTransfer} style={{ flex: 1 }}>
             Transferir
           </Button>
         </View>
@@ -67,3 +55,5 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({ balance, onInvest, onT
     </Card>
   );
 };
+
+export default BalanceCard;

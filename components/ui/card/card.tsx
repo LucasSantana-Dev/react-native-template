@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 
-import {
-    TouchableOpacity,
-    View,
-    ViewStyle,
-} from 'react-native';
+import { TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { getCardStyles, getPressableCardStyles } from './styles';
 import { CardProps } from './types';
@@ -31,7 +27,7 @@ import { CardProps } from './types';
  * </Card>
  * ```
  */
-export const Card: React.FC<CardProps> = ({
+const CardComponent: React.FC<CardProps> = ({
   children,
   variant = 'elevated',
   size = 'md',
@@ -71,26 +67,10 @@ export const Card: React.FC<CardProps> = ({
     if (header || body || footer) {
       return (
         <>
-          {header && (
-            <View style={cardStyles.header}>
-              {header}
-            </View>
-          )}
-          {body && (
-            <View style={cardStyles.body}>
-              {body}
-            </View>
-          )}
-          {children && (
-            <View style={cardStyles.body}>
-              {children}
-            </View>
-          )}
-          {footer && (
-            <View style={cardStyles.footer}>
-              {footer}
-            </View>
-          )}
+          {header && <View style={cardStyles.header}>{header}</View>}
+          {body && <View style={cardStyles.body}>{body}</View>}
+          {children && <View style={cardStyles.body}>{children}</View>}
+          {footer && <View style={cardStyles.footer}>{footer}</View>}
         </>
       );
     }
@@ -103,11 +83,7 @@ export const Card: React.FC<CardProps> = ({
 
   return (
     <CardContainer
-      style={[
-        cardStyles.card,
-        pressableStyles.card,
-        style,
-      ]}
+      style={[cardStyles.card, (pressableStyles as any).card || {}, style]}
       onPress={handlePress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
@@ -125,30 +101,18 @@ export const Card: React.FC<CardProps> = ({
 // ========== CARD SECTIONS ==========
 export const CardHeader: React.FC<{ children: React.ReactNode; style?: ViewStyle }> = ({
   children,
-  style
-}) => (
-  <View style={style}>
-    {children}
-  </View>
-);
+  style,
+}) => <View style={style}>{children}</View>;
 
 export const CardBody: React.FC<{ children: React.ReactNode; style?: ViewStyle }> = ({
   children,
-  style
-}) => (
-  <View style={style}>
-    {children}
-  </View>
-);
+  style,
+}) => <View style={style}>{children}</View>;
 
 export const CardFooter: React.FC<{ children: React.ReactNode; style?: ViewStyle }> = ({
   children,
-  style
-}) => (
-  <View style={style}>
-    {children}
-  </View>
-);
+  style,
+}) => <View style={style}>{children}</View>;
 
 // Create compound component type
 interface CardComponent extends React.FC<CardProps> {
@@ -158,7 +122,7 @@ interface CardComponent extends React.FC<CardProps> {
 }
 
 // Attach sections to main component and cast to compound type
-const CardWithSections = Card as CardComponent;
+const CardWithSections = CardComponent as CardComponent;
 CardWithSections.Header = CardHeader;
 CardWithSections.Body = CardBody;
 CardWithSections.Footer = CardFooter;

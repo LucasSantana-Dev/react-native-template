@@ -159,7 +159,7 @@ export function useScreenSize() {
   const { dimensions } = useScreenDimensions();
 
   const getScreenSize = () => {
-    const { width, height } = dimensions;
+    const { width, height: _height } = dimensions;
 
     if (width < 320) return 'small';
     if (width < 375) return 'medium';

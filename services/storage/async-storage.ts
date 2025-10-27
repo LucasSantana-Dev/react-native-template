@@ -74,10 +74,9 @@ export class StorageService {
   // Set multiple items
   static async setMultiple(items: Record<StorageKeys, any>): Promise<boolean> {
     try {
-      const entries = Object.entries(items).map(([key, value]) => [
-        key,
-        JSON.stringify(value),
-      ]);
+      const entries = Object.entries(items).map(
+        ([key, value]) => [key, JSON.stringify(value)] as [string, string]
+      );
 
       await AsyncStorage.multiSet(entries);
       return true;
@@ -102,12 +101,10 @@ export const storage = {
 
   // Theme
   getThemeMode: () => StorageService.getItem<'light' | 'dark'>(StorageKeys.THEME_MODE),
-  setThemeMode: (mode: 'light' | 'dark') =>
-    StorageService.setItem(StorageKeys.THEME_MODE, mode),
+  setThemeMode: (mode: 'light' | 'dark') => StorageService.setItem(StorageKeys.THEME_MODE, mode),
 
   // Onboarding
-  isOnboardingCompleted: () =>
-    StorageService.getItem<boolean>(StorageKeys.ONBOARDING_COMPLETED),
+  isOnboardingCompleted: () => StorageService.getItem<boolean>(StorageKeys.ONBOARDING_COMPLETED),
   setOnboardingCompleted: (completed: boolean) =>
     StorageService.setItem(StorageKeys.ONBOARDING_COMPLETED, completed),
 };

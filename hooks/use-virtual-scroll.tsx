@@ -259,7 +259,10 @@ export const useInfiniteScroll = <T extends Record<string, any>>({
 
   const { flatListProps } = useVirtualScroll({
     data,
-    renderItem: ({ item: _item }) => <Text>{JSON.stringify(_item)}</Text>, // Placeholder
+    renderItem: ({ item: _item }) => {
+      // This is a placeholder - in real usage, this would be a proper component
+      return null;
+    },
     keyExtractor: (_item, index) => `item-${index}`,
   });
 

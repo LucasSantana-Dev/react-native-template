@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 import { useThemeColors } from '@/context/theme-context';
 
@@ -79,7 +79,7 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({
         }}
       >
         {isTablet ? (
-          actions.map(action => (
+          actions.map((action) => (
             <View key={action.id} style={{ flex: 1 }}>
               <ActionItem action={action} />
             </View>
@@ -92,7 +92,7 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({
               gap: 12,
             }}
           >
-            {actions.map(action => (
+            {actions.map((action) => (
               <View key={action.id} style={{ width: '48%' }}>
                 <ActionItem action={action} />
               </View>
@@ -103,3 +103,5 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({
     </View>
   );
 };
+
+export default QuickActionsGrid;

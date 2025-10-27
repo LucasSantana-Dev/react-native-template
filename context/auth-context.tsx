@@ -107,12 +107,12 @@ export function AuthProvider({
       const mockUser: User = {
         id: '1',
         email: credentials.email,
-        name: credentials.email.split('@')[0],
+        name: credentials.email.split('@')[0] || 'User',
         avatar: undefined,
       };
 
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Validate credentials (mock validation)
       if (credentials.email && credentials.password) {
@@ -139,7 +139,7 @@ export function AuthProvider({
 
       // TODO: Replace with actual API call
       // This is a mock implementation
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
       setUser(null);
       setSigned(false);
@@ -179,11 +179,7 @@ export function AuthProvider({
     clearAuth,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 // ========== AUTH HOOK ==========

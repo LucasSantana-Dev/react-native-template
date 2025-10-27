@@ -57,13 +57,13 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  const handleLoad = (event: any) => {
+  const handleLoad = (event: ImageProps['onLoad']) => {
     setIsLoading(false);
     setHasError(false);
     onLoad?.(event);
   };
 
-  const handleError = (event: any) => {
+  const handleError = (event: ImageProps['onError']) => {
     setIsLoading(false);
     setHasError(true);
     onError?.(event);
@@ -151,7 +151,7 @@ export const AvatarImage: React.FC<{
   source?: { uri: string } | number;
   size?: number;
   fallback?: string;
-  style?: any;
+  style?: ImageProps['style'];
 }> = ({ source, size = 60, fallback = '👤', style }) => {
   const colors = useThemeColors();
   const [hasError, setHasError] = useState(false);
@@ -216,7 +216,7 @@ export const HeroImage: React.FC<{
   source: { uri: string } | number;
   height?: number;
   title?: string;
-  style?: any;
+  style?: ImageProps['style'];
 }> = ({ source, height = 200, title, style }) => {
   return (
     <View style={[{ position: 'relative' }, style]}>

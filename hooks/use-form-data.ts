@@ -288,7 +288,6 @@ export function useFormData<T extends Record<string, any>>({
 
   // Computed form state
   const formState = useMemo((): FormState<T> => {
-    const values = getCurrentValues();
     const errors: Record<keyof T, string | undefined> = {} as Record<keyof T, string | undefined>;
     let isValid = true;
     let isDirty = false;

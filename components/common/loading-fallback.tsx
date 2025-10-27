@@ -177,7 +177,7 @@ export const SkeletonLoader: React.FC<{
     <View
       style={{
         height,
-        width: width as any,
+            width: width as number | string,
         backgroundColor: colors.surface,
         borderRadius,
         opacity: 0.6,

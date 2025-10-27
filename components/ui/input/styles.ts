@@ -53,6 +53,9 @@ export const getInputSizeStyles = (): InputSizeStyles => ({
       fontSize: theme.typography.fontSize.sm,
       lineHeight: theme.typography.lineHeight.sm,
     },
+    icon: {
+      fontSize: 16,
+    },
   },
   md: {
     inputContainer: {
@@ -67,6 +70,9 @@ export const getInputSizeStyles = (): InputSizeStyles => ({
     label: {
       fontSize: theme.typography.fontSize.md,
       lineHeight: theme.typography.lineHeight.md,
+    },
+    icon: {
+      fontSize: 18,
     },
   },
   lg: {
@@ -83,6 +89,9 @@ export const getInputSizeStyles = (): InputSizeStyles => ({
       fontSize: theme.typography.fontSize.lg,
       lineHeight: theme.typography.lineHeight.lg,
     },
+    icon: {
+      fontSize: 20,
+    },
   },
 });
 
@@ -95,6 +104,9 @@ export const getInputStateStyles = (): InputStateStyles => ({
     input: {
       color: theme.colors.text,
     },
+    label: {
+      color: theme.colors.text,
+    },
   },
   focused: {
     inputContainer: {
@@ -104,6 +116,9 @@ export const getInputStateStyles = (): InputStateStyles => ({
     input: {
       color: theme.colors.text,
     },
+    label: {
+      color: theme.colors.primary,
+    },
   },
   error: {
     inputContainer: {
@@ -111,6 +126,9 @@ export const getInputStateStyles = (): InputStateStyles => ({
     },
     input: {
       color: theme.colors.text,
+    },
+    label: {
+      color: theme.colors.error,
     },
   },
   disabled: {
@@ -120,6 +138,9 @@ export const getInputStateStyles = (): InputStateStyles => ({
       opacity: 0.6,
     },
     input: {
+      color: theme.colors.textDisabled,
+    },
+    label: {
       color: theme.colors.textDisabled,
     },
   },

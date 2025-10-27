@@ -1,9 +1,4 @@
-import {
-    ButtonSizeStyles,
-    ButtonStateStyles,
-    ButtonVariantStyles,
-    IconConfig
-} from './types';
+import { ButtonSizeStyles, ButtonStateStyles, ButtonVariantStyles, IconConfig } from './types';
 
 import { theme } from '@/config/theme';
 
@@ -145,7 +140,7 @@ export const getButtonStyles = (
       ...variantStyle.button,
       ...sizeStyle.button,
       ...stateStyle.button,
-      ...(fullWidth && { width: '100%' }),
+      ...(fullWidth && { width: '100%' as const }),
       borderRadius: theme.borderRadius.md,
       alignItems: 'center' as const,
       justifyContent: 'center' as const,

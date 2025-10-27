@@ -79,7 +79,7 @@ export const useLazyLoadOnView = (
       { threshold, rootMargin }
     );
 
-    observer.observe(element as any);
+    observer.observe(element as Element);
 
     return () => observer.disconnect();
   }, [threshold, rootMargin]);

@@ -62,4 +62,6 @@ export const WelcomeCard: React.FC = React.memo(() => {
   );
 });
 
+export default WelcomeCard;
+
 WelcomeCard.displayName = 'WelcomeCard';

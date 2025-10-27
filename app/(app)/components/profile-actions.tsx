@@ -46,3 +46,5 @@ export const ProfileActions: React.FC<ProfileActionsProps> = ({
     </Card>
   );
 };
+
+export default ProfileActions;

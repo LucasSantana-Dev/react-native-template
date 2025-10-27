@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 import { TransactionItem } from './transaction-item';
 
@@ -78,7 +78,7 @@ export const RecentTransactions: React.FC<RecentTransactionsProps> = ({
             Nenhuma transação encontrada
           </Text>
         ) : (
-          transactions.map(transaction => (
+          transactions.map((transaction) => (
             <TransactionItem key={transaction.id} transaction={transaction} />
           ))
         )}
@@ -86,3 +86,5 @@ export const RecentTransactions: React.FC<RecentTransactionsProps> = ({
     </View>
   );
 };
+
+export default RecentTransactions;

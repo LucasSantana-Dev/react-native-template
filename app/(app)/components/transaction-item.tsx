@@ -65,3 +65,5 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({ transaction })
     </View>
   );
 };
+
+export default TransactionItem;

@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-    RefreshControl,
-    RefreshControlProps,
-    ScrollView,
-    ScrollViewProps,
-    ViewStyle,
-} from 'react-native';
+import { RefreshControlProps, ScrollView, ScrollViewProps, ViewStyle } from 'react-native';
 
 import { useThemeColors } from '@/context/theme-context';
 

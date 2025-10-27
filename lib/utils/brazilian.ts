@@ -222,21 +222,29 @@ export function validateCNPJ(cnpj: string): boolean {
   // First check digit
   const weights1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
   for (let i = 0; i < 12; i++) {
-    sum += parseInt(cleaned[i]) * weights1[i];
+    const digit = cleaned[i];
+    const weight = weights1[i];
+    if (digit && weight && !isNaN(parseInt(digit))) {
+      sum += parseInt(digit!) * weight;
+    }
   }
   remainder = sum % 11;
   const firstDigit = remainder < 2 ? 0 : 11 - remainder;
-  if (firstDigit !== parseInt(cleaned[12])) return false;
+  if (firstDigit !== parseInt(cleaned[12] || '0')) return false;
 
   // Second check digit
   sum = 0;
   const weights2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
   for (let i = 0; i < 13; i++) {
-    sum += parseInt(cleaned[i]) * weights2[i];
+    const digit = cleaned[i];
+    const weight = weights2[i];
+    if (digit && weight && !isNaN(parseInt(digit))) {
+      sum += parseInt(digit!) * weight;
+    }
   }
   remainder = sum % 11;
   const secondDigit = remainder < 2 ? 0 : 11 - remainder;
-  if (secondDigit !== parseInt(cleaned[13])) return false;
+  if (secondDigit !== parseInt(cleaned[13] || '0')) return false;
 
   return true;
 }
@@ -336,13 +344,17 @@ export function validatePIS(pis: string): boolean {
   let sum = 0;
 
   for (let i = 0; i < 10; i++) {
-    sum += parseInt(cleaned[i]) * weights[i];
+    const digit = cleaned[i];
+    const weight = weights[i];
+    if (digit && weight && !isNaN(parseInt(digit))) {
+      sum += parseInt(digit!) * weight;
+    }
   }
 
   const remainder = sum % 11;
   const checkDigit = remainder < 2 ? 0 : 11 - remainder;
 
-  return checkDigit === parseInt(cleaned[10]);
+  return checkDigit === parseInt(cleaned[10] || '0');
 }
 
 // ========== UTILITY FUNCTIONS ==========

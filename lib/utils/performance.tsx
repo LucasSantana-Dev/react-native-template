@@ -406,7 +406,7 @@ export const PerformanceOverlay: React.FC<{
  * console.log(`Average: ${results.average}ms`);
  * ```
  */
-export const benchmark = async <T extends any>(
+export const benchmark = async <T>(
   name: string,
   fn: () => T | Promise<T>,
   iterations: number = 1

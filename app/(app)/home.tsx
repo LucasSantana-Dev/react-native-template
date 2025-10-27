@@ -14,11 +14,10 @@ import { useScreenDimensions } from '@/hooks/use-screen-dimensions';
 import { formatBRL } from '@/lib/utils/currency';
 import { formatRelative as formatRelativeDate } from '@/lib/utils/date';
 
-
 // ========== HOME SCREEN ==========
 export default function HomeScreen() {
   const router = useRouter();
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
   const colors = useThemeColors();
   const { isTablet } = useScreenDimensions();
   const [refreshing, setRefreshing] = useState(false);
@@ -28,8 +27,20 @@ export default function HomeScreen() {
     balance: 1250.75,
     transactions: [
       { id: '1', title: 'Salário', amount: 3000, date: new Date(), type: 'income' },
-      { id: '2', title: 'Compras', amount: -150.50, date: new Date(Date.now() - 86400000), type: 'expense' },
-      { id: '3', title: 'Transferência', amount: 500, date: new Date(Date.now() - 172800000), type: 'income' },
+      {
+        id: '2',
+        title: 'Compras',
+        amount: -150.5,
+        date: new Date(Date.now() - 86400000),
+        type: 'expense',
+      },
+      {
+        id: '3',
+        title: 'Transferência',
+        amount: 500,
+        date: new Date(Date.now() - 172800000),
+        type: 'income',
+      },
     ],
     quickActions: [
       { id: '1', title: 'Transferir', icon: '💸', color: colors.primary },
@@ -43,7 +54,7 @@ export default function HomeScreen() {
   const handleRefresh = async () => {
     setRefreshing(true);
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setRefreshing(false);
   };
 
@@ -65,12 +76,7 @@ export default function HomeScreen() {
         title="Olá, {user?.name || 'Usuário'}"
         subtitle="Bem-vindo de volta!"
         rightAction={
-          <Button
-            variant="ghost"
-            size="sm"
-            onPress={handleSignOut}
-            icon="🚪"
-          >
+          <Button variant="ghost" size="sm" onPress={handleSignOut} icon="🚪">
             Sair
           </Button>
         }
@@ -228,7 +234,8 @@ export default function HomeScreen() {
                     color: transaction.type === 'income' ? colors.success : colors.error,
                   }}
                 >
-                  {transaction.type === 'income' ? '+' : ''}{formatBRL(transaction.amount)}
+                  {transaction.type === 'income' ? '+' : ''}
+                  {formatBRL(transaction.amount)}
                 </Text>
               </View>
             ))}

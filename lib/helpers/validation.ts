@@ -11,7 +11,9 @@ export const isValidPhone = (phone: string): boolean => {
 };
 
 // Password validation
-export const isValidPassword = (password: string): {
+export const isValidPassword = (
+  password: string
+): {
   isValid: boolean;
   errors: string[];
 } => {
@@ -65,7 +67,7 @@ export const isValidCreditCard = (cardNumber: string): boolean => {
   let isEven = false;
 
   for (let i = cleaned.length - 1; i >= 0; i--) {
-    let digit = parseInt(cleaned[i]);
+    let digit = parseInt(cleaned[i] || '0');
 
     if (isEven) {
       digit *= 2;
@@ -104,7 +106,8 @@ export const validateForm = <T extends Record<string, any>>(
 
 // Common validation rules
 export const validationRules = {
-  required: (message = 'This field is required') =>
+  required:
+    (message = 'This field is required') =>
     (value: any) => {
       if (value === null || value === undefined || value === '') {
         return message;
@@ -112,23 +115,22 @@ export const validationRules = {
       return null;
     },
 
-  minLength: (min: number, message?: string) =>
-    (value: string) => {
-      if (value && value.length < min) {
-        return message || `Must be at least ${min} characters long`;
-      }
-      return null;
-    },
+  minLength: (min: number, message?: string) => (value: string) => {
+    if (value && value.length < min) {
+      return message || `Must be at least ${min} characters long`;
+    }
+    return null;
+  },
 
-  maxLength: (max: number, message?: string) =>
-    (value: string) => {
-      if (value && value.length > max) {
-        return message || `Must be no more than ${max} characters long`;
-      }
-      return null;
-    },
+  maxLength: (max: number, message?: string) => (value: string) => {
+    if (value && value.length > max) {
+      return message || `Must be no more than ${max} characters long`;
+    }
+    return null;
+  },
 
-  email: (message = 'Please enter a valid email address') =>
+  email:
+    (message = 'Please enter a valid email address') =>
     (value: string) => {
       if (value && !isValidEmail(value)) {
         return message;
@@ -136,7 +138,8 @@ export const validationRules = {
       return null;
     },
 
-  phone: (message = 'Please enter a valid phone number') =>
+  phone:
+    (message = 'Please enter a valid phone number') =>
     (value: string) => {
       if (value && !isValidPhone(value)) {
         return message;
@@ -144,7 +147,8 @@ export const validationRules = {
       return null;
     },
 
-  url: (message = 'Please enter a valid URL') =>
+  url:
+    (message = 'Please enter a valid URL') =>
     (value: string) => {
       if (value && !isValidUrl(value)) {
         return message;
@@ -152,7 +156,8 @@ export const validationRules = {
       return null;
     },
 
-  numeric: (message = 'Must be a number') =>
+  numeric:
+    (message = 'Must be a number') =>
     (value: any) => {
       if (value && isNaN(Number(value))) {
         return message;
@@ -160,22 +165,24 @@ export const validationRules = {
       return null;
     },
 
-  min: (min: number, message?: string) =>
-    (value: number) => {
-      if (value !== undefined && value < min) {
-        return message || `Must be at least ${min}`;
-      }
-      return null;
-    },
+  min: (min: number, message?: string) => (value: number) => {
+    if (value !== undefined && value < min) {
+      return message || `Must be at least ${min}`;
+    }
+    return null;
+  },
 
-  max: (max: number, message?: string) =>
-    (value: number) => {
-      if (value !== undefined && value > max) {
-        return message || `Must be no more than ${max}`;
-      }
-      return null;
-    },
+  max: (max: number, message?: string) => (value: number) => {
+    if (value !== undefined && value > max) {
+      return message || `Must be no more than ${max}`;
+    }
+    return null;
+  },
 };
+
+// Re-export utility functions for convenience
+export { formatCPF, validateCPF } from '../utils/cpf';
+export { formatPhone } from '../utils/phone';
 
 // Sanitization helpers
 export const sanitize = {
@@ -194,7 +201,7 @@ export const sanitize = {
       "'": '&#39;',
     };
 
-    return text.replace(/[&<>"']/g, (m) => map[m]);
+    return text.replace(/[&<>"']/g, (m) => map[m] || m);
   },
 
   // Trim and clean whitespace
