@@ -1,6 +1,9 @@
 # lint-staged Guide
 
-lint-staged is a tool that runs linters on staged files in your Git repository. It ensures that only high-quality, properly formatted code is committed to your repository by running linting and formatting tools on the files you're about to commit.
+lint-staged is a tool that runs linters on staged files in your Git repository.
+It ensures that only high-quality, properly formatted code is committed to your
+repository by running linting and formatting tools on the files you're about to
+commit.
 
 ## ⚙️ Configuration
 
@@ -241,4 +244,6 @@ Run multiple commands in parallel for better performance.
 }
 ```
 
-Remember: lint-staged is a tool to help maintain code quality. Use it as part of your development workflow to ensure all committed code meets your project's standards.
+Remember: lint-staged is a tool to help maintain code quality. Use it as part of
+your development workflow to ensure all committed code meets your project's
+standards.

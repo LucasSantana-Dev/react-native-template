@@ -1,6 +1,10 @@
 # Prettier Guide
 
-Prettier is an opinionated code formatter that enforces a consistent code style across your project. It automatically formats your code according to predefined rules, eliminating debates about code style and ensuring consistency across the entire codebase. This guide explains the Prettier setup in this template and how to use it effectively.
+Prettier is an opinionated code formatter that enforces a consistent code style
+across your project. It automatically formats your code according to predefined
+rules, eliminating debates about code style and ensuring consistency across the
+entire codebase. This guide explains the Prettier setup in this template and how
+to use it effectively.
 
 ## ⚙️ Configuration
 
@@ -183,7 +187,7 @@ const veryLongVariableName = someVeryLongFunctionCall(
   parameter2,
   parameter3,
   parameter4,
-  parameter5
+  parameter5,
 );
 
 // ✅ Good - Wrapped at 80 characters
@@ -192,7 +196,7 @@ const veryLongVariableName = someVeryLongFunctionCall(
   parameter2,
   parameter3,
   parameter4,
-  parameter5
+  parameter5,
 );
 ```
 
@@ -270,7 +274,8 @@ const obj = { name: 'John', age: 30 };
 
 #### `bracketSameLine: false`
 
-Put the `>` of a multi-line JSX element at the end of the last line instead of being alone on the next line.
+Put the `>` of a multi-line JSX element at the end of the last line instead of
+being alone on the next line.
 
 ```typescript
 // ❌ Bad
@@ -300,11 +305,11 @@ Omit parentheses when possible for arrow functions.
 
 ```typescript
 // ❌ Bad
-const double = (x) => x * 2;
+const double = x => x * 2;
 const add = (a, b) => a + b;
 
 // ✅ Good
-const double = (x) => x * 2;
+const double = x => x * 2;
 const add = (a, b) => a + b; // Parentheses required for multiple parameters
 ```
 
@@ -312,7 +317,8 @@ const add = (a, b) => a + b; // Parentheses required for multiple parameters
 
 #### `endOfLine: "lf"`
 
-Use LF (Line Feed) characters for line endings, which is the standard for Unix/Linux/macOS.
+Use LF (Line Feed) characters for line endings, which is the standard for
+Unix/Linux/macOS.
 
 ```typescript
 // ❌ Bad - CRLF (Windows style)
@@ -395,7 +401,8 @@ const obj = {
 
 ### 1. Consistent Code Style
 
-Prettier automatically enforces consistent code style, eliminating style debates and ensuring all team members write code in the same format.
+Prettier automatically enforces consistent code style, eliminating style debates
+and ensuring all team members write code in the same format.
 
 ```typescript
 // Before Prettier - Inconsistent style
@@ -409,7 +416,8 @@ const users = ['Alice', 'Bob', 'Charlie'];
 
 ### 2. Automatic Formatting
 
-Set up your editor to format code automatically on save, ensuring consistent formatting without manual intervention.
+Set up your editor to format code automatically on save, ensuring consistent
+formatting without manual intervention.
 
 ```typescript
 // VS Code settings.json
@@ -421,7 +429,8 @@ Set up your editor to format code automatically on save, ensuring consistent for
 
 ### 3. Integration with ESLint
 
-Use Prettier alongside ESLint for comprehensive code quality. Prettier handles formatting, while ESLint handles code quality and best practices.
+Use Prettier alongside ESLint for comprehensive code quality. Prettier handles
+formatting, while ESLint handles code quality and best practices.
 
 ```json
 // .eslintrc.js
@@ -451,9 +460,11 @@ Use pre-commit hooks to ensure all committed code is properly formatted.
 
 ### Prettier Conflicts with ESLint
 
-**Problem**: Prettier and ESLint have conflicting rules, causing formatting issues.
+**Problem**: Prettier and ESLint have conflicting rules, causing formatting
+issues.
 
-**Solution**: Use `eslint-config-prettier` to disable ESLint rules that conflict with Prettier.
+**Solution**: Use `eslint-config-prettier` to disable ESLint rules that conflict
+with Prettier.
 
 ```bash
 npm install --save-dev eslint-config-prettier
@@ -469,9 +480,11 @@ export default [
 
 ### Inconsistent Line Endings
 
-**Problem**: Different line endings (LF vs CRLF) causing issues across different operating systems.
+**Problem**: Different line endings (LF vs CRLF) causing issues across different
+operating systems.
 
-**Solution**: Configure Prettier to use consistent line endings and add a `.gitattributes` file.
+**Solution**: Configure Prettier to use consistent line endings and add a
+`.gitattributes` file.
 
 ```json
 // .prettierrc.json
@@ -489,7 +502,8 @@ export default [
 
 **Problem**: Prettier takes too long to format large files.
 
-**Solution**: Add large files to `.prettierignore` or split them into smaller files.
+**Solution**: Add large files to `.prettierignore` or split them into smaller
+files.
 
 ```gitignore
 # .prettierignore
@@ -500,7 +514,8 @@ large-generated-file.js
 
 **Problem**: JSX elements not formatting correctly.
 
-**Solution**: Ensure you have the correct Prettier configuration for JSX and that your file has the correct extension (`.tsx` for TypeScript JSX).
+**Solution**: Ensure you have the correct Prettier configuration for JSX and
+that your file has the correct extension (`.tsx` for TypeScript JSX).
 
 ```typescript
 // Ensure file is named .tsx for TypeScript JSX
@@ -589,7 +604,8 @@ jobs:
 For large codebases, consider:
 
 1. **Incremental formatting**: Only format changed files
-2. **Parallel processing**: Use tools like `prettier --write .` with parallel processing
+2. **Parallel processing**: Use tools like `prettier --write .` with parallel
+   processing
 3. **Selective formatting**: Use `.prettierignore` to exclude generated files
 
 ```bash
@@ -605,7 +621,8 @@ npx prettier --check "src/**/*.{ts,tsx}"
 
 ### CI/CD Integration
 
-Include Prettier checks in your CI/CD pipeline to ensure all code is properly formatted.
+Include Prettier checks in your CI/CD pipeline to ensure all code is properly
+formatted.
 
 ```yaml
 # .github/workflows/format.yml
@@ -628,4 +645,6 @@ jobs:
         run: npm run format:write
 ```
 
-Remember: Prettier is a tool to help you maintain consistent code style. Use it as part of your development workflow to ensure all code is properly formatted and readable.
+Remember: Prettier is a tool to help you maintain consistent code style. Use it
+as part of your development workflow to ensure all code is properly formatted
+and readable.

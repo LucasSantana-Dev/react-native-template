@@ -73,7 +73,7 @@ export const DocumentationCard: React.FC = React.memo(() => {
                   <Text style={linkDescriptionStyle}>{link.description}</Text>
                 </View>
               </Button>
-            )
+            ),
           )}
         </View>
       </Card.Body>

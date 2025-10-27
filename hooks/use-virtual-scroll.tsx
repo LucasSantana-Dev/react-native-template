@@ -69,7 +69,7 @@ export const useVirtualScroll = <T extends Record<string, any>>({
         index,
       };
     },
-    [estimatedItemSize]
+    [estimatedItemSize],
   );
 
   // Optimized render item with memoization
@@ -77,7 +77,7 @@ export const useVirtualScroll = <T extends Record<string, any>>({
     (info: { item: T; index: number; separators: any }) => {
       return renderItem(info);
     },
-    [renderItem]
+    [renderItem],
   );
 
   // Scroll to specific index
@@ -97,7 +97,7 @@ export const useVirtualScroll = <T extends Record<string, any>>({
     (animated: boolean = true) => {
       scrollToOffset(0, animated);
     },
-    [scrollToOffset]
+    [scrollToOffset],
   );
 
   // Scroll to bottom
@@ -106,7 +106,7 @@ export const useVirtualScroll = <T extends Record<string, any>>({
       const totalHeight = data.length * estimatedItemSize;
       scrollToOffset(totalHeight, animated);
     },
-    [data.length, estimatedItemSize, scrollToOffset]
+    [data.length, estimatedItemSize, scrollToOffset],
   );
 
   // Handle scroll events
@@ -167,7 +167,7 @@ export const useVirtualScroll = <T extends Record<string, any>>({
       handleScrollBeginDrag,
       handleScrollEndDrag,
       persistenceKey,
-    ]
+    ],
   );
 
   return {
@@ -230,7 +230,7 @@ export const useInfiniteScroll = <T extends Record<string, any>>({
         const newData = await fetchData(page, pageSize);
 
         if (append) {
-          setData((prev) => [...prev, ...newData]);
+          setData(prev => [...prev, ...newData]);
         } else {
           setData(newData);
         }
@@ -244,7 +244,7 @@ export const useInfiniteScroll = <T extends Record<string, any>>({
         setIsLoadingMore(false);
       }
     },
-    [fetchData, pageSize]
+    [fetchData, pageSize],
   );
 
   const loadMore = useCallback(() => {
@@ -310,7 +310,7 @@ export const useScrollPersistence = (key: string) => {
       // In a real implementation, you would save to AsyncStorage
       // AsyncStorage.setItem(`scroll-${key}`, offsetY.toString());
     },
-    [key]
+    [key],
   );
 
   const restoreScrollPosition = useCallback(async () => {

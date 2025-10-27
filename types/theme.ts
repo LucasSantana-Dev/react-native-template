@@ -96,11 +96,11 @@ export interface Typography {
     bold: string;
   };
   fontSize: {
-    xs: number;
-    sm: number;
-    md: number;
-    lg: number;
-    xl: number;
+    'xs': number;
+    'sm': number;
+    'md': number;
+    'lg': number;
+    'xl': number;
     '2xl': number;
     '3xl': number;
     '4xl': number;
@@ -108,11 +108,11 @@ export interface Typography {
     '6xl': number;
   };
   lineHeight: {
-    xs: number;
-    sm: number;
-    md: number;
-    lg: number;
-    xl: number;
+    'xs': number;
+    'sm': number;
+    'md': number;
+    'lg': number;
+    'xl': number;
     '2xl': number;
     '3xl': number;
     '4xl': number;
@@ -129,11 +129,11 @@ export interface Typography {
 
 // ========== SPACING ==========
 export interface Spacing {
-  xs: number;
-  sm: number;
-  md: number;
-  lg: number;
-  xl: number;
+  'xs': number;
+  'sm': number;
+  'md': number;
+  'lg': number;
+  'xl': number;
   '2xl': number;
   '3xl': number;
   '4xl': number;
@@ -143,15 +143,15 @@ export interface Spacing {
 
 // ========== BORDER RADIUS ==========
 export interface BorderRadius {
-  none: number;
-  xs: number;
-  sm: number;
-  md: number;
-  lg: number;
-  xl: number;
+  'none': number;
+  'xs': number;
+  'sm': number;
+  'md': number;
+  'lg': number;
+  'xl': number;
   '2xl': number;
   '3xl': number;
-  full: number;
+  'full': number;
 }
 
 // ========== SHADOWS ==========

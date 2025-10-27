@@ -1,10 +1,13 @@
 # Accessibility Guide
 
-This guide covers accessibility implementation, testing, and best practices for the React Native template.
+This guide covers accessibility implementation, testing, and best practices for
+the React Native template.
 
 ## 🎯 Overview
 
-Accessibility ensures your app is usable by people with disabilities, including those with visual, motor, cognitive, and hearing impairments. This guide covers implementation using React Native's accessibility APIs and best practices.
+Accessibility ensures your app is usable by people with disabilities, including
+those with visual, motor, cognitive, and hearing impairments. This guide covers
+implementation using React Native's accessibility APIs and best practices.
 
 ## 🛠️ Tools and Technologies
 
@@ -244,9 +247,13 @@ export class ColorContrast {
       : { r: 0, g: 0, b: 0 };
   }
 
-  private static getRelativeLuminance(rgb: { r: number; g: number; b: number }): number {
+  private static getRelativeLuminance(rgb: {
+    r: number;
+    g: number;
+    b: number;
+  }): number {
     const { r, g, b } = rgb;
-    const [rs, gs, bs] = [r, g, b].map((c) => {
+    const [rs, gs, bs] = [r, g, b].map(c => {
       c = c / 255;
       return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
     });
@@ -467,7 +474,7 @@ export const useFocusManagement = () => {
 
   const focusNext = useCallback(() => {
     const currentIndex = focusableElements.current.findIndex(
-      (element) => document.activeElement === element
+      element => document.activeElement === element,
     );
     const nextIndex = (currentIndex + 1) % focusableElements.current.length;
     focusableElements.current[nextIndex]?.focus();
@@ -475,10 +482,12 @@ export const useFocusManagement = () => {
 
   const focusPrevious = useCallback(() => {
     const currentIndex = focusableElements.current.findIndex(
-      (element) => document.activeElement === element
+      element => document.activeElement === element,
     );
     const previousIndex =
-      currentIndex === 0 ? focusableElements.current.length - 1 : currentIndex - 1;
+      currentIndex === 0
+        ? focusableElements.current.length - 1
+        : currentIndex - 1;
     focusableElements.current[previousIndex]?.focus();
   }, []);
 
@@ -610,7 +619,7 @@ export const testColorContrast = () => {
     const isAccessible = ColorContrast.isAccessible(contrast, 'AA');
 
     console.log(
-      `${foreground} on ${background}: ${contrast.toFixed(2)}:1 (${isAccessible ? 'PASS' : 'FAIL'})`
+      `${foreground} on ${background}: ${contrast.toFixed(2)}:1 (${isAccessible ? 'PASS' : 'FAIL'})`,
     );
   });
 };
@@ -806,4 +815,6 @@ const styles = StyleSheet.create({
 - Don't ignore user feedback
 - Don't forget to update accessibility as you add features
 
-Remember: Accessibility is not just about compliance—it's about creating inclusive experiences that work for everyone. Focus on making your app usable by people with diverse abilities and needs.
+Remember: Accessibility is not just about compliance—it's about creating
+inclusive experiences that work for everyone. Focus on making your app usable by
+people with diverse abilities and needs.

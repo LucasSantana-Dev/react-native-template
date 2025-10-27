@@ -60,7 +60,7 @@ export default function HomeScreen() {
   const handleRefresh = async () => {
     setRefreshing(true);
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     setRefreshing(false);
   };
 

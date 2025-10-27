@@ -11,7 +11,7 @@ describe.skip('Button Component', () => {
   it('renders with different variants', () => {
     const { getByText: getByTextPrimary } = render(<Button variant="primary">Primary</Button>);
     const { getByText: getByTextSecondary } = render(
-      <Button variant="secondary">Secondary</Button>
+      <Button variant="secondary">Secondary</Button>,
     );
 
     expect(getByTextPrimary('Primary')).toBeTruthy();
@@ -39,7 +39,7 @@ describe.skip('Button Component', () => {
     const { getByText } = render(
       <Button disabled onPress={onPress}>
         Disabled
-      </Button>
+      </Button>,
     );
 
     fireEvent.press(getByText('Disabled'));
@@ -50,7 +50,7 @@ describe.skip('Button Component', () => {
     const { getByTestId } = render(
       <Button loading testID="loading-button">
         Loading
-      </Button>
+      </Button>,
     );
 
     expect(getByTestId('loading-button')).toBeTruthy();
@@ -73,7 +73,7 @@ describe.skip('Button Component', () => {
     const { getByLabelText } = render(
       <Button accessibilityLabel="Test button" accessibilityHint="Press to test">
         Test
-      </Button>
+      </Button>,
     );
 
     expect(getByLabelText('Test button')).toBeTruthy();

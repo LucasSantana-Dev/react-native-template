@@ -86,12 +86,7 @@ export default function ProfileScreen() {
               Edit Profile
             </Button>
 
-            <Button
-              variant="ghost"
-              size="lg"
-              fullWidth
-              onPress={handleSignOut}
-            >
+            <Button variant="ghost" size="lg" fullWidth onPress={handleSignOut}>
               Sign Out
             </Button>
           </Card.Body>

@@ -2,7 +2,9 @@
 
 ## Overview
 
-This checklist ensures that all new screens, components, and features are implemented with performance best practices in mind. Use this checklist during development and code review to maintain optimal app performance.
+This checklist ensures that all new screens, components, and features are
+implemented with performance best practices in mind. Use this checklist during
+development and code review to maintain optimal app performance.
 
 ## ✅ New Screen Implementation
 
@@ -80,7 +82,7 @@ This checklist ensures that all new screens, components, and features are implem
     (id: string) => {
       onItemPress(id);
     },
-    [onItemPress]
+    [onItemPress],
   );
   ```
 - [ ] **Value Optimization**: Use useMemo for expensive calculations
@@ -94,7 +96,8 @@ This checklist ensures that all new screens, components, and features are implem
 ### After Development
 
 - [ ] **Render Performance**: Check for unnecessary re-renders
-- [ ] **Bundle Impact**: Verify component doesn't significantly increase bundle size
+- [ ] **Bundle Impact**: Verify component doesn't significantly increase bundle
+      size
 - [ ] **Memory Leaks**: Ensure proper cleanup
 - [ ] **Accessibility**: Verify accessibility props are included
 
@@ -383,4 +386,6 @@ This checklist ensures that all new screens, components, and features are implem
 - **Screen Transitions**: < 300ms
 - **Image Load Time**: < 1s for visible images
 
-Remember: Performance is not just about speed—it's about providing a smooth, responsive user experience that works well on all devices and network conditions.
+Remember: Performance is not just about speed—it's about providing a smooth,
+responsive user experience that works well on all devices and network
+conditions.

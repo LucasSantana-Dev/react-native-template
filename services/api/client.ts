@@ -45,7 +45,7 @@ export interface ApiError {
 // Generic API client function
 export async function apiClient<T = any>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<ApiResponse<T>> {
   const url = `${apiConfig.baseURL}${endpoint}`;
 

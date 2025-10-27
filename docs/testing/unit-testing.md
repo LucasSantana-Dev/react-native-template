@@ -1,13 +1,19 @@
 # Unit Testing with Jest & React Native Testing Library
 
-Unit testing is a fundamental practice for ensuring the reliability and correctness of individual components, hooks, and utility functions in your React Native application. This guide covers the setup, best practices, and common patterns for writing effective unit tests using Jest and React Native Testing Library.
+Unit testing is a fundamental practice for ensuring the reliability and
+correctness of individual components, hooks, and utility functions in your React
+Native application. This guide covers the setup, best practices, and common
+patterns for writing effective unit tests using Jest and React Native Testing
+Library.
 
 ## ⚙️ Setup
 
 This template comes pre-configured with Jest and React Native Testing Library.
 
 - **Jest**: The test runner and assertion library
-- **React Native Testing Library (RNTL)**: Provides utilities for testing React Native components in a way that simulates user interactions and focuses on accessibility
+- **React Native Testing Library (RNTL)**: Provides utilities for testing React
+  Native components in a way that simulates user interactions and focuses on
+  accessibility
 
 ### Key Configuration Files
 
@@ -35,7 +41,8 @@ __tests__/
 
 - Test files: `*.test.{ts,tsx}`
 - Test suites: `describe('ComponentName', () => {})`
-- Individual tests: `it('should do something', () => {})` or `test('should do something', () => {})`
+- Individual tests: `it('should do something', () => {})` or
+  `test('should do something', () => {})`
 
 ### Basic Component Test Example
 
@@ -80,7 +87,9 @@ describe('useAsync', () => {
   it('should handle async function correctly', async () => {
     const mockAsyncFunction = jest
       .fn()
-      .mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
+      .mockImplementation(
+        () => new Promise(resolve => setTimeout(resolve, 100)),
+      );
     const { result } = renderHook(() => useAsync(mockAsyncFunction));
 
     expect(result.current.loading).toBe(true);
@@ -88,7 +97,7 @@ describe('useAsync', () => {
     expect(result.current.error).toBeUndefined();
 
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 150)); // Wait for the async function to complete
+      await new Promise(resolve => setTimeout(resolve, 150)); // Wait for the async function to complete
     });
 
     expect(result.current.loading).toBe(false);
@@ -99,7 +108,9 @@ describe('useAsync', () => {
   it('should return data on successful resolution', async () => {
     const mockData = { message: 'Success!' };
     const mockAsyncFunction = jest.fn().mockResolvedValue(mockData);
-    const { result, waitForNextUpdate } = renderHook(() => useAsync(mockAsyncFunction));
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useAsync(mockAsyncFunction),
+    );
 
     await act(async () => {
       await waitForNextUpdate();
@@ -113,7 +124,9 @@ describe('useAsync', () => {
   it('should return error on rejection', async () => {
     const mockError = new Error('Failed!');
     const mockAsyncFunction = jest.fn().mockRejectedValue(mockError);
-    const { result, waitForNextUpdate } = renderHook(() => useAsync(mockAsyncFunction));
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useAsync(mockAsyncFunction),
+    );
 
     await act(async () => {
       await waitForNextUpdate();
@@ -128,17 +141,22 @@ describe('useAsync', () => {
 
 ## 💡 Best Practices
 
-- **Test behavior, not implementation**: Focus on what the user sees and interacts with, not internal component state or methods
-- **Isolation**: Unit tests should be isolated and not depend on external services or databases. Use mocks for dependencies
+- **Test behavior, not implementation**: Focus on what the user sees and
+  interacts with, not internal component state or methods
+- **Isolation**: Unit tests should be isolated and not depend on external
+  services or databases. Use mocks for dependencies
 - **Fast execution**: Unit tests should run quickly to provide rapid feedback
 - **Descriptive names**: Test names should clearly explain what is being tested
-- **AAA Pattern**: Arrange (setup), Act (perform action), Assert (verify outcome)
+- **AAA Pattern**: Arrange (setup), Act (perform action), Assert (verify
+  outcome)
 
 ## ⚠️ Troubleshooting Common Issues
 
 ### Platform.OS Undefined
 
-**Problem**: `Cannot read properties of undefined (reading 'OS')` when running tests. This often happens when React Native components or libraries try to access `Platform.OS` in a Jest environment.
+**Problem**: `Cannot read properties of undefined (reading 'OS')` when running
+tests. This often happens when React Native components or libraries try to
+access `Platform.OS` in a Jest environment.
 
 **Solution**: Ensure Platform is mocked in `jest.setup.js`:
 
@@ -146,16 +164,19 @@ describe('useAsync', () => {
 // jest.setup.js
 global.Platform = {
   OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
+  select: jest.fn(obj => obj.ios || obj.default),
   Version: '14.0',
 };
 ```
 
 ### Async Operations Not Completing
 
-**Problem**: Tests fail due to async operations (e.g., `useEffect` with `fetch`, `setTimeout`) not completing before assertions are made.
+**Problem**: Tests fail due to async operations (e.g., `useEffect` with `fetch`,
+`setTimeout`) not completing before assertions are made.
 
-**Solution**: Use `act()` from `@testing-library/react-hooks` (for hooks) or `@testing-library/react-native` (for components) to wrap code that causes state updates, and `waitFor()` for async assertions.
+**Solution**: Use `act()` from `@testing-library/react-hooks` (for hooks) or
+`@testing-library/react-native` (for components) to wrap code that causes state
+updates, and `waitFor()` for async assertions.
 
 ```typescript
 import { renderHook, act } from '@testing-library/react-hooks';
@@ -177,9 +198,12 @@ await act(async () => {
 
 ### Mock Not Working
 
-**Problem**: Mocks for external modules or functions are not being applied correctly, leading to real implementations being called or errors.
+**Problem**: Mocks for external modules or functions are not being applied
+correctly, leading to real implementations being called or errors.
 
-**Solution**: Ensure mocks are defined before imports in your test file or in `jest.setup.js`. Jest hoists `jest.mock` calls to the top of the file, but it's good practice to place them at the top.
+**Solution**: Ensure mocks are defined before imports in your test file or in
+`jest.setup.js`. Jest hoists `jest.mock` calls to the top of the file, but it's
+good practice to place them at the top.
 
 ```typescript
 // Mock before import
@@ -199,4 +223,5 @@ describe('MyComponent', () => {
 });
 ```
 
-Remember: Good unit tests are fast, isolated, and test behavior rather than implementation details.
+Remember: Good unit tests are fast, isolated, and test behavior rather than
+implementation details.

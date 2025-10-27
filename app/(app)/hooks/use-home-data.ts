@@ -88,7 +88,7 @@ export const useHomeData = () => {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     setRefreshing(false);
   };
 

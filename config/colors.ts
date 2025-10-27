@@ -142,11 +142,11 @@ export const TYPOGRAPHY = {
     bold: 'System',
   },
   fontSize: {
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl: 20,
+    'xs': 12,
+    'sm': 14,
+    'md': 16,
+    'lg': 18,
+    'xl': 20,
     '2xl': 24,
     '3xl': 28,
     '4xl': 32,
@@ -154,11 +154,11 @@ export const TYPOGRAPHY = {
     '6xl': 48,
   },
   lineHeight: {
-    xs: 16,
-    sm: 20,
-    md: 24,
-    lg: 28,
-    xl: 32,
+    'xs': 16,
+    'sm': 20,
+    'md': 24,
+    'lg': 28,
+    'xl': 32,
     '2xl': 36,
     '3xl': 40,
     '4xl': 44,
@@ -175,11 +175,11 @@ export const TYPOGRAPHY = {
 
 // ========== SPACING ==========
 export const SPACING = {
-  xs: 4,
-  sm: 8,
-  md: 16,
-  lg: 24,
-  xl: 32,
+  'xs': 4,
+  'sm': 8,
+  'md': 16,
+  'lg': 24,
+  'xl': 32,
   '2xl': 40,
   '3xl': 48,
   '4xl': 64,
@@ -189,15 +189,15 @@ export const SPACING = {
 
 // ========== BORDER RADIUS ==========
 export const BORDER_RADIUS = {
-  none: 0,
-  xs: 2,
-  sm: 4,
-  md: 8,
-  lg: 12,
-  xl: 16,
+  'none': 0,
+  'xs': 2,
+  'sm': 4,
+  'md': 8,
+  'lg': 12,
+  'xl': 16,
   '2xl': 20,
   '3xl': 24,
-  full: 9999,
+  'full': 9999,
 } as const;
 
 // ========== SHADOWS ==========

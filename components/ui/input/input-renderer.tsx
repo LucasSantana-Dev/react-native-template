@@ -40,7 +40,7 @@ export const renderControlledInput = <T extends FieldValues>(
     control: any;
     rules?: any;
     defaultValue?: any;
-  }
+  },
 ) => {
   return renderInputWithController(props as any);
 };

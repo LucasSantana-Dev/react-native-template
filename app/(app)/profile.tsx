@@ -32,7 +32,7 @@ const createDeleteAccountHandler = () => {
           style: 'destructive',
           onPress: () => Alert.alert('Conta Excluída', 'Sua conta foi excluída com sucesso.'),
         },
-      ]
+      ],
     );
   };
 };

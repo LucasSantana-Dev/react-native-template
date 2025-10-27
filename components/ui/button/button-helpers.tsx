@@ -178,7 +178,7 @@ export const renderButtonContent = ({
 export const getButtonState = (
   disabled: boolean,
   loading: boolean,
-  state: string
+  state: string,
 ): { isDisabled: boolean } => {
   const isDisabled = disabled || loading || state === 'disabled';
   return { isDisabled };
@@ -190,7 +190,7 @@ export const getButtonState = (
 export const shouldRenderText = (
   rawChildren: boolean,
   children: React.ReactNode,
-  forceIcon: boolean
+  forceIcon: boolean,
 ): boolean => {
   return Boolean(!rawChildren && children && !forceIcon);
 };

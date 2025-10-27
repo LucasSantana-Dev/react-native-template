@@ -47,7 +47,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
         label="Nome completo"
         placeholder="Digite seu nome completo"
         value={formState.values.name}
-        onChangeText={(value) => setFieldValue('name', value)}
+        onChangeText={value => setFieldValue('name', value)}
         onBlur={() => setFieldTouched('name')}
         error={formState.errors.name}
         leftIcon="👤"
@@ -57,7 +57,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
         label="Email"
         placeholder="Digite seu email"
         value={formState.values.email}
-        onChangeText={(value) => setFieldValue('email', value)}
+        onChangeText={value => setFieldValue('email', value)}
         onBlur={() => setFieldTouched('email')}
         error={formState.errors.email}
         keyboardType="email-address"
@@ -70,7 +70,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
         label="CPF"
         placeholder="000.000.000-00"
         value={formState.values.cpf}
-        onChangeText={(value) => setFieldValue('cpf', value)}
+        onChangeText={value => setFieldValue('cpf', value)}
         onBlur={() => setFieldTouched('cpf')}
         error={formState.errors.cpf}
         keyboardType="numeric"
@@ -81,7 +81,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
         label="Telefone"
         placeholder="(00) 00000-0000"
         value={formState.values.phone}
-        onChangeText={(value) => setFieldValue('phone', value)}
+        onChangeText={value => setFieldValue('phone', value)}
         onBlur={() => setFieldTouched('phone')}
         error={formState.errors.phone}
         keyboardType="phone-pad"

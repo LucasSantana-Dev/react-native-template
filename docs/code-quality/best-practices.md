@@ -1,6 +1,9 @@
 # Code Quality Best Practices
 
-This guide outlines the best practices for maintaining high code quality in your React Native project. Following these practices will help you write maintainable, readable, and reliable code that your team can work with effectively.
+This guide outlines the best practices for maintaining high code quality in your
+React Native project. Following these practices will help you write
+maintainable, readable, and reliable code that your team can work with
+effectively.
 
 ## 🏗️ Code Organization
 
@@ -119,7 +122,13 @@ Implement type guards for runtime type checking.
 
 ```typescript
 function isUser(obj: unknown): obj is User {
-  return typeof obj === 'object' && obj !== null && 'id' in obj && 'name' in obj && 'email' in obj;
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'id' in obj &&
+    'name' in obj &&
+    'email' in obj
+  );
 }
 ```
 
@@ -401,7 +410,8 @@ Maintain comprehensive README files for each major module.
 ````markdown
 # User Profile Module
 
-This module handles user profile management including display, editing, and validation.
+This module handles user profile management including display, editing, and
+validation.
 
 ## Components
 

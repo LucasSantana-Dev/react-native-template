@@ -40,7 +40,7 @@ class Logger {
   private formatMessage(
     level: LogLevel,
     message: string,
-    context?: Record<string, unknown>
+    context?: Record<string, unknown>,
   ): LogEntry {
     return {
       level,

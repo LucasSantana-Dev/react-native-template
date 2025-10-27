@@ -2,7 +2,9 @@
 
 ## Overview
 
-This document outlines the best practices for maintaining optimal performance in React Native Expo applications. These practices are based on real-world experience and industry standards for mobile app performance.
+This document outlines the best practices for maintaining optimal performance in
+React Native Expo applications. These practices are based on real-world
+experience and industry standards for mobile app performance.
 
 ## Table of Contents
 
@@ -61,7 +63,7 @@ const handleItemPress = useCallback(
   (id: string) => {
     onItemPress(id);
   },
-  [onItemPress]
+  [onItemPress],
 );
 
 // ❌ Bad - New function on every render
@@ -354,7 +356,7 @@ const contextValue = useMemo(() => ({
 const [isLoading, setIsLoading] = useState(false);
 const [data, setData] = useState<Data[]>([]);
 
-const memoizedData = useMemo(() => data.filter((item) => item.isActive), [data]);
+const memoizedData = useMemo(() => data.filter(item => item.isActive), [data]);
 
 // ❌ Bad - Unnecessary state
 const [filteredData, setFilteredData] = useState<Data[]>([]);
@@ -365,12 +367,16 @@ const [filteredData, setFilteredData] = useState<Data[]>([]);
 ```typescript
 // ✅ Good - Optimized state update
 const updateItem = useCallback((id: string, updates: Partial<Item>) => {
-  setItems((prev) => prev.map((item) => (item.id === id ? { ...item, ...updates } : item)));
+  setItems(prev =>
+    prev.map(item => (item.id === id ? { ...item, ...updates } : item)),
+  );
 }, []);
 
 // ❌ Bad - Inefficient state update
 const updateItem = (id: string, updates: Partial<Item>) => {
-  const newItems = items.map((item) => (item.id === id ? { ...item, ...updates } : item));
+  const newItems = items.map(item =>
+    item.id === id ? { ...item, ...updates } : item,
+  );
   setItems(newItems);
 };
 ```
@@ -411,12 +417,12 @@ const animatedValue = new Animated.Value(0);
 // ✅ Good - LayoutAnimation for list changes
 const addItem = useCallback((item: Item) => {
   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  setItems((prev) => [...prev, item]);
+  setItems(prev => [...prev, item]);
 }, []);
 
 // ❌ Bad - No animation for list changes
 const addItem = (item: Item) => {
-  setItems((prev) => [...prev, item]);
+  setItems(prev => [...prev, item]);
 };
 ```
 
@@ -463,7 +469,7 @@ useEffect(() => {
 // ✅ Good - Optimistic updates
 const updateUser = useMutation({
   mutationFn: updateUserApi,
-  onMutate: async (newUser) => {
+  onMutate: async newUser => {
     await queryClient.cancelQueries(['user', newUser.id]);
     const previousUser = queryClient.getQueryData(['user', newUser.id]);
     queryClient.setQueryData(['user', newUser.id], newUser);
@@ -723,7 +729,10 @@ useEffect(() => {
 
 ## Conclusion
 
-Following these best practices will help you build performant React Native Expo applications that provide a smooth user experience across all devices and network conditions. Remember that performance is an ongoing concern that requires continuous monitoring and optimization.
+Following these best practices will help you build performant React Native Expo
+applications that provide a smooth user experience across all devices and
+network conditions. Remember that performance is an ongoing concern that
+requires continuous monitoring and optimization.
 
 Key takeaways:
 

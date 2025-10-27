@@ -2,7 +2,10 @@
 
 ## Overview
 
-This document provides a comprehensive guide to the lazy loading strategies implemented in this React Native Expo project. Lazy loading is a performance optimization technique that defers loading of non-critical resources until they are needed, resulting in faster initial load times and better user experience.
+This document provides a comprehensive guide to the lazy loading strategies
+implemented in this React Native Expo project. Lazy loading is a performance
+optimization technique that defers loading of non-critical resources until they
+are needed, resulting in faster initial load times and better user experience.
 
 ## Table of Contents
 
@@ -266,7 +269,8 @@ const { trackScreenLoad } = useScreenPerformance('HomeScreen');
 
 **Problem**: Lazy loading everything, even small components.
 
-**Solution**: Only lazy load components that provide significant performance benefits.
+**Solution**: Only lazy load components that provide significant performance
+benefits.
 
 ```typescript
 // ❌ Don't lazy load small components
@@ -440,7 +444,11 @@ npm run quality:check
 
 ## Conclusion
 
-Lazy loading is a powerful technique for improving React Native app performance. By implementing the strategies outlined in this guide, you can achieve significant improvements in bundle size, load times, and user experience. Remember to measure performance before and after implementation, and always provide appropriate loading states and error handling.
+Lazy loading is a powerful technique for improving React Native app performance.
+By implementing the strategies outlined in this guide, you can achieve
+significant improvements in bundle size, load times, and user experience.
+Remember to measure performance before and after implementation, and always
+provide appropriate loading states and error handling.
 
 For more information, see:
 

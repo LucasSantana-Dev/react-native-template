@@ -2,7 +2,9 @@
 
 ## Overview
 
-This document outlines the architectural decisions made for performance optimization in this React Native Expo project. Each decision includes the context, options considered, trade-offs, and rationale.
+This document outlines the architectural decisions made for performance
+optimization in this React Native Expo project. Each decision includes the
+context, options considered, trade-offs, and rationale.
 
 ## Table of Contents
 
@@ -18,7 +20,8 @@ This document outlines the architectural decisions made for performance optimiza
 
 ### Decision: React.lazy() with Suspense for Code Splitting
 
-**Context**: Need to reduce initial bundle size and improve Time to Interactive (TTI).
+**Context**: Need to reduce initial bundle size and improve Time to Interactive
+(TTI).
 
 **Options Considered**:
 
@@ -27,11 +30,13 @@ This document outlines the architectural decisions made for performance optimiza
 3. **Route-based code splitting** - Split by navigation routes
 4. **Component-level splitting** - Split individual components
 
-**Decision**: React.lazy() with Suspense for screen-level and component-level code splitting.
+**Decision**: React.lazy() with Suspense for screen-level and component-level
+code splitting.
 
 **Rationale**:
 
-- **Standard Solution**: React.lazy() is the standard way to implement code splitting
+- **Standard Solution**: React.lazy() is the standard way to implement code
+  splitting
 - **Built-in Support**: Suspense provides built-in loading state management
 - **TypeScript Support**: Full TypeScript support with proper typing
 - **Error Handling**: Easy to combine with error boundaries
@@ -63,7 +68,8 @@ const LazyScreen = lazy(() => import('./screen'));
 3. **Complexity threshold** - Lazy load based on cyclomatic complexity
 4. **Usage pattern threshold** - Lazy load based on user interaction
 
-**Decision**: Combination of line count (>200 lines) and usage pattern (non-critical screens).
+**Decision**: Combination of line count (>200 lines) and usage pattern
+(non-critical screens).
 
 **Rationale**:
 
@@ -90,7 +96,8 @@ const LazyScreen = lazy(() => import('./screen'));
 3. **FlashList** - Shopify's high-performance list component
 4. **Custom virtualization** - Custom implementation
 
-**Decision**: FlatList for standard lists (<1000 items), FlashList for large lists (1000+ items).
+**Decision**: FlatList for standard lists (<1000 items), FlashList for large
+lists (1000+ items).
 
 **Rationale**:
 
@@ -303,7 +310,8 @@ module.exports = {
 3. **Custom tracking utility** - Custom performance tracking
 4. **Shopify Performance** - Shopify's performance library
 
-**Decision**: Custom performance tracking utility with Shopify Performance integration.
+**Decision**: Custom performance tracking utility with Shopify Performance
+integration.
 
 **Rationale**:
 
@@ -422,7 +430,8 @@ useEffect(() => {
 
 ### Decision: Context API with Custom Hooks for Global State
 
-**Context**: Need to manage global state efficiently without external dependencies.
+**Context**: Need to manage global state efficiently without external
+dependencies.
 
 **Options Considered**:
 
@@ -470,7 +479,8 @@ export const useTheme = (): ThemeContextType => {
 3. **Custom hooks** - Custom state management hooks
 4. **External state** - External state management
 
-**Decision**: useState for simple state, useReducer for complex state, custom hooks for reusable logic.
+**Decision**: useState for simple state, useReducer for complex state, custom
+hooks for reusable logic.
 
 **Rationale**:
 
@@ -486,7 +496,10 @@ export const useTheme = (): ThemeContextType => {
 
 ## Conclusion
 
-These architectural decisions were made to optimize performance while maintaining code quality, developer experience, and maintainability. Each decision includes trade-offs that were carefully considered based on the project's requirements and constraints.
+These architectural decisions were made to optimize performance while
+maintaining code quality, developer experience, and maintainability. Each
+decision includes trade-offs that were carefully considered based on the
+project's requirements and constraints.
 
 The decisions prioritize:
 

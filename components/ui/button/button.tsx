@@ -29,7 +29,7 @@ import { ButtonProps } from './types';
  * </Button>
  * ```
  */
-export const Button: React.FC<ButtonProps> = (props) => {
+export const Button: React.FC<ButtonProps> = props => {
   const {
     children,
     variant = 'primary',

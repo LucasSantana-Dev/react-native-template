@@ -112,7 +112,7 @@ export function AuthProvider({
       };
 
       // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Validate credentials (mock validation)
       if (credentials.email && credentials.password) {
@@ -139,7 +139,7 @@ export function AuthProvider({
 
       // TODO: Replace with actual API call
       // This is a mock implementation
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       setUser(null);
       setSigned(false);
@@ -240,7 +240,7 @@ export function useAuthActions() {
  */
 export function withAuth<P extends object>(
   Component: React.ComponentType<P>,
-  fallback?: React.ComponentType
+  fallback?: React.ComponentType,
 ) {
   return function AuthenticatedComponent(props: P) {
     const { signed, loading } = useAuth();

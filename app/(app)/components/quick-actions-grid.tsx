@@ -79,7 +79,7 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({
         }}
       >
         {isTablet ? (
-          actions.map((action) => (
+          actions.map(action => (
             <View key={action.id} style={{ flex: 1 }}>
               <ActionItem action={action} />
             </View>
@@ -92,7 +92,7 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({
               gap: 12,
             }}
           >
-            {actions.map((action) => (
+            {actions.map(action => (
               <View key={action.id} style={{ width: '48%' }}>
                 <ActionItem action={action} />
               </View>

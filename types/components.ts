@@ -210,7 +210,13 @@ export interface ContainerProps extends BaseComponentProps {
   margin?: 'none' | 'small' | 'medium' | 'large';
   backgroundColor?: string;
   flex?: number;
-  justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
+  justifyContent?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly';
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
   direction?: 'row' | 'column';
   wrap?: 'wrap' | 'nowrap' | 'wrap-reverse';

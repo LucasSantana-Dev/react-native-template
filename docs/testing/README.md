@@ -1,6 +1,8 @@
 # Testing Overview
 
-This section provides a comprehensive guide to the testing strategy implemented in this React Native template. Effective testing is crucial for building robust, maintainable, and high-quality mobile applications.
+This section provides a comprehensive guide to the testing strategy implemented
+in this React Native template. Effective testing is crucial for building robust,
+maintainable, and high-quality mobile applications.
 
 ## 🧪 Test Types
 
@@ -24,8 +26,10 @@ This section provides a comprehensive guide to the testing strategy implemented 
 
 ## 🚀 Quick Start Guides
 
-- **[Unit Testing Guide](unit-testing.md)** - Jest & React Native Testing Library setup and usage
-- **[Integration Testing Guide](integration-testing.md)** - Testing component interactions and flows
+- **[Unit Testing Guide](unit-testing.md)** - Jest & React Native Testing
+  Library setup and usage
+- **[Integration Testing Guide](integration-testing.md)** - Testing component
+  interactions and flows
 - **[E2E Testing Guide](e2e-testing.md)** - Detox end-to-end tests
 - **[Test Patterns](test-patterns.md)** - Best practices and common patterns
 
@@ -69,7 +73,9 @@ import { useAsync } from '../../hooks/use-async';
 describe('useAsync', () => {
   it('should handle async function correctly', async () => {
     const mockAsyncFunction = jest.fn().mockResolvedValue('data');
-    const { result, waitForNextUpdate } = renderHook(() => useAsync(mockAsyncFunction));
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useAsync(mockAsyncFunction),
+    );
 
     expect(result.current.loading).toBe(true);
     expect(result.current.data).toBeUndefined();
@@ -206,7 +212,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 // Mock Platform
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
+  select: jest.fn(obj => obj.ios || obj.default),
   Version: '14.0',
 }));
 ```
@@ -220,7 +226,12 @@ module.exports = {
   preset: 'react-native',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testPathIgnorePatterns: ['/node_modules/', '/e2e/'],
-  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**', '!**/e2e/**'],
+  collectCoverageFrom: [
+    '**/*.{ts,tsx}',
+    '!**/*.d.ts',
+    '!**/node_modules/**',
+    '!**/e2e/**',
+  ],
   coverageThreshold: {
     global: {
       branches: 75,
@@ -255,7 +266,7 @@ module.exports = {
 ```javascript
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
+  select: jest.fn(obj => obj.ios || obj.default),
   Version: '14.0',
 }));
 ```
@@ -293,4 +304,5 @@ jest.mock('my-module', () => ({
 import { myFunction } from 'my-module'; // Import after mock
 ```
 
-Remember: Good tests are fast, reliable, and maintainable. Focus on testing user behavior rather than implementation details.
+Remember: Good tests are fast, reliable, and maintainable. Focus on testing user
+behavior rather than implementation details.

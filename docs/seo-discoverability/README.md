@@ -1,10 +1,13 @@
 # SEO & Discoverability Documentation
 
-This directory contains comprehensive documentation for app discoverability strategies, including App Store Optimization (ASO), deep linking, web SEO, and accessibility.
+This directory contains comprehensive documentation for app discoverability
+strategies, including App Store Optimization (ASO), deep linking, web SEO, and
+accessibility.
 
 ## 🎯 Overview
 
-This template implements a comprehensive discoverability strategy to help your React Native app reach more users through various channels and platforms.
+This template implements a comprehensive discoverability strategy to help your
+React Native app reach more users through various channels and platforms.
 
 ## 🛠️ Strategies and Tools
 
@@ -27,17 +30,22 @@ This template implements a comprehensive discoverability strategy to help your R
 
 ### Quick Start Guides
 
-- **[App Store Optimization](app-store-optimization.md)** - ASO fundamentals and best practices
+- **[App Store Optimization](app-store-optimization.md)** - ASO fundamentals and
+  best practices
 - **[Deep Linking](deep-linking.md)** - Universal Links and App Links setup
 - **[Web SEO](web-seo.md)** - Expo web optimization for search engines
-- **[Accessibility](accessibility.md)** - Inclusive design and accessibility features
+- **[Accessibility](accessibility.md)** - Inclusive design and accessibility
+  features
 
 ### Implementation Guides
 
-- **[ASO Checklist](checklists/aso-checklist.md)** - Step-by-step ASO implementation
-- **[Deep Linking Setup](guides/deep-linking-setup.md)** - Complete deep linking implementation
+- **[ASO Checklist](checklists/aso-checklist.md)** - Step-by-step ASO
+  implementation
+- **[Deep Linking Setup](guides/deep-linking-setup.md)** - Complete deep linking
+  implementation
 - **[Web SEO Setup](guides/web-seo-setup.md)** - Expo web SEO configuration
-- **[Accessibility Testing](guides/accessibility-testing.md)** - Accessibility testing and validation
+- **[Accessibility Testing](guides/accessibility-testing.md)** - Accessibility
+  testing and validation
 
 ## 🚀 Quick Start
 
@@ -257,4 +265,6 @@ This template implements a comprehensive discoverability strategy to help your R
 4. **Monitor performance**: Track metrics and optimize
 5. **Iterate and improve**: Continuously improve based on data
 
-Remember: Discoverability is not just about getting found—it's about reaching the right users with the right message at the right time. Focus on providing value and creating great user experiences.
+Remember: Discoverability is not just about getting found—it's about reaching
+the right users with the right message at the right time. Focus on providing
+value and creating great user experiences.

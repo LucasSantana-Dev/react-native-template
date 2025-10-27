@@ -4,7 +4,7 @@ import 'react-native-gesture-handler/jestSetup';
 // Mock Platform before any React Native imports
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
+  select: jest.fn(obj => obj.ios || obj.default),
   Version: '14.0',
 }));
 
@@ -23,7 +23,7 @@ jest.mock('@testing-library/react-native', () => {
 // Mock global Platform
 global.Platform = {
   OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
+  select: jest.fn(obj => obj.ios || obj.default),
   Version: '14.0',
 };
 

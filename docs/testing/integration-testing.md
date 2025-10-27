@@ -1,10 +1,15 @@
 # Integration Testing with Jest & React Native Testing Library
 
-Integration tests verify that different parts of your application work correctly together. Unlike unit tests, which focus on isolated units, integration tests ensure that components, hooks, contexts, and services interact as expected, forming a cohesive user experience.
+Integration tests verify that different parts of your application work correctly
+together. Unlike unit tests, which focus on isolated units, integration tests
+ensure that components, hooks, contexts, and services interact as expected,
+forming a cohesive user experience.
 
 ## ⚙️ Setup
 
-The setup for integration tests is largely the same as for unit tests, utilizing Jest as the test runner and React Native Testing Library for component rendering and interaction.
+The setup for integration tests is largely the same as for unit tests, utilizing
+Jest as the test runner and React Native Testing Library for component rendering
+and interaction.
 
 ### Key Configuration Files
 
@@ -146,17 +151,23 @@ describe('LoginScreen Integration', () => {
 
 - **Realistic data**: Use mock data that closely resembles real application data
 - **Simulate user flows**: Test common user journeys through your application
-- **Test boundaries**: Focus on interactions between different modules (e.g., component + API, component + context)
-- **Avoid over-mocking**: Only mock external services or complex dependencies that are not central to the integration being tested
-- **Clear assertions**: Verify the visible output and state changes that result from interactions
+- **Test boundaries**: Focus on interactions between different modules (e.g.,
+  component + API, component + context)
+- **Avoid over-mocking**: Only mock external services or complex dependencies
+  that are not central to the integration being tested
+- **Clear assertions**: Verify the visible output and state changes that result
+  from interactions
 
 ## ⚠️ Troubleshooting Common Issues
 
 ### Context Not Available
 
-**Problem**: `useAuth must be used within an AuthProvider` or similar errors when testing components that rely on React Context.
+**Problem**: `useAuth must be used within an AuthProvider` or similar errors
+when testing components that rely on React Context.
 
-**Solution**: Wrap the component being tested with the necessary context provider(s) using a custom `wrapper` in `render()` or by explicitly rendering the provider in your test.
+**Solution**: Wrap the component being tested with the necessary context
+provider(s) using a custom `wrapper` in `render()` or by explicitly rendering
+the provider in your test.
 
 ```typescript
 // Custom wrapper for render
@@ -169,9 +180,12 @@ render(<MyComponent />, { wrapper: TestWrapper });
 
 ### Async Operations Not Completing
 
-**Problem**: Tests fail because asynchronous operations (e.g., API calls, `setTimeout`) initiated by component interactions do not complete before assertions are made.
+**Problem**: Tests fail because asynchronous operations (e.g., API calls,
+`setTimeout`) initiated by component interactions do not complete before
+assertions are made.
 
-**Solution**: Use `waitFor()` from React Native Testing Library to wait for elements to appear or disappear, or for state changes to propagate.
+**Solution**: Use `waitFor()` from React Native Testing Library to wait for
+elements to appear or disappear, or for state changes to propagate.
 
 ```typescript
 import { render, fireEvent, screen, waitFor } from '@testing-library/react-native';
@@ -186,9 +200,12 @@ it('should show success message after async action', async () => {
 
 ### Mock Not Working
 
-**Problem**: Mocks for external services (e.g., API clients, `AsyncStorage`) are not being applied correctly, leading to real network requests or unexpected behavior.
+**Problem**: Mocks for external services (e.g., API clients, `AsyncStorage`) are
+not being applied correctly, leading to real network requests or unexpected
+behavior.
 
-**Solution**: Ensure mocks are defined before imports in your test file. For mocks that need to be reset between tests, use `beforeEach` or `afterEach`.
+**Solution**: Ensure mocks are defined before imports in your test file. For
+mocks that need to be reset between tests, use `beforeEach` or `afterEach`.
 
 ```typescript
 // __mocks__/@react-native-async-storage/async-storage.ts
@@ -214,4 +231,5 @@ it('should save data to storage', async () => {
 });
 ```
 
-Remember: Integration tests should verify that different parts of your application work together correctly, not just that they work in isolation.
+Remember: Integration tests should verify that different parts of your
+application work together correctly, not just that they work in isolation.

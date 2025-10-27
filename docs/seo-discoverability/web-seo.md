@@ -1,10 +1,13 @@
 # Web SEO Guide
 
-This guide covers web SEO optimization for Expo web builds, including meta tags, Open Graph, Twitter cards, and performance optimization.
+This guide covers web SEO optimization for Expo web builds, including meta tags,
+Open Graph, Twitter cards, and performance optimization.
 
 ## 🎯 Overview
 
-When using Expo web, your React Native app can be built for the web, making it discoverable through search engines. This guide covers SEO optimization strategies specifically for Expo web builds.
+When using Expo web, your React Native app can be built for the web, making it
+discoverable through search engines. This guide covers SEO optimization
+strategies specifically for Expo web builds.
 
 ## 🛠️ Tools and Technologies
 
@@ -245,12 +248,12 @@ export class SitemapGenerator {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${this.routes
   .map(
-    (route) => `  <url>
+    route => `  <url>
     <loc>${this.baseUrl}${route.path}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>${route.changefreq}</changefreq>
     <priority>${route.priority}</priority>
-  </url>`
+  </url>`,
   )
   .join('\n')}
 </urlset>`;
@@ -320,8 +323,8 @@ import { useEffect } from 'react';
 export const useWebVitals = () => {
   useEffect(() => {
     // Monitor Core Web Vitals
-    const observer = new PerformanceObserver((list) => {
-      list.getEntries().forEach((entry) => {
+    const observer = new PerformanceObserver(list => {
+      list.getEntries().forEach(entry => {
         if (entry.entryType === 'largest-contentful-paint') {
           console.log('LCP:', entry.startTime);
         }
@@ -334,7 +337,9 @@ export const useWebVitals = () => {
       });
     });
 
-    observer.observe({ entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] });
+    observer.observe({
+      entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'],
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -547,8 +552,12 @@ npx lighthouse https://myapp.com --config-path=lighthouse.config.js
 export class SEOAudit {
   static checkMetaTags() {
     const title = document.querySelector('title')?.textContent;
-    const description = document.querySelector('meta[name="description"]')?.getAttribute('content');
-    const ogTitle = document.querySelector('meta[property="og:title"]')?.getAttribute('content');
+    const description = document
+      .querySelector('meta[name="description"]')
+      ?.getAttribute('content');
+    const ogTitle = document
+      .querySelector('meta[property="og:title"]')
+      ?.getAttribute('content');
 
     return {
       hasTitle: !!title,
@@ -560,11 +569,15 @@ export class SEOAudit {
   }
 
   static checkPerformance() {
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+    const navigation = performance.getEntriesByType(
+      'navigation',
+    )[0] as PerformanceNavigationTiming;
 
     return {
       loadTime: navigation.loadEventEnd - navigation.loadEventStart,
-      domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+      domContentLoaded:
+        navigation.domContentLoadedEventEnd -
+        navigation.domContentLoadedEventStart,
       firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0,
     };
   }
@@ -620,7 +633,7 @@ export default function App() {
 ```typescript
 // Check robots.txt accessibility
 const robotsUrl = 'https://myapp.com/robots.txt';
-fetch(robotsUrl).then((response) => {
+fetch(robotsUrl).then(response => {
   if (!response.ok) {
     console.error('Robots.txt not accessible');
   }
@@ -663,4 +676,6 @@ fetch(robotsUrl).then((response) => {
 - Don't ignore analytics and user feedback
 - Don't forget to update meta tags regularly
 
-Remember: Web SEO is about making your app discoverable and accessible to users through search engines. Focus on providing value, optimizing performance, and creating great user experiences.
+Remember: Web SEO is about making your app discoverable and accessible to users
+through search engines. Focus on providing value, optimizing performance, and
+creating great user experiences.

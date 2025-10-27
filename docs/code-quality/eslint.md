@@ -1,6 +1,10 @@
 # ESLint Guide
 
-ESLint is a powerful static analysis tool that helps identify and report problematic patterns found in JavaScript/TypeScript code. It enforces coding standards, catches common errors, and ensures code consistency across your project. This guide explains the ESLint setup in this template, its key rules, and how to use it effectively.
+ESLint is a powerful static analysis tool that helps identify and report
+problematic patterns found in JavaScript/TypeScript code. It enforces coding
+standards, catches common errors, and ensures code consistency across your
+project. This guide explains the ESLint setup in this template, its key rules,
+and how to use it effectively.
 
 ## ⚙️ Configuration
 
@@ -159,7 +163,8 @@ export default [
 
 #### `no-console`
 
-Warns against `console.log` statements, encouraging proper logging or removal in production.
+Warns against `console.log` statements, encouraging proper logging or removal in
+production.
 
 ```typescript
 // ❌ Bad
@@ -187,7 +192,9 @@ const age = 30;
 
 #### `import/order`
 
-Enforces consistent import order and grouping. The configuration typically groups imports by type (e.g., React, third-party, internal, relative) with empty lines between groups.
+Enforces consistent import order and grouping. The configuration typically
+groups imports by type (e.g., React, third-party, internal, relative) with empty
+lines between groups.
 
 ```typescript
 // ❌ Bad
@@ -219,7 +226,9 @@ export const MyComponent = () => <Text>Hello</Text>; // Used elsewhere
 
 #### `complexity`
 
-Limits cyclomatic complexity to prevent overly complex functions. High complexity often indicates a function is doing too much and should be refactored.
+Limits cyclomatic complexity to prevent overly complex functions. High
+complexity often indicates a function is doing too much and should be
+refactored.
 
 ```typescript
 // ❌ Bad - Complexity too high
@@ -233,7 +242,10 @@ function getUserStatus(user: User, permissions: string[]): string {
   if (user.isSuspended && !permissions.includes('override')) {
     return 'suspended';
   }
-  if (user.isInactive && user.lastLogin < new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)) {
+  if (
+    user.isInactive &&
+    user.lastLogin < new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  ) {
     return 'inactive';
   }
   if (user.role === 'admin' && permissions.includes('full_access')) {
@@ -264,7 +276,8 @@ function isSuspended(user: User, permissions: string[]): boolean {
 
 #### `max-lines-per-function`
 
-Limits function length to improve readability and maintainability. Long functions are harder to understand and test.
+Limits function length to improve readability and maintainability. Long
+functions are harder to understand and test.
 
 ```typescript
 // ❌ Bad - Function too long
@@ -288,7 +301,8 @@ function renderComplexForm() {
 
 #### `max-lines`
 
-Limits file length to prevent overly large files. Large files often indicate a lack of modularization.
+Limits file length to prevent overly large files. Large files often indicate a
+lack of modularization.
 
 ```typescript
 // ❌ Bad - File too long (e.g., 300 lines)
@@ -308,7 +322,8 @@ Limits file length to prevent overly large files. Large files often indicate a l
 
 #### `@typescript-eslint/no-explicit-any`
 
-Discourages use of `any` type. While `any` can be useful for quick prototyping, it bypasses TypeScript's type checking, defeating its purpose.
+Discourages use of `any` type. While `any` can be useful for quick prototyping,
+it bypasses TypeScript's type checking, defeating its purpose.
 
 ```typescript
 // ❌ Bad - Using any
@@ -317,14 +332,17 @@ function processData(data: any) {
 }
 
 // ✅ Good - Proper typing
-function processData<T extends { someProperty: unknown }>(data: T): T['someProperty'] {
+function processData<T extends { someProperty: unknown }>(
+  data: T,
+): T['someProperty'] {
   return data.someProperty;
 }
 ```
 
 #### `@typescript-eslint/no-unused-vars`
 
-Detects unused variables and parameters. Helps keep the codebase clean and reduces potential bugs.
+Detects unused variables and parameters. Helps keep the codebase clean and
+reduces potential bugs.
 
 ```typescript
 // ❌ Bad
@@ -344,7 +362,8 @@ function myFunction(param1: string, _unusedParam: number) {
 
 #### `react-native/no-inline-styles`
 
-Warns against using inline styles, encouraging the use of `StyleSheet.create` for better performance and maintainability.
+Warns against using inline styles, encouraging the use of `StyleSheet.create`
+for better performance and maintainability.
 
 ```typescript
 // ❌ Bad
@@ -362,8 +381,10 @@ const styles = StyleSheet.create({
 
 ## 📊 Rule Severity Levels
 
-- **`error`**: Violations cause build failure (e.g., in CI/CD or pre-commit hooks)
-- **`warn`**: Violations show warnings but don't fail build. Useful for non-critical issues or during development
+- **`error`**: Violations cause build failure (e.g., in CI/CD or pre-commit
+  hooks)
+- **`warn`**: Violations show warnings but don't fail build. Useful for
+  non-critical issues or during development
 - **`off`**: Rule is disabled. Use sparingly and with justification
 
 ### Rule Configuration
@@ -433,7 +454,8 @@ export default [
 
 ### WebStorm
 
-1. Enable ESLint in Settings > Languages & Frameworks > JavaScript > Code Quality Tools > ESLint
+1. Enable ESLint in Settings > Languages & Frameworks > JavaScript > Code
+   Quality Tools > ESLint
 2. Enable "Autofix ESLint problems on save"
 
 ### Pre-commit Hooks (via lint-staged)
@@ -468,7 +490,8 @@ import { someHelper } from './utils';
 
 ### 2. Function Complexity Management
 
-Keep functions small and focused. If a function's complexity score is high, it's a sign to refactor.
+Keep functions small and focused. If a function's complexity score is high, it's
+a sign to refactor.
 
 ```typescript
 // ❌ Bad - Complex function
@@ -500,7 +523,8 @@ function processUserAction(user: User, action: Action): void {
 
 ### 3. File Size Management
 
-Split large files into smaller, more manageable modules. A good rule of thumb is to keep files under 200 lines.
+Split large files into smaller, more manageable modules. A good rule of thumb is
+to keep files under 200 lines.
 
 ```typescript
 // ❌ Bad - Large file
@@ -518,12 +542,13 @@ Split large files into smaller, more manageable modules. A good rule of thumb is
 
 ### 4. Type Safety
 
-Leverage TypeScript to its fullest. Avoid `any` and ensure all variables, function parameters, and return types are explicitly typed.
+Leverage TypeScript to its fullest. Avoid `any` and ensure all variables,
+function parameters, and return types are explicitly typed.
 
 ```typescript
 // ❌ Bad - Using any
 function fetchData(url: string): Promise<any> {
-  return fetch(url).then((res) => res.json());
+  return fetch(url).then(res => res.json());
 }
 
 // ✅ Good - Type-safe
@@ -542,9 +567,11 @@ async function fetchData(url: string): Promise<UserData> {
 
 ### Import Order Violations
 
-**Problem**: `There should be at least one empty line between import groups` or imports are not sorted correctly.
+**Problem**: `There should be at least one empty line between import groups` or
+imports are not sorted correctly.
 
-**Solution**: Add empty lines between import groups as per the `import/order` rule configuration. Run `eslint --fix` to automatically sort.
+**Solution**: Add empty lines between import groups as per the `import/order`
+rule configuration. Run `eslint --fix` to automatically sort.
 
 ```typescript
 import React from 'react';
@@ -554,9 +581,12 @@ import { View, Text } from 'react-native';
 
 ### Unused Variables
 
-**Problem**: `'variable' is assigned a value but never used` or `'parameter' is defined but never used`.
+**Problem**: `'variable' is assigned a value but never used` or
+`'parameter' is defined but never used`.
 
-**Solution**: Remove unused variables or parameters. For parameters that must exist but are not used (e.g., in interface implementations), prefix them with an underscore (`_`).
+**Solution**: Remove unused variables or parameters. For parameters that must
+exist but are not used (e.g., in interface implementations), prefix them with an
+underscore (`_`).
 
 ```typescript
 // Remove if truly unused
@@ -572,12 +602,14 @@ function handleEvent(_event: SomeEventType, data: string) {
 
 **Problem**: `Function has a complexity of 15. Maximum allowed is 12`.
 
-**Solution**: Refactor the function into smaller, more focused functions. Use guard clauses to reduce nesting.
+**Solution**: Refactor the function into smaller, more focused functions. Use
+guard clauses to reduce nesting.
 
 ```typescript
 // Extract complex conditions
 const isValidUser = (user: User) => user.isActive && user.hasPermissions;
-const isEligibleForDiscount = (user: User, item: Item) => isValidUser(user) && item.price > 100;
+const isEligibleForDiscount = (user: User, item: Item) =>
+  isValidUser(user) && item.price > 100;
 
 function calculatePrice(user: User, item: Item): number {
   if (!isEligibleForDiscount(user, item)) {
@@ -591,6 +623,9 @@ function calculatePrice(user: User, item: Item): number {
 
 **Problem**: `File has too many lines (250). Maximum allowed is 200`.
 
-**Solution**: Split large files into smaller, focused files. For example, extract styles, helper functions, or sub-components into their own files.
+**Solution**: Split large files into smaller, focused files. For example,
+extract styles, helper functions, or sub-components into their own files.
 
-Remember: ESLint is a tool to help you write better code. Use it as a guide, not a strict rule. Sometimes, you may need to disable a rule for a specific case, but always document why you're doing so.
+Remember: ESLint is a tool to help you write better code. Use it as a guide, not
+a strict rule. Sometimes, you may need to disable a rule for a specific case,
+but always document why you're doing so.

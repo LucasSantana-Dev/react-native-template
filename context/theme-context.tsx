@@ -17,23 +17,19 @@ interface ThemeProviderProps {
 }
 
 // Theme provider component
-export function ThemeProvider({
-  children,
-  defaultTheme = 'system'
-}: ThemeProviderProps) {
+export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProviderProps) {
   const systemColorScheme = useColorScheme();
   const [themeMode, setThemeMode] = useState<ThemeMode>(defaultTheme);
 
   // Determine actual color scheme
-  const colorScheme: ColorScheme = themeMode === 'system'
-    ? (systemColorScheme || 'light')
-    : themeMode;
+  const colorScheme: ColorScheme =
+    themeMode === 'system' ? systemColorScheme || 'light' : themeMode;
 
   const isDark = colorScheme === 'dark';
 
   // Toggle between light and dark themes
   const toggleTheme = () => {
-    setThemeMode(prev => prev === 'light' ? 'dark' : 'light');
+    setThemeMode(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
   // Context value
@@ -45,11 +41,7 @@ export function ThemeProvider({
     toggleTheme,
   };
 
-  return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
 // Hook to use theme context
@@ -68,20 +60,22 @@ export function useThemeColors() {
   const { isDark } = useTheme();
 
   // Return colors based on theme mode
-  return isDark ? {
-    ...theme.colors,
-    // Override specific colors for dark mode if needed
-  } : {
-    ...theme.colors,
-    // Override specific colors for light mode if needed
-    background: '#FFFFFF',
-    surface: '#FFFFFF',
-    text: '#000000',
-    textSecondary: '#6D6D70',
-    textTertiary: '#8E8E93',
-    border: '#C6C6C8',
-    borderLight: '#E5E5EA',
-  };
+  return isDark
+    ? {
+        ...theme.colors,
+        // Override specific colors for dark mode if needed
+      }
+    : {
+        ...theme.colors,
+        // Override specific colors for light mode if needed
+        background: '#FFFFFF',
+        surface: '#FFFFFF',
+        text: '#000000',
+        textSecondary: '#6D6D70',
+        textTertiary: '#8E8E93',
+        border: '#C6C6C8',
+        borderLight: '#E5E5EA',
+      };
 }
 
 // Hook to get theme-aware styles

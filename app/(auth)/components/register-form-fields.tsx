@@ -33,7 +33,7 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
         <View style={fieldContainerStyle}>
           <Input
             value={values.name}
-            onChangeText={(value) => setFieldValue('name', value)}
+            onChangeText={value => setFieldValue('name', value)}
             label="Nome completo"
             placeholder="Digite seu nome completo"
             error={errors.name?.message}
@@ -44,7 +44,7 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
         <View style={fieldContainerStyle}>
           <Input
             value={values.email}
-            onChangeText={(value) => setFieldValue('email', value)}
+            onChangeText={value => setFieldValue('email', value)}
             label="E-mail"
             placeholder="Digite seu e-mail"
             keyboardType="email-address"
@@ -57,7 +57,7 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
         <View style={fieldContainerStyle}>
           <Input
             value={formattedCPF}
-            onChangeText={(value) => setFieldValue('cpf', value)}
+            onChangeText={value => setFieldValue('cpf', value)}
             label="CPF"
             placeholder="000.000.000-00"
             keyboardType="numeric"
@@ -70,7 +70,7 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
         <View style={fieldContainerStyle}>
           <Input
             value={formattedPhone}
-            onChangeText={(value) => setFieldValue('phone', value)}
+            onChangeText={value => setFieldValue('phone', value)}
             label="Telefone"
             placeholder="(00) 00000-0000"
             keyboardType="phone-pad"
@@ -83,7 +83,7 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
         <View style={fieldContainerStyle}>
           <Input
             value={values.password}
-            onChangeText={(value) => setFieldValue('password', value)}
+            onChangeText={value => setFieldValue('password', value)}
             label="Senha"
             placeholder="Digite sua senha"
             secureTextEntry
@@ -95,7 +95,7 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
         <View style={fieldContainerStyle}>
           <Input
             value={values.confirmPassword}
-            onChangeText={(value) => setFieldValue('confirmPassword', value)}
+            onChangeText={value => setFieldValue('confirmPassword', value)}
             label="Confirmar senha"
             placeholder="Confirme sua senha"
             secureTextEntry
@@ -105,7 +105,7 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
         </View>
       </View>
     );
-  }
+  },
 );
 
 RegisterFormFields.displayName = 'RegisterFormFields';

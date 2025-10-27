@@ -48,7 +48,7 @@ config.serializer = {
           entryPoint,
           preModules,
           graph,
-          options
+          options,
         );
   },
 };

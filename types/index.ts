@@ -5,18 +5,18 @@ export * from './navigation';
 
 // Export theme types with specific names to avoid conflicts
 export type { ThemeMode, ColorScheme } from './theme';
-export type { 
-  Theme, 
-  ThemeColors, 
-  Gradient, 
-  Overlay, 
-  Typography, 
-  Spacing, 
-  BorderRadius, 
-  Shadow, 
-  Shadows, 
-  Animation, 
-  Breakpoints, 
+export type {
+  Theme,
+  ThemeColors,
+  Gradient,
+  Overlay,
+  Typography,
+  Spacing,
+  BorderRadius,
+  Shadow,
+  Shadows,
+  Animation,
+  Breakpoints,
   ZIndex,
   ComponentStyles,
   ThemeContextType,
@@ -27,7 +27,7 @@ export type {
   FontSize,
   FontWeight,
   BorderRadiusSize,
-  ShadowSize
+  ShadowSize,
 } from './theme';
 
 // Export common types with specific names to avoid conflicts
@@ -58,5 +58,5 @@ export type {
   Dimensions,
   LayoutDimensions,
   RootStackParamList,
-  TabParamList
+  TabParamList,
 } from './common';

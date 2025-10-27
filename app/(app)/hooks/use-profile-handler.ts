@@ -18,7 +18,7 @@ export const useProfileHandler = () => {
       logger.info('Profile update attempt', { email: values.email });
 
       // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Update user data
       await updateUser({

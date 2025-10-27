@@ -15,7 +15,7 @@ describe.skip('Input Component', () => {
 
   it('renders with helper text', () => {
     const { getByText } = render(
-      <Input helperText="This is helper text" placeholder="Enter text" />
+      <Input helperText="This is helper text" placeholder="Enter text" />,
     );
     expect(getByText('This is helper text')).toBeTruthy();
   });
@@ -38,7 +38,7 @@ describe.skip('Input Component', () => {
   it('handles text input', () => {
     const onChangeText = jest.fn();
     const { getByPlaceholderText } = render(
-      <Input placeholder="Enter text" onChangeText={onChangeText} />
+      <Input placeholder="Enter text" onChangeText={onChangeText} />,
     );
 
     fireEvent.changeText(getByPlaceholderText('Enter text'), 'test input');
@@ -77,7 +77,7 @@ describe.skip('Input Component', () => {
 
   it('renders with different states', () => {
     const { getByPlaceholderText, rerender } = render(
-      <Input state="focused" placeholder="Focused input" />
+      <Input state="focused" placeholder="Focused input" />,
     );
     expect(getByPlaceholderText('Focused input')).toBeTruthy();
 
@@ -95,7 +95,7 @@ describe.skip('Input Component', () => {
         accessibilityLabel="Email input"
         accessibilityHint="Enter your email address"
         placeholder="Enter email"
-      />
+      />,
     );
 
     expect(getByLabelText('Email')).toBeTruthy();

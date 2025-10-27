@@ -4,7 +4,7 @@
 // Mock Platform after modules are loaded to ensure it's available
 jest.doMock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
+  select: jest.fn(obj => obj.ios || obj.default),
   Version: '14.0',
 }));
 

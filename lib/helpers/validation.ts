@@ -12,7 +12,7 @@ export const isValidPhone = (phone: string): boolean => {
 
 // Password validation
 export const isValidPassword = (
-  password: string
+  password: string,
 ): {
   isValid: boolean;
   errors: string[];
@@ -86,12 +86,12 @@ export const isValidCreditCard = (cardNumber: string): boolean => {
 // Form validation helpers
 export const validateForm = <T extends Record<string, any>>(
   data: T,
-  rules: Record<keyof T, (value: any) => string | null>
+  rules: Record<keyof T, (value: any) => string | null>,
 ): { isValid: boolean; errors: Record<keyof T, string> } => {
   const errors = {} as Record<keyof T, string>;
   let isValid = true;
 
-  Object.keys(rules).forEach((key) => {
+  Object.keys(rules).forEach(key => {
     const rule = rules[key as keyof T];
     const error = rule(data[key as keyof T]);
 
@@ -201,7 +201,7 @@ export const sanitize = {
       "'": '&#39;',
     };
 
-    return text.replace(/[&<>"']/g, (m) => map[m] || m);
+    return text.replace(/[&<>"']/g, m => map[m] || m);
   },
 
   // Trim and clean whitespace

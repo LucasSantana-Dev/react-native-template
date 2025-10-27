@@ -84,7 +84,7 @@ export const getCardStyles = (
   variant: string,
   size: string,
   pressable: boolean = false,
-  disabled: boolean = false
+  disabled: boolean = false,
 ) => {
   const variantStyles = getCardVariantStyles();
   const sizeStyles = getCardSizeStyles();

@@ -59,7 +59,7 @@ export const useLazyLoad = (delay: number = 0): boolean => {
  */
 export const useLazyLoadOnView = (
   threshold: number = 0.1,
-  rootMargin: string = '50px'
+  rootMargin: string = '50px',
 ): { ref: React.RefObject<View | null>; shouldLoad: boolean } => {
   const [shouldLoad, setShouldLoad] = useState(false);
   const ref = useRef<View | null>(null);
@@ -69,14 +69,14 @@ export const useLazyLoadOnView = (
     if (!element) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         const entry = entries[0];
         if (entry && entry.isIntersecting) {
           setShouldLoad(true);
           observer.disconnect();
         }
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
 
     observer.observe(element as unknown as Element);
@@ -157,37 +157,37 @@ export const useLazyLoadManager = (components: string[]) => {
         return;
       }
 
-      setLoadingComponents((prev) => new Set(prev).add(componentName));
+      setLoadingComponents(prev => new Set(prev).add(componentName));
 
       // Simulate loading delay
       setTimeout(() => {
-        setLoadedComponents((prev) => new Set(prev).add(componentName));
-        setLoadingComponents((prev) => {
+        setLoadedComponents(prev => new Set(prev).add(componentName));
+        setLoadingComponents(prev => {
           const newSet = new Set(prev);
           newSet.delete(componentName);
           return newSet;
         });
       }, 100);
     },
-    [loadedComponents, loadingComponents]
+    [loadedComponents, loadingComponents],
   );
 
   const isLoaded = useCallback(
     (componentName: string) => {
       return loadedComponents.has(componentName);
     },
-    [loadedComponents]
+    [loadedComponents],
   );
 
   const isLoading = useCallback(
     (componentName: string) => {
       return loadingComponents.has(componentName);
     },
-    [loadingComponents]
+    [loadingComponents],
   );
 
   const loadAll = useCallback(() => {
-    components.forEach((component) => loadComponent(component));
+    components.forEach(component => loadComponent(component));
   }, [components, loadComponent]);
 
   return {

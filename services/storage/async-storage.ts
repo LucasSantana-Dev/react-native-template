@@ -75,7 +75,7 @@ export class StorageService {
   static async setMultiple(items: Record<StorageKeys, any>): Promise<boolean> {
     try {
       const entries = Object.entries(items).map(
-        ([key, value]) => [key, JSON.stringify(value)] as [string, string]
+        ([key, value]) => [key, JSON.stringify(value)] as [string, string],
       );
 
       await AsyncStorage.multiSet(entries);

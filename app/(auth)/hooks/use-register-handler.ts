@@ -16,7 +16,7 @@ export const useRegisterHandler = () => {
       logger.info('Register attempt', { email: values.email });
 
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       logger.info('Register successful', { email: values.email });
       router.push('/(auth)/login');

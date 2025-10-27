@@ -1,6 +1,9 @@
 # SEO & App Store Optimization (ASO) Guide
 
-This guide covers Search Engine Optimization (SEO) for web builds and App Store Optimization (ASO) for mobile app stores. While React Native apps are primarily mobile-focused, understanding SEO principles is crucial for web builds and marketing strategies.
+This guide covers Search Engine Optimization (SEO) for web builds and App Store
+Optimization (ASO) for mobile app stores. While React Native apps are primarily
+mobile-focused, understanding SEO principles is crucial for web builds and
+marketing strategies.
 
 ## 🌐 Web SEO (Expo Web)
 
@@ -174,9 +177,7 @@ import { LazyView } from 'expo-lazy';
 
 ## Key Features
 
-• Feature 1 with benefit
-• Feature 2 with benefit
-• Feature 3 with benefit
+• Feature 1 with benefit • Feature 2 with benefit • Feature 3 with benefit
 
 ## Why Choose Our App?
 
@@ -217,7 +218,8 @@ import { LazyView } from 'expo-lazy';
 - **4000 characters total**
 - **Natural language**
 - **Include variations**
-- **Example**: "productivity app task manager organizer planner reminder notes to do list"
+- **Example**: "productivity app task manager organizer planner reminder notes
+  to do list"
 
 ### 3. Visual Assets
 
@@ -284,13 +286,13 @@ const generateSitemap = () => {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${pages
     .map(
-      (page) => `
+      page => `
     <url>
       <loc>https://yourapp.com${page.url}</loc>
       <priority>${page.priority}</priority>
       <changefreq>weekly</changefreq>
     </url>
-  `
+  `,
     )
     .join('')}
 </urlset>`;
@@ -401,4 +403,5 @@ export const trackConversion = (conversionId: string, value?: number) => {
 4. **Technical Health**: Fix bugs, ensure stability
 5. **Monitoring**: Track metrics and adjust strategies
 
-Remember: SEO and ASO are long-term strategies. Consistent effort and monitoring are key to success.
+Remember: SEO and ASO are long-term strategies. Consistent effort and monitoring
+are key to success.

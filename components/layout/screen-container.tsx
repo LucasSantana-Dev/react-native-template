@@ -31,7 +31,7 @@ const getSafeAreaStyle = (insets: EdgeInsets, safeArea: boolean): ViewStyle => (
  */
 const getBackgroundStyle = (
   backgroundColor: string | undefined,
-  colors: { background: string }
+  colors: { background: string },
 ): ViewStyle => ({
   backgroundColor: backgroundColor || colors.background,
 });

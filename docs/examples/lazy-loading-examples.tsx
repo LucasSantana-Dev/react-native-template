@@ -173,7 +173,7 @@ export const FlatListExample: React.FC = () => {
         )}
       </View>
     ),
-    keyExtractor: (item) => item.id,
+    keyExtractor: item => item.id,
   });
 
   return <FlatList data={[]} renderItem={() => null} keyExtractor={() => ''} {...flatListProps} />;
@@ -193,7 +193,7 @@ export const FlashListExample: React.FC = () => {
     </View>
   );
 
-  return <FlashList data={mockData} renderItem={renderItem} keyExtractor={(item) => item.id} />;
+  return <FlashList data={mockData} renderItem={renderItem} keyExtractor={item => item.id} />;
 };
 
 /**
@@ -202,7 +202,7 @@ export const FlashListExample: React.FC = () => {
 export const InfiniteScrollExample: React.FC = () => {
   const fetchData = async (page: number, pageSize: number) => {
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     const startIndex = page * pageSize;
     const endIndex = startIndex + pageSize;
@@ -225,7 +225,7 @@ export const InfiniteScrollExample: React.FC = () => {
             <Text style={{ fontSize: 14, color: '#666' }}>{item.subtitle}</Text>
           </View>
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         {...flatListProps}
         ListFooterComponent={() =>
           isLoadingMore ? (

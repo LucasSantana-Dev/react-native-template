@@ -1,6 +1,9 @@
 # Knip Guide
 
-Knip is a powerful tool that finds unused files, dependencies, and exports in your JavaScript/TypeScript project. It helps keep your codebase clean by identifying dead code and unused dependencies, which can reduce bundle size and improve maintainability.
+Knip is a powerful tool that finds unused files, dependencies, and exports in
+your JavaScript/TypeScript project. It helps keep your codebase clean by
+identifying dead code and unused dependencies, which can reduce bundle size and
+improve maintainability.
 
 ## ⚙️ Configuration
 
@@ -33,7 +36,8 @@ Knip is a powerful tool that finds unused files, dependencies, and exports in yo
 
 ### `entry`
 
-Specifies the entry points of your application. Knip uses these to determine what code is actually used.
+Specifies the entry points of your application. Knip uses these to determine
+what code is actually used.
 
 ```json
 {
@@ -145,7 +149,8 @@ Run Knip regularly to identify and remove unused code.
 
 ### 2. Ignore False Positives
 
-Some files might be used in ways Knip can't detect (e.g., dynamic imports, configuration files).
+Some files might be used in ways Knip can't detect (e.g., dynamic imports,
+configuration files).
 
 ```json
 {
@@ -198,7 +203,8 @@ Ensure all entry points are properly configured to avoid false positives.
 
 **Problem**: Files imported dynamically are reported as unused.
 
-**Solution**: Add dynamic import patterns to the ignore list or use comments to indicate usage.
+**Solution**: Add dynamic import patterns to the ignore list or use comments to
+indicate usage.
 
 ```typescript
 // This file is used via dynamic import
@@ -206,4 +212,6 @@ Ensure all entry points are properly configured to avoid false positives.
 export const MyComponent = () => <div>Hello</div>;
 ```
 
-Remember: Knip is a tool to help keep your codebase clean. Use it regularly to identify and remove unused code, but always verify before deleting files or dependencies.
+Remember: Knip is a tool to help keep your codebase clean. Use it regularly to
+identify and remove unused code, but always verify before deleting files or
+dependencies.

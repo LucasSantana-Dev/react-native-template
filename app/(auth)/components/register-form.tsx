@@ -45,21 +45,21 @@ export const RegisterForm: React.FC<RegisterFormProps> = React.memo(
         marginBottom: 24,
         textAlign: 'center' as const,
       }),
-      [colors.text]
+      [colors.text],
     );
 
     const cardStyle = useMemo(
       () => ({
         marginBottom: 24,
       }),
-      []
+      [],
     );
 
     const buttonStyle = useMemo(
       () => ({
         marginTop: 16,
       }),
-      []
+      [],
     );
 
     return (
@@ -89,5 +89,5 @@ export const RegisterForm: React.FC<RegisterFormProps> = React.memo(
         </Card.Body>
       </Card>
     );
-  }
+  },
 );

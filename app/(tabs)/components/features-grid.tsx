@@ -31,7 +31,7 @@ export const FeaturesGrid: React.FC<FeaturesGridProps> = ({
         gap: 12,
       }}
     >
-      {features.map((feature) => (
+      {features.map(feature => (
         <View
           key={feature.id}
           style={{

@@ -1,19 +1,23 @@
 # React Native Template 🚀
 
-A modern, well-structured React Native template built with Expo, TypeScript, and best practices for scalable mobile app development.
+A modern, well-structured React Native template built with Expo, TypeScript, and
+best practices for scalable mobile app development.
 
 ## ✨ Features
 
 ### 🎨 Component Library
 
-- **Button**: Multiple variants (primary, secondary, outline, ghost, danger) and sizes
-- **Card**: Elevated, outlined, and flat variants with header/body/footer sections
+- **Button**: Multiple variants (primary, secondary, outline, ghost, danger) and
+  sizes
+- **Card**: Elevated, outlined, and flat variants with header/body/footer
+  sections
 - **Input**: Form inputs with validation, icons, and different states
 - **Layout Components**: ScreenContainer, ScrollContainer, HeaderLayout
 
 ### 🎯 Theme System
 
-- **Comprehensive Color Palette**: Primary, secondary, status, and semantic colors
+- **Comprehensive Color Palette**: Primary, secondary, status, and semantic
+  colors
 - **Typography Scale**: Consistent font sizes, weights, and line heights
 - **Spacing System**: Standardized spacing values (xs, sm, md, lg, xl, etc.)
 - **Border Radius**: Consistent corner radius values
@@ -54,7 +58,8 @@ See [Testing Documentation](docs/testing/README.md) for detailed guides.
 - **lint-staged**: Pre-commit validation with Husky hooks
 - **TypeScript**: Strict type checking for safety
 
-See [Code Quality Documentation](docs/code-quality/README.md) for setup and usage.
+See [Code Quality Documentation](docs/code-quality/README.md) for setup and
+usage.
 
 ### 🔍 Discoverability
 
@@ -63,7 +68,8 @@ See [Code Quality Documentation](docs/code-quality/README.md) for setup and usag
 - **Accessibility**: WCAG-compliant for inclusive user experience
 - **Web SEO**: Optimized for search engines when using Expo web
 
-See [SEO & Discoverability Documentation](docs/seo-discoverability/README.md) for implementation guides.
+See [SEO & Discoverability Documentation](docs/seo-discoverability/README.md)
+for implementation guides.
 
 ### 🔐 Authentication
 
@@ -88,9 +94,12 @@ See [SEO & Discoverability Documentation](docs/seo-discoverability/README.md) fo
 
 ### 🔧 Development Tools
 
-- **Git Hooks**: Pre-commit linting, commit message validation, pre-push type checking
-- **CI/CD Pipeline**: Automated testing, linting, and type checking on GitHub Actions
-- **Code Quality**: ESLint, Prettier, TypeScript strict mode, and Knip for dead code detection
+- **Git Hooks**: Pre-commit linting, commit message validation, pre-push type
+  checking
+- **CI/CD Pipeline**: Automated testing, linting, and type checking on GitHub
+  Actions
+- **Code Quality**: ESLint, Prettier, TypeScript strict mode, and Knip for dead
+  code detection
 - **Testing**: Jest and React Native Testing Library setup
 - **Orientation Support**: Portrait/landscape handling
 - **Adaptive Layouts**: Components that adapt to screen size
@@ -99,7 +108,8 @@ See [SEO & Discoverability Documentation](docs/seo-discoverability/README.md) fo
 
 - **Expo Router** - File-based routing for React Native
 - **TypeScript** - Full type safety and better developer experience
-- **Modern Architecture** - Organized folder structure following React Native best practices
+- **Modern Architecture** - Organized folder structure following React Native
+  best practices
 - **API Layer** - Structured API client with error handling
 - **Storage Management** - AsyncStorage wrapper with type safety
 
@@ -178,7 +188,8 @@ See [SEO & Discoverability Documentation](docs/seo-discoverability/README.md) fo
 
 ### Lazy Loading Implementation
 
-This template includes comprehensive lazy loading strategies for optimal performance:
+This template includes comprehensive lazy loading strategies for optimal
+performance:
 
 - **Screen-level lazy loading** for heavy screens (Profile, Explore, Home)
 - **Component-level lazy loading** for feature-specific components
@@ -221,17 +232,21 @@ For detailed performance optimization guides, see:
 ### Components Organization
 
 - **`components/ui/`** - Reusable base UI components (buttons, inputs, cards)
-- **`components/common/`** - Shared components used across features (external links, haptic feedback)
-- **`components/features/`** - Feature-specific components (hello wave, parallax scroll)
+- **`components/common/`** - Shared components used across features (external
+  links, haptic feedback)
+- **`components/features/`** - Feature-specific components (hello wave, parallax
+  scroll)
 
 ### Services Layer
 
 - **`services/api/`** - API client configuration and HTTP methods
-- **`services/storage/`** - AsyncStorage wrapper with type safety and convenience methods
+- **`services/storage/`** - AsyncStorage wrapper with type safety and
+  convenience methods
 
 ### Utilities
 
-- **`lib/utils/`** - Formatting functions (dates, numbers, strings, phone numbers)
+- **`lib/utils/`** - Formatting functions (dates, numbers, strings, phone
+  numbers)
 - **`lib/helpers/`** - Validation helpers and sanitization functions
 
 ### Type System
@@ -244,7 +259,11 @@ For detailed performance optimization guides, see:
 The project includes a comprehensive theming system:
 
 ```typescript
-import { useTheme, useThemeColors, useThemeStyles } from '@/context/theme-context';
+import {
+  useTheme,
+  useThemeColors,
+  useThemeStyles,
+} from '@/context/theme-context';
 
 // Use theme context
 const { isDark, toggleTheme } = useTheme();
@@ -497,7 +516,8 @@ This project uses Husky to manage Git hooks for code quality:
 
 ### Commit Message Convention
 
-Follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+Follow the [Conventional Commits](https://www.conventionalcommits.org/)
+specification:
 
 ```bash
 feat: add new feature
@@ -511,7 +531,8 @@ chore: maintenance tasks
 
 ### CI/CD Pipeline (GitHub Actions)
 
-The project includes a comprehensive CI/CD pipeline that runs on every push and pull request:
+The project includes a comprehensive CI/CD pipeline that runs on every push and
+pull request:
 
 - **Lint & Type Check**: ESLint, TypeScript, and Prettier validation
 - **Testing**: Jest test suite execution

@@ -114,7 +114,11 @@ export function isValidCurrency(value: string): boolean {
 /**
  * Check if a number is within valid currency range
  */
-export function isWithinCurrencyRange(value: number, min: number = 0, max: number = 999999999.99): boolean {
+export function isWithinCurrencyRange(
+  value: number,
+  min: number = 0,
+  max: number = 999999999.99,
+): boolean {
   return value >= min && value <= max;
 }
 

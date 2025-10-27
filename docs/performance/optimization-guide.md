@@ -2,7 +2,9 @@
 
 ## Overview
 
-This guide covers comprehensive performance optimization strategies for React Native Expo applications, including bundle size optimization, memory management, list virtualization, image optimization, and performance monitoring.
+This guide covers comprehensive performance optimization strategies for React
+Native Expo applications, including bundle size optimization, memory management,
+list virtualization, image optimization, and performance monitoring.
 
 ## Table of Contents
 
@@ -177,7 +179,7 @@ const handlePress = useCallback(
   (id: string) => {
     onItemPress(id);
   },
-  [onItemPress]
+  [onItemPress],
 );
 ```
 
@@ -487,7 +489,10 @@ npm run quality:check
 
 ## Conclusion
 
-Performance optimization is an ongoing process that requires careful measurement, strategic implementation, and continuous monitoring. By following the strategies outlined in this guide, you can achieve significant improvements in bundle size, load times, memory usage, and overall user experience.
+Performance optimization is an ongoing process that requires careful
+measurement, strategic implementation, and continuous monitoring. By following
+the strategies outlined in this guide, you can achieve significant improvements
+in bundle size, load times, memory usage, and overall user experience.
 
 For more information, see:
 

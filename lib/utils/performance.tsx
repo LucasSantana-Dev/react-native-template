@@ -142,12 +142,12 @@ export class PerformanceTracker {
 
     const slowestMetric = metrics.reduce(
       (slowest, [name, duration]) => (duration > slowest.duration ? { name, duration } : slowest),
-      { name: '', duration: 0 }
+      { name: '', duration: 0 },
     );
 
     const fastestMetric = metrics.reduce(
       (fastest, [name, duration]) => (duration < fastest.duration ? { name, duration } : fastest),
-      { name: '', duration: Infinity }
+      { name: '', duration: Infinity },
     );
 
     return {
@@ -409,7 +409,7 @@ export const PerformanceOverlay: React.FC<{
 export async function benchmark<T>(
   name: string,
   fn: () => T | Promise<T>,
-  iterations: number = 1
+  iterations: number = 1,
 ): Promise<{
   name: string;
   iterations: number;

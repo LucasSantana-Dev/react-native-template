@@ -10,7 +10,7 @@ global.__DEV__ = global.__DEV__ || true;
 Object.defineProperty(global, 'Platform', {
   value: {
     OS: 'ios',
-    select: jest.fn((obj) => obj.ios || obj.default),
+    select: jest.fn(obj => obj.ios || obj.default),
     Version: '14.0',
   },
   writable: true,
@@ -20,14 +20,14 @@ Object.defineProperty(global, 'Platform', {
 // Mock Platform BEFORE any React Native imports
 global.Platform = {
   OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
+  select: jest.fn(obj => obj.ios || obj.default),
   Version: '14.0',
 };
 
 // Mock Platform module
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
+  select: jest.fn(obj => obj.ios || obj.default),
   Version: '14.0',
 }));
 
@@ -63,8 +63,8 @@ jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => ({
 jest.mock('react-native/Libraries/Utilities/PixelRatio', () => ({
   get: jest.fn(() => 2),
   getFontScale: jest.fn(() => 1),
-  getPixelSizeForLayoutSize: jest.fn((size) => size * 2),
-  roundToNearestPixel: jest.fn((size) => Math.round(size)),
+  getPixelSizeForLayoutSize: jest.fn(size => size * 2),
+  roundToNearestPixel: jest.fn(size => Math.round(size)),
 }));
 
 // Mock Detox device for E2E tests
@@ -128,13 +128,13 @@ global.by = {
 // Mock global variables that might be missing in test environment
 global.requestAnimationFrame =
   global.requestAnimationFrame ||
-  ((callback) => {
+  (callback => {
     return setTimeout(callback, 0);
   });
 
 global.cancelAnimationFrame =
   global.cancelAnimationFrame ||
-  ((id) => {
+  (id => {
     clearTimeout(id);
   });
 

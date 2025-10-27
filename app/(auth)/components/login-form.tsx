@@ -39,7 +39,7 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(
         marginBottom: 24,
         textAlign: 'center' as const,
       }),
-      [colors.text]
+      [colors.text],
     );
 
     const forgotPasswordStyle = useMemo(
@@ -47,14 +47,14 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(
         alignSelf: 'flex-end' as const,
         marginBottom: 24,
       }),
-      []
+      [],
     );
 
     const cardStyle = useMemo(
       () => ({
         marginBottom: 24,
       }),
-      []
+      [],
     );
 
     return (
@@ -66,7 +66,7 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(
             label="Email"
             placeholder="Digite seu email"
             value={formState.values.email}
-            onChangeText={(value) => setFieldValue('email', value)}
+            onChangeText={value => setFieldValue('email', value)}
             error={formState.errors.email?.message}
             keyboardType="email-address"
             autoCapitalize="none"
@@ -78,7 +78,7 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(
             label="Senha"
             placeholder="Digite sua senha"
             value={formState.values.password}
-            onChangeText={(value) => setFieldValue('password', value)}
+            onChangeText={value => setFieldValue('password', value)}
             error={formState.errors.password?.message}
             secureTextEntry
             leftIcon="🔒"
@@ -101,5 +101,5 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(
         </Card.Body>
       </Card>
     );
-  }
+  },
 );

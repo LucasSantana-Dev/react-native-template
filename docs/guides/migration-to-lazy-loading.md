@@ -2,7 +2,10 @@
 
 ## Overview
 
-This guide provides step-by-step instructions for migrating an existing React Native Expo project to implement comprehensive lazy loading for better performance. The migration is designed to be incremental and safe, allowing you to implement changes gradually.
+This guide provides step-by-step instructions for migrating an existing React
+Native Expo project to implement comprehensive lazy loading for better
+performance. The migration is designed to be incremental and safe, allowing you
+to implement changes gradually.
 
 ## Table of Contents
 
@@ -205,7 +208,7 @@ export const useLazyLoad = (delay: number = 0): boolean => {
 
 export const useLazyLoadOnView = (
   threshold: number = 0.1,
-  rootMargin: string = '50px'
+  rootMargin: string = '50px',
 ): { ref: React.RefObject<View>; shouldLoad: boolean } => {
   const [shouldLoad, setShouldLoad] = useState(false);
   const ref = useRef<View>(null);
@@ -221,7 +224,7 @@ export const useLazyLoadOnView = (
           observer.disconnect();
         }
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
 
     observer.observe(element);
@@ -466,7 +469,7 @@ export const useVirtualScroll = <T>({
         index,
       };
     },
-    [estimatedItemSize]
+    [estimatedItemSize],
   );
 
   const flatListProps: Partial<FlatListProps<T>> = useMemo(
@@ -489,7 +492,7 @@ export const useVirtualScroll = <T>({
       maxToRenderPerBatch,
       windowSize,
       removeClippedSubviews,
-    ]
+    ],
   );
 
   return { flatListProps };
@@ -809,4 +812,8 @@ After completing the migration, you should see:
 
 ## Conclusion
 
-This migration guide provides a comprehensive approach to implementing lazy loading in your React Native Expo project. The incremental approach allows you to implement changes safely while maintaining functionality. Remember to test thoroughly at each phase and measure performance improvements to ensure the migration is successful.
+This migration guide provides a comprehensive approach to implementing lazy
+loading in your React Native Expo project. The incremental approach allows you
+to implement changes safely while maintaining functionality. Remember to test
+thoroughly at each phase and measure performance improvements to ensure the
+migration is successful.

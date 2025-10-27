@@ -78,7 +78,7 @@ export const RecentTransactions: React.FC<RecentTransactionsProps> = ({
             Nenhuma transação encontrada
           </Text>
         ) : (
-          transactions.map((transaction) => (
+          transactions.map(transaction => (
             <TransactionItem key={transaction.id} transaction={transaction} />
           ))
         )}

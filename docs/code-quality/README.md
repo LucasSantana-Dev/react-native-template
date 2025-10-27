@@ -1,6 +1,10 @@
 # Code Quality Overview
 
-Maintaining high code quality is essential for building scalable, maintainable, and reliable React Native applications. This section outlines the tools and practices implemented in this template to ensure consistent code style, detect potential issues early, and enforce coding standards across the development team.
+Maintaining high code quality is essential for building scalable, maintainable,
+and reliable React Native applications. This section outlines the tools and
+practices implemented in this template to ensure consistent code style, detect
+potential issues early, and enforce coding standards across the development
+team.
 
 ## 🛠️ Core Tools
 
@@ -25,7 +29,8 @@ Maintaining high code quality is essential for building scalable, maintainable, 
 - **Prettier**: `.prettierrc.json` - Code formatting rules
 - **TypeScript**: `tsconfig.json` - TypeScript compiler options
 - **Knip**: `knip.json` - Unused code detection configuration
-- **Husky/lint-staged**: `package.json` (for lint-staged config) and `.husky/` directory
+- **Husky/lint-staged**: `package.json` (for lint-staged config) and `.husky/`
+  directory
 
 ## ⚡ Automated Quality Checks
 
@@ -35,7 +40,10 @@ The template includes pre-commit hooks that automatically:
 2. Format code with Prettier
 3. Run TypeScript type checks
 
-This ensures that only high-quality, consistently formatted, and type-safe code is committed to the repository. Additionally, GitHub Actions are configured to run these checks on every pull request, providing an extra layer of quality assurance.
+This ensures that only high-quality, consistently formatted, and type-safe code
+is committed to the repository. Additionally, GitHub Actions are configured to
+run these checks on every pull request, providing an extra layer of quality
+assurance.
 
 ## 📊 Quality Metrics & Targets
 
@@ -63,33 +71,43 @@ This ensures that only high-quality, consistently formatted, and type-safe code 
 
 ### 1. Code Organization
 
-- **File structure**: Consistent directory organization (e.g., `components/ui`, `lib/utils`)
-- **Import order**: Standardized import grouping (React, third-party, internal, relative)
-- **Modularization**: Break down large files and functions into smaller, focused units
+- **File structure**: Consistent directory organization (e.g., `components/ui`,
+  `lib/utils`)
+- **Import order**: Standardized import grouping (React, third-party, internal,
+  relative)
+- **Modularization**: Break down large files and functions into smaller, focused
+  units
 
 ### 2. Type Safety
 
 - **TypeScript strict mode**: Maximum type safety to catch errors early
-- **Type definitions**: Comprehensive type coverage for all data structures and props
-- **Avoid `any`**: Minimize the use of `any` type, using specific types or generics instead
+- **Type definitions**: Comprehensive type coverage for all data structures and
+  props
+- **Avoid `any`**: Minimize the use of `any` type, using specific types or
+  generics instead
 
 ### 3. Performance
 
 - **Bundle optimization**: Tree-shaking and dead code elimination with Knip
-- **Lazy loading**: Component and screen lazy loading for faster initial load times
+- **Lazy loading**: Component and screen lazy loading for faster initial load
+  times
 - **Efficient rendering**: Memoization and virtualization for lists
 
 ### 4. Testing
 
-- **Unit tests**: Component and utility testing with Jest and React Native Testing Library
+- **Unit tests**: Component and utility testing with Jest and React Native
+  Testing Library
 - **Integration tests**: Component interaction testing
 - **E2E tests**: End-to-end testing with Detox
-- **Test coverage**: Maintain high test coverage for critical parts of the application
+- **Test coverage**: Maintain high test coverage for critical parts of the
+  application
 
 ### 5. Documentation
 
-- **Code comments**: Clear, helpful comments for complex logic or non-obvious decisions
-- **JSDoc**: Function and component documentation for better IDE support and readability
+- **Code comments**: Clear, helpful comments for complex logic or non-obvious
+  decisions
+- **JSDoc**: Function and component documentation for better IDE support and
+  readability
 - **README files**: Comprehensive READMEs for each major module or feature
 
 ## ⚠️ Troubleshooting Common Issues
@@ -215,4 +233,6 @@ jobs:
 - **Consistent patterns**: Predictable code style and architecture
 - **Reduced technical debt**: Proactive identification and resolution of issues
 
-Remember: Code quality is not just about following rules—it's about writing maintainable, readable, and reliable code that your team can work with effectively.
+Remember: Code quality is not just about following rules—it's about writing
+maintainable, readable, and reliable code that your team can work with
+effectively.

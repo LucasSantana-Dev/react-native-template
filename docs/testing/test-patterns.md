@@ -1,12 +1,17 @@
 # Test Patterns and Best Practices
 
-Writing effective and maintainable tests requires adherence to certain patterns and best practices. This guide outlines common testing patterns, strategies for different scenarios, and general guidelines to improve your test suite's quality and efficiency.
+Writing effective and maintainable tests requires adherence to certain patterns
+and best practices. This guide outlines common testing patterns, strategies for
+different scenarios, and general guidelines to improve your test suite's quality
+and efficiency.
 
 ## 💡 General Best Practices
 
 ### 1. Test Behavior, Not Implementation
 
-Focus on what the user sees and interacts with, rather than the internal workings of your components. This makes your tests more resilient to refactoring.
+Focus on what the user sees and interacts with, rather than the internal
+workings of your components. This makes your tests more resilient to
+refactoring.
 
 ```typescript
 // ❌ Bad - Testing implementation
@@ -25,7 +30,8 @@ it('should display correct text after user interaction', () => {
 
 ### 2. Use Descriptive Test Names
 
-Test names should clearly explain what is being tested, including the component/function, the action, and the expected outcome.
+Test names should clearly explain what is being tested, including the
+component/function, the action, and the expected outcome.
 
 ```typescript
 // ❌ Bad
@@ -43,7 +49,8 @@ it('should display an error message when the input is invalid', () => {});
 Organize your tests into three distinct phases:
 
 - **Arrange**: Set up the test environment, mock data, and render components
-- **Act**: Perform the action being tested (e.g., user interaction, function call)
+- **Act**: Perform the action being tested (e.g., user interaction, function
+  call)
 - **Assert**: Verify the expected outcome using assertions
 
 ```typescript
@@ -62,7 +69,8 @@ it('should call onPress when button is pressed', () => {
 
 ### 4. Mock External Dependencies
 
-Isolate your tests by mocking external dependencies like API calls, `AsyncStorage`, `Platform.OS`, or complex third-party libraries.
+Isolate your tests by mocking external dependencies like API calls,
+`AsyncStorage`, `Platform.OS`, or complex third-party libraries.
 
 ```typescript
 // Mock AsyncStorage
@@ -75,14 +83,16 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 // Mock Platform
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
+  select: jest.fn(obj => obj.ios || obj.default),
   Version: '14.0',
 }));
 ```
 
 ### 5. Test Asynchronous Operations
 
-Use `async/await` with `act()` and `waitFor()` to handle asynchronous code in your tests, ensuring that all updates have been processed before making assertions.
+Use `async/await` with `act()` and `waitFor()` to handle asynchronous code in
+your tests, ensuring that all updates have been processed before making
+assertions.
 
 ```typescript
 import { render, act, waitFor } from '@testing-library/react-native';
@@ -106,7 +116,9 @@ it('should load data after an API call', async () => {
 
 ### 6. Snapshot Testing (Use Sparingly)
 
-Snapshot tests capture the rendered output of a component and compare it to a previously saved snapshot. Use them for simple, static components or to detect unintentional UI changes.
+Snapshot tests capture the rendered output of a component and compare it to a
+previously saved snapshot. Use them for simple, static components or to detect
+unintentional UI changes.
 
 ```typescript
 import renderer from 'react-test-renderer';
@@ -118,7 +130,8 @@ it('renders correctly', () => {
 });
 ```
 
-**Note**: Snapshots can be brittle and lead to frequent updates. Prefer testing user-facing behavior over exact rendering.
+**Note**: Snapshots can be brittle and lead to frequent updates. Prefer testing
+user-facing behavior over exact rendering.
 
 ### 7. Test Error States
 
@@ -139,7 +152,9 @@ it('should display an error message when data fetching fails', async () => {
 
 ### 8. Accessibility Testing
 
-Use React Native Testing Library's accessibility queries (`getByLabelText`, `getByRole`) and tools like `jest-axe` (for web, or manual checks for RN) to ensure your app is accessible.
+Use React Native Testing Library's accessibility queries (`getByLabelText`,
+`getByRole`) and tools like `jest-axe` (for web, or manual checks for RN) to
+ensure your app is accessible.
 
 ```typescript
 import { render, screen } from '@testing-library/react-native';
@@ -151,4 +166,5 @@ it('should have an accessibility label', () => {
 });
 ```
 
-Remember: A well-designed test suite provides confidence, speeds up development, and reduces bugs.
+Remember: A well-designed test suite provides confidence, speeds up development,
+and reduces bugs.

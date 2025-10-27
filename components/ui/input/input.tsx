@@ -63,7 +63,7 @@ export const Input = forwardRef<TextInput, InputProps<FieldValues>>(
       name: _name,
       ...props
     },
-    ref
+    ref,
   ) => {
     // Simplified implementation for now
     const isDisabled = disabled || readonly;
@@ -80,7 +80,7 @@ export const Input = forwardRef<TextInput, InputProps<FieldValues>>(
         />
       </View>
     );
-  }
+  },
 );
 
 Input.displayName = 'Input';

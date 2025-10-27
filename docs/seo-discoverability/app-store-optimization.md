@@ -1,10 +1,13 @@
 # App Store Optimization (ASO) Guide
 
-This guide covers App Store Optimization strategies and best practices for the React Native template.
+This guide covers App Store Optimization strategies and best practices for the
+React Native template.
 
 ## 🎯 Overview
 
-App Store Optimization (ASO) is the process of improving your app's visibility and discoverability in app stores. It involves optimizing various elements of your app store listing to increase downloads and user engagement.
+App Store Optimization (ASO) is the process of improving your app's visibility
+and discoverability in app stores. It involves optimizing various elements of
+your app store listing to increase downloads and user engagement.
 
 ## 🛠️ Key Elements
 
@@ -116,9 +119,8 @@ Brief description of what the app does and its main value proposition.
 
 ## Key Features
 
-• Feature 1 - Brief description
-• Feature 2 - Brief description
-• Feature 3 - Brief description
+• Feature 1 - Brief description • Feature 2 - Brief description • Feature 3 -
+Brief description
 
 ## Target Audience
 
@@ -584,4 +586,6 @@ interface ASOMetrics {
 - Don't set and forget
 - Don't copy competitor listings exactly
 
-Remember: ASO is an ongoing process that requires continuous optimization and testing. Focus on providing value to users and creating compelling store listings that accurately represent your app's features and benefits.
+Remember: ASO is an ongoing process that requires continuous optimization and
+testing. Focus on providing value to users and creating compelling store
+listings that accurately represent your app's features and benefits.

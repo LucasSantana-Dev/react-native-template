@@ -75,15 +75,13 @@ export const formatString = {
 
   // Capitalize each word
   capitalizeWords: (str: string): string => {
-    return str.replace(/\w\S*/g, (txt) =>
-      txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-    );
+    return str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
   },
 
   // Truncate string with ellipsis
   truncate: (str: string, length: number): string => {
     if (str.length <= length) return str;
-    return `${str.substring(0, length)  }...`;
+    return `${str.substring(0, length)}...`;
   },
 
   // Remove extra whitespace

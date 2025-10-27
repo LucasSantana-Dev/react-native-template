@@ -78,7 +78,7 @@ export function isYesterday(date: Date | string): boolean {
 export function isDateInRange(
   date: Date | string,
   startDate: Date | string,
-  endDate: Date | string
+  endDate: Date | string,
 ): boolean {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   const startObj = typeof startDate === 'string' ? new Date(startDate) : startDate;

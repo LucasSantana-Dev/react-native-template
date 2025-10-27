@@ -1,10 +1,14 @@
 # Deep Linking Guide
 
-This guide covers deep linking implementation, Universal Links (iOS), App Links (Android), and best practices for the React Native template.
+This guide covers deep linking implementation, Universal Links (iOS), App Links
+(Android), and best practices for the React Native template.
 
 ## 🎯 Overview
 
-Deep linking allows users to navigate directly to specific content within your app from external sources like web pages, emails, or other apps. This guide covers implementation using Expo Linking and platform-specific deep linking features.
+Deep linking allows users to navigate directly to specific content within your
+app from external sources like web pages, emails, or other apps. This guide
+covers implementation using Expo Linking and platform-specific deep linking
+features.
 
 ## 🛠️ Tools and Technologies
 
@@ -318,7 +322,10 @@ export class DeepLinkService {
   private static baseUrl = 'https://myapp.com';
   private static customScheme = 'myapp';
 
-  static generateUniversalLink(path: string, params?: Record<string, string>): string {
+  static generateUniversalLink(
+    path: string,
+    params?: Record<string, string>,
+  ): string {
     const url = new URL(path, this.baseUrl);
 
     if (params) {
@@ -330,7 +337,10 @@ export class DeepLinkService {
     return url.toString();
   }
 
-  static generateCustomSchemeLink(path: string, params?: Record<string, string>): string {
+  static generateCustomSchemeLink(
+    path: string,
+    params?: Record<string, string>,
+  ): string {
     const url = `${this.customScheme}://${path}`;
 
     if (params) {
@@ -341,7 +351,10 @@ export class DeepLinkService {
     return url;
   }
 
-  static generateShareableLink(path: string, params?: Record<string, string>): string {
+  static generateShareableLink(
+    path: string,
+    params?: Record<string, string>,
+  ): string {
     // Prefer Universal Links for sharing
     return this.generateUniversalLink(path, params);
   }
@@ -684,4 +697,6 @@ export class DeepLinkABTesting {
 - Don't ignore analytics and performance
 - Don't forget to handle edge cases
 
-Remember: Deep linking is about creating seamless user experiences. Focus on making it easy for users to navigate to your app and find the content they're looking for.
+Remember: Deep linking is about creating seamless user experiences. Focus on
+making it easy for users to navigate to your app and find the content they're
+looking for.

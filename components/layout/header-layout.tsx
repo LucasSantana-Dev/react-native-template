@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-    StatusBar,
-    Text,
-    TextStyle,
-    View,
-    ViewStyle
-} from 'react-native';
+import { StatusBar, Text, TextStyle, View, ViewStyle } from 'react-native';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -135,16 +129,11 @@ export const HeaderLayout: React.FC<HeaderLayoutProps> = ({
   return (
     <View style={headerStyle} testID={testID}>
       {showStatusBar && (
-        <StatusBar
-          barStyle={statusBarStyle}
-          backgroundColor={backgroundColor || colors.surface}
-        />
+        <StatusBar barStyle={statusBarStyle} backgroundColor={backgroundColor || colors.surface} />
       )}
 
       <View style={titleContainerStyle}>
-        <View style={actionStyle}>
-          {leftAction}
-        </View>
+        <View style={actionStyle}>{leftAction}</View>
 
         <View style={{ flex: 1, alignItems: 'center' }}>
           {title && (
@@ -159,9 +148,7 @@ export const HeaderLayout: React.FC<HeaderLayoutProps> = ({
           )}
         </View>
 
-        <View style={actionStyle}>
-          {rightAction}
-        </View>
+        <View style={actionStyle}>{rightAction}</View>
       </View>
     </View>
   );

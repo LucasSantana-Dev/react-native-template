@@ -11,7 +11,7 @@ export function validateField<T extends Record<string, any>>(
   field: keyof T,
   value: T[keyof T],
   formData: T,
-  validation: FormValidation<T>
+  validation: FormValidation<T>,
 ): string | undefined {
   const validator = validation[field];
   if (!validator) return undefined;
@@ -28,7 +28,7 @@ export function validateField<T extends Record<string, any>>(
  */
 export function validateForm<T extends Record<string, any>>(
   formData: FormData<T>,
-  validation: FormValidation<T>
+  validation: FormValidation<T>,
 ): Record<keyof T, string | undefined> {
   const errors: Record<keyof T, string | undefined> = {} as Record<keyof T, string | undefined>;
 
@@ -47,7 +47,7 @@ export function validateForm<T extends Record<string, any>>(
  * Check if form is valid (no errors)
  */
 export function isFormValid<T extends Record<string, any>>(
-  errors: Record<keyof T, string | undefined>
+  errors: Record<keyof T, string | undefined>,
 ): boolean {
   return Object.values(errors).every(error => !error);
 }
@@ -55,27 +55,21 @@ export function isFormValid<T extends Record<string, any>>(
 /**
  * Check if form is dirty (any field has been modified)
  */
-export function isFormDirty<T extends Record<string, any>>(
-  formData: FormData<T>
-): boolean {
+export function isFormDirty<T extends Record<string, any>>(formData: FormData<T>): boolean {
   return Object.values(formData).some(field => field.dirty);
 }
 
 /**
  * Check if form is touched (any field has been focused)
  */
-export function isFormTouched<T extends Record<string, any>>(
-  formData: FormData<T>
-): boolean {
+export function isFormTouched<T extends Record<string, any>>(formData: FormData<T>): boolean {
   return Object.values(formData).some(field => field.touched);
 }
 
 /**
  * Get form values as plain object
  */
-export function getFormValues<T extends Record<string, any>>(
-  formData: FormData<T>
-): T {
+export function getFormValues<T extends Record<string, any>>(formData: FormData<T>): T {
   const values: T = {} as T;
 
   Object.keys(formData).forEach(key => {

@@ -1,36 +1,47 @@
 # Documentation Overview
 
-This directory contains comprehensive documentation for the React Native Expo template with performance optimization features.
+This directory contains comprehensive documentation for the React Native Expo
+template with performance optimization features.
 
 ## 📚 Documentation Structure
 
 ### Performance Guides
 
-- **[Lazy Loading Guide](performance/lazy-loading.md)** - Comprehensive guide to implementing lazy loading strategies
-- **[Performance Optimization Guide](performance/optimization-guide.md)** - Complete performance optimization techniques
-- **[Performance Best Practices](best-practices/performance.md)** - Best practices for maintaining optimal performance
+- **[Lazy Loading Guide](performance/lazy-loading.md)** - Comprehensive guide to
+  implementing lazy loading strategies
+- **[Performance Optimization Guide](performance/optimization-guide.md)** -
+  Complete performance optimization techniques
+- **[Performance Best Practices](best-practices/performance.md)** - Best
+  practices for maintaining optimal performance
 
 ### Code Examples
 
-- **[Lazy Loading Examples](examples/lazy-loading-examples.tsx)** - Reusable code examples for all lazy loading patterns
+- **[Lazy Loading Examples](examples/lazy-loading-examples.tsx)** - Reusable
+  code examples for all lazy loading patterns
 
 ### Checklists
 
-- **[Performance Checklist](checklists/performance-checklist.md)** - Step-by-step checklist for implementing performance optimizations
+- **[Performance Checklist](checklists/performance-checklist.md)** -
+  Step-by-step checklist for implementing performance optimizations
 
 ### Architecture
 
-- **[Performance Architecture Decisions](architecture/performance-decisions.md)** - Documented architectural decisions for performance optimizations
+- **[Performance Architecture Decisions](architecture/performance-decisions.md)** -
+  Documented architectural decisions for performance optimizations
 
 ### Migration Guides
 
-- **[Migration to Lazy Loading](guides/migration-to-lazy-loading.md)** - Step-by-step guide for migrating existing projects
+- **[Migration to Lazy Loading](guides/migration-to-lazy-loading.md)** -
+  Step-by-step guide for migrating existing projects
 
 ### Testing
 
-- **[Testing Overview](testing/README.md)** - Complete testing strategy and quick start guide
-- **[Unit Testing](testing/unit-testing.md)** - Jest & React Native Testing Library
-- **[Integration Testing](testing/integration-testing.md)** - Testing component interactions
+- **[Testing Overview](testing/README.md)** - Complete testing strategy and
+  quick start guide
+- **[Unit Testing](testing/unit-testing.md)** - Jest & React Native Testing
+  Library
+- **[Integration Testing](testing/integration-testing.md)** - Testing component
+  interactions
 - **[E2E Testing](testing/e2e-testing.md)** - Detox end-to-end tests
 - **[Test Patterns](testing/test-patterns.md)** - Best practices and patterns
 
@@ -45,9 +56,12 @@ This directory contains comprehensive documentation for the React Native Expo te
 
 ### SEO & Discoverability
 
-- **[Discoverability Overview](seo-discoverability/README.md)** - App visibility strategies
-- **[App Store Optimization](seo-discoverability/app-store-optimization.md)** - ASO guide
-- **[Deep Linking](seo-discoverability/deep-linking.md)** - Universal/App Links setup
+- **[Discoverability Overview](seo-discoverability/README.md)** - App visibility
+  strategies
+- **[App Store Optimization](seo-discoverability/app-store-optimization.md)** -
+  ASO guide
+- **[Deep Linking](seo-discoverability/deep-linking.md)** - Universal/App Links
+  setup
 - **[Web SEO](seo-discoverability/web-seo.md)** - Expo web optimization
 - **[Accessibility](seo-discoverability/accessibility.md)** - Inclusive design
 
@@ -62,8 +76,10 @@ This directory contains comprehensive documentation for the React Native Expo te
 ### For Existing Projects
 
 1. Follow the [Migration Guide](guides/migration-to-lazy-loading.md)
-2. Use the [Performance Checklist](checklists/performance-checklist.md) for validation
-3. Reference [Best Practices](best-practices/performance.md) for ongoing optimization
+2. Use the [Performance Checklist](checklists/performance-checklist.md) for
+   validation
+3. Reference [Best Practices](best-practices/performance.md) for ongoing
+   optimization
 
 ## 📖 Documentation by Role
 
@@ -71,27 +87,35 @@ This directory contains comprehensive documentation for the React Native Expo te
 
 - [Lazy Loading Guide](performance/lazy-loading.md) - Implementation details
 - [Code Examples](examples/lazy-loading-examples.tsx) - Copy-paste examples
-- [Performance Checklist](checklists/performance-checklist.md) - Development checklist
+- [Performance Checklist](checklists/performance-checklist.md) - Development
+  checklist
 
 ### Architects
 
-- [Architecture Decisions](architecture/performance-decisions.md) - Design decisions and rationale
-- [Performance Optimization Guide](performance/optimization-guide.md) - Technical deep dive
+- [Architecture Decisions](architecture/performance-decisions.md) - Design
+  decisions and rationale
+- [Performance Optimization Guide](performance/optimization-guide.md) -
+  Technical deep dive
 
 ### Project Managers
 
-- [Migration Guide](guides/migration-to-lazy-loading.md) - Project migration planning
-- [Performance Checklist](checklists/performance-checklist.md) - Project validation
+- [Migration Guide](guides/migration-to-lazy-loading.md) - Project migration
+  planning
+- [Performance Checklist](checklists/performance-checklist.md) - Project
+  validation
 
 ### QA/Testing
 
 - [Testing Overview](testing/README.md) - Complete testing strategy
 - [Unit Testing](testing/unit-testing.md) - Component and utility testing
-- [Integration Testing](testing/integration-testing.md) - Component interaction testing
+- [Integration Testing](testing/integration-testing.md) - Component interaction
+  testing
 - [E2E Testing](testing/e2e-testing.md) - End-to-end testing with Detox
 - [Test Patterns](testing/test-patterns.md) - Testing best practices
-- [Performance Checklist](checklists/performance-checklist.md) - Performance testing checklist
-- [Best Practices](best-practices/performance.md) - Performance testing guidelines
+- [Performance Checklist](checklists/performance-checklist.md) - Performance
+  testing checklist
+- [Best Practices](best-practices/performance.md) - Performance testing
+  guidelines
 
 ## 🎯 Performance Targets
 
@@ -207,4 +231,6 @@ After implementing the documented patterns, you should see:
 - **60 FPS** scroll performance on all lists
 - **< 300ms** screen transitions
 
-Remember: Performance is not just about speed—it's about providing a smooth, responsive user experience that works well on all devices and network conditions.
+Remember: Performance is not just about speed—it's about providing a smooth,
+responsive user experience that works well on all devices and network
+conditions.

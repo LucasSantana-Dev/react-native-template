@@ -125,7 +125,7 @@ export const getButtonStyles = (
   variant: string,
   size: string,
   disabled: boolean,
-  fullWidth: boolean = false
+  fullWidth: boolean = false,
 ) => {
   const variantStyles = getButtonVariantStyles();
   const sizeStyles = getButtonSizeStyles();
@@ -166,7 +166,7 @@ export const getIconSize = (size: string): number => {
 export const getIconConfig = (
   size: string,
   color?: string,
-  position: 'left' | 'right' = 'left'
+  position: 'left' | 'right' = 'left',
 ): IconConfig => {
   const iconSize = getIconSize(size);
   const iconColor = color || theme.colors.white;
