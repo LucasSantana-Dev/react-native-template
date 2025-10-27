@@ -47,6 +47,8 @@ interface RenderProps {
   onChangeText?: (text: string) => void;
   onFocus?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   onBlur?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  handleFocus?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  handleBlur?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   accessibilityLabel?: string;
   accessibilityHint?: string;
   testID?: string;
@@ -184,6 +186,8 @@ export const renderInputField = ({
   isFocused: _isFocused,
   onFocus,
   onBlur,
+  handleFocus,
+  handleBlur,
   accessibilityLabel,
   accessibilityHint,
   testID,
@@ -200,6 +204,8 @@ export const renderInputField = ({
   | 'isFocused'
   | 'onFocus'
   | 'onBlur'
+  | 'handleFocus'
+  | 'handleBlur'
   | 'accessibilityLabel'
   | 'accessibilityHint'
   | 'testID'
@@ -213,8 +219,8 @@ export const renderInputField = ({
     value={value}
     onChangeText={onChangeText}
     editable={!isDisabled}
-    onFocus={onFocus}
-    onBlur={onBlur}
+    onFocus={handleFocus || onFocus}
+    onBlur={handleBlur || onBlur}
     accessibilityLabel={accessibilityLabel}
     accessibilityHint={accessibilityHint}
     testID={testID}
