@@ -34,6 +34,7 @@ interface RenderProps {
   helperText?: string;
   isDisabled: boolean;
   isFocused: boolean;
+  state?: string;
   inputStyles: Record<string, ViewStyle | TextStyle>;
   iconStyles: Record<string, ViewStyle | TextStyle>;
   requiredStyles: Record<string, TextStyle>;
@@ -202,6 +203,7 @@ export const renderInputField = ({
   | 'onChangeText'
   | 'isDisabled'
   | 'isFocused'
+  | 'state'
   | 'onFocus'
   | 'onBlur'
   | 'handleFocus'
@@ -219,8 +221,8 @@ export const renderInputField = ({
     value={value}
     onChangeText={onChangeText}
     editable={!isDisabled}
-    onFocus={handleFocus || onFocus}
-    onBlur={handleBlur || onBlur}
+    onFocus={(handleFocus || onFocus) as never}
+    onBlur={(handleBlur || onBlur) as never}
     accessibilityLabel={accessibilityLabel}
     accessibilityHint={accessibilityHint}
     testID={testID}

@@ -4,6 +4,7 @@ import {
   NativeSyntheticEvent,
   TextInput,
   TextInputFocusEventData,
+  TextInputProps,
   TextStyle,
   View,
   ViewStyle,
@@ -142,7 +143,7 @@ export const renderInputWithController = <T extends FieldValues>({
       name={name}
       control={control}
       rules={rules}
-      defaultValue={defaultValue}
+      defaultValue={defaultValue as never}
       render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
         <View style={inputStyles.container}>
           {/* Label */}

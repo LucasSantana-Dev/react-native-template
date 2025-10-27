@@ -7,7 +7,9 @@
 
 import React from 'react';
 
+import { prepareButtonContentProps } from './button-helpers';
 import { getButtonStyles, getIconConfig, getLoadingStyles } from './styles';
+import { ButtonProps } from './types';
 
 /**
  * Get button variant styles helper
@@ -96,8 +98,75 @@ export const createButtonStyleConfig = ({
   iconPosition?: string;
 }) => {
   const buttonStyles = getButtonStyles(variant, size, isDisabled, fullWidth);
-  const iconConfig = hasButtonIcon ? getIconConfig(size, iconColor, iconPosition) : null;
+  const iconConfig = hasButtonIcon(iconColor)
+    ? getIconConfig(size, iconColor, iconPosition as 'left' | 'right')
+    : null;
   const loadingStyles = getLoadingStyles();
 
   return { buttonStyles, iconConfig, loadingStyles };
+};
+
+/**
+ * Create button component props to reduce complexity
+ */
+export const createButtonProps = ({
+  variant,
+  size,
+  state,
+  textStyle,
+  icon,
+  iconSize,
+  iconColor,
+  iconPosition,
+  loading,
+  disabled,
+  fullWidth,
+  forceIcon,
+  rawChildren,
+  onPress,
+  ...restProps
+}: ButtonProps) => {
+  const isDisabled = Boolean(disabled || loading || state === 'disabled');
+  const hasText = Boolean(!rawChildren && restProps.children && !forceIcon);
+  const hasIcon = Boolean(icon);
+
+  const { buttonStyles, iconConfig, loadingStyles } = createButtonStyleConfig({
+    variant: variant || 'primary',
+    size: size || 'md',
+    isDisabled,
+    fullWidth: fullWidth || false,
+    iconColor,
+    iconPosition,
+  });
+
+  const buttonContentProps = prepareButtonContentProps({
+    icon,
+    iconSize,
+    iconColor,
+    iconPosition,
+    children: restProps.children,
+    loading,
+    hasText,
+    hasIcon,
+    rawChildren,
+    buttonStyles,
+    iconConfig: (iconConfig || {}) as Record<string, unknown>,
+    loadingStyles,
+    textStyle: (textStyle || {}) as Record<string, unknown>,
+  });
+
+  return {
+    isDisabled,
+    hasText,
+    hasIcon,
+    buttonStyles,
+    iconConfig,
+    loadingStyles,
+    buttonContentProps,
+    handlePress: createButtonPressHandler(
+      isDisabled,
+      Boolean(loading),
+      onPress as (event: unknown) => void,
+    ),
+  };
 };

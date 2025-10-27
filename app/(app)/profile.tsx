@@ -9,7 +9,7 @@ import { HeaderLayout } from '@/components/layout/header-layout';
 import { ScreenContainer } from '@/components/layout/screen-container';
 import { Button } from '@/components/ui/button';
 import { User } from '@/context/auth-context';
-import { FormData } from '@/hooks/form/use-form-data';
+import { FormData } from '@/hooks/form/types';
 
 interface ProfileFormValues {
   name: string;
@@ -36,7 +36,7 @@ const getUserWithDefaults = (user: User | null) => {
 
 const prepareFormState = (
   data: FormData<ProfileFormValues>,
-  errors: Record<string, string>,
+  errors: Record<keyof ProfileFormValues, string | undefined>,
   isLoading: boolean,
 ) => ({
   values: {
@@ -45,7 +45,9 @@ const prepareFormState = (
     cpf: data.cpf.value,
     phone: data.phone.value,
   },
-  errors,
+  errors: Object.fromEntries(
+    Object.entries(errors).filter(([_, value]) => value !== undefined),
+  ) as Record<string, string>,
   touched: {
     name: data.name.touched,
     email: data.email.touched,
@@ -65,7 +67,7 @@ const ProfileFormSection = ({
   handleSaveProfile,
 }: {
   data: FormData<ProfileFormValues>;
-  errors: Record<string, string>;
+  errors: Record<keyof ProfileFormValues, string | undefined>;
   isLoading: boolean;
   setFieldValue: (field: keyof ProfileFormValues, value: string) => void;
   setFieldTouched: (field: keyof ProfileFormValues) => void;
