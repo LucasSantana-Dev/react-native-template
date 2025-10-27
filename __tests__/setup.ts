@@ -1,6 +1,5 @@
 // Custom test setup to fix Platform.OS undefined issue
 import 'react-native-gesture-handler/jestSetup';
-import { Platform } from 'react-native';
 
 // Mock Platform before any React Native imports
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
@@ -22,15 +21,10 @@ jest.mock('@testing-library/react-native', () => {
 });
 
 // Mock global Platform
-(global as any).Platform = {
+(global as Record<string, unknown>).Platform = {
   OS: 'ios',
-  select: jest.fn((obj: any) => obj.ios || obj.default),
+  select: jest.fn((obj: Record<string, unknown>) => obj.ios || obj.default),
   Version: '14.0',
 };
 
-// Add a simple test to prevent "must contain at least one test" error
-describe('Test Setup', () => {
-  it('should have Platform.OS mocked', () => {
-    expect(Platform.OS).toBe('ios');
-  });
-});
+// Setup file - no tests needed here
