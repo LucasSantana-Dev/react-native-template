@@ -14,9 +14,9 @@ jest.mock('@testing-library/react-native', () => {
   return {
     ...RTL,
     // Override the host component detection to avoid Platform.OS issue
-    detectHostComponentNames: () => ({
+    detectHostComponentNames: jest.fn(() => ({
       hostComponentNames: new Set(['View', 'Text', 'TouchableOpacity', 'TextInput', 'ScrollView']),
-    }),
+    })),
   };
 });
 
