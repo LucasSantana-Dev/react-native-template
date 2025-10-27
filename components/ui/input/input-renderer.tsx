@@ -30,17 +30,17 @@ export { renderInputContent, renderInputWithController };
 
 // Main render function for regular inputs
 export const renderInput = <T extends FieldValues>(props: InputRendererProps<T>) => {
-  return renderInputContent(props);
+  return renderInputContent<T>(props);
 };
 
 // Main render function for controlled inputs
 export const renderControlledInput = <T extends FieldValues>(
   props: InputRendererProps<T> & {
     name: string;
-    control: unknown;
-    rules?: unknown;
-    defaultValue?: string;
+    control: any;
+    rules?: any;
+    defaultValue?: any;
   }
 ) => {
-  return renderInputWithController(props);
+  return renderInputWithController(props as any);
 };

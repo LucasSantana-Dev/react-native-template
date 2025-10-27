@@ -21,7 +21,7 @@ import {
 } from './render-helpers';
 import { InputProps } from './types';
 
-interface InputContentRendererProps<T extends FieldValues>
+interface InputContentRendererProps<T extends FieldValues = FieldValues>
   extends Omit<InputProps<T>, 'onFocus' | 'onBlur'> {
   inputStyles: Record<string, ViewStyle | TextStyle>;
   iconStyles: { container: ViewStyle; icon: TextStyle };
@@ -35,7 +35,7 @@ interface InputContentRendererProps<T extends FieldValues>
 }
 
 // Helper function to render common input content
-export const renderInputContent = ({
+export const renderInputContent = <T extends FieldValues = FieldValues>({
   label,
   required,
   labelStyle,
@@ -58,7 +58,7 @@ export const renderInputContent = ({
   handleFocus,
   handleBlur,
   ref,
-}: InputContentRendererProps<FieldValues>) => {
+}: InputContentRendererProps<T>) => {
   return (
     <View style={inputStyles.container}>
       {/* Label */}
@@ -84,7 +84,6 @@ export const renderInputContent = ({
 
         {/* Input Field */}
         {renderInputField({
-          inputProps,
           inputStyles,
           isFocused,
           isDisabled,
@@ -92,6 +91,7 @@ export const renderInputContent = ({
           handleFocus,
           handleBlur,
           ref,
+          ...inputProps,
         })}
 
         {/* Right Icon */}
@@ -168,12 +168,6 @@ export const renderInputWithController = <T extends FieldValues>({
 
             {/* Input Field */}
             {renderInputField({
-              inputProps: {
-                ...inputProps,
-                onChangeText: onChange,
-                onBlur,
-                value,
-              },
               inputStyles,
               isFocused,
               isDisabled,
@@ -181,6 +175,10 @@ export const renderInputWithController = <T extends FieldValues>({
               handleFocus,
               handleBlur,
               ref,
+              onChangeText: onChange,
+              onBlur,
+              value,
+              ...inputProps,
             })}
 
             {/* Right Icon */}
