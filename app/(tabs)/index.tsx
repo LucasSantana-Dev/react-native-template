@@ -6,14 +6,12 @@ import { HeaderLayout } from '@/components/layout/header-layout';
 import { ScreenContainer } from '@/components/layout/screen-container';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { useAuth } from '@/context/auth-context';
 import { useThemeColors } from '@/context/theme-context';
 import { useScreenDimensions } from '@/hooks/use-screen-dimensions';
 import { formatBRL } from '@/lib/utils/currency';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { user } = useAuth();
   const colors = useThemeColors();
   const { isTablet } = useScreenDimensions();
 

@@ -13,7 +13,6 @@ import { useThemeColors } from '@/context/theme-context';
 import { useFormData } from '@/hooks/use-form-data';
 import { isValidEmail, validateCPF, validatePhone } from '@/lib/utils/brazilian';
 
-
 // ========== REGISTER FORM TYPES ==========
 interface RegisterForm {
   name: string;
@@ -65,13 +64,7 @@ export default function RegisterScreen() {
   };
 
   // Form management
-  const {
-    formState,
-    setFieldValue,
-    setFieldTouched,
-    handleSubmit,
-    resetForm,
-  } = useFormData<RegisterForm>({
+  const { formState, setFieldValue, setFieldTouched, handleSubmit } = useFormData<RegisterForm>({
     initialValues: {
       name: '',
       email: '',
@@ -86,23 +79,19 @@ export default function RegisterScreen() {
   });
 
   // Handle register
-  const handleRegister = async (values: RegisterForm) => {
+  const handleRegister = async (_values: RegisterForm) => {
     try {
       setIsLoading(true);
 
       // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      Alert.alert(
-        'Sucesso',
-        'Conta criada com sucesso! Você pode fazer login agora.',
-        [
-          {
-            text: 'OK',
-            onPress: () => router.replace('/(auth)/login'),
-          },
-        ]
-      );
+      Alert.alert('Sucesso', 'Conta criada com sucesso! Você pode fazer login agora.', [
+        {
+          text: 'OK',
+          onPress: () => router.replace('/(auth)/login'),
+        },
+      ]);
     } catch (error) {
       Alert.alert('Erro', 'Falha ao criar conta. Tente novamente.');
       console.error('Register error:', error);
@@ -122,12 +111,7 @@ export default function RegisterScreen() {
         title="Criar Conta"
         subtitle="Preencha os dados abaixo"
         leftAction={
-          <Button
-            variant="ghost"
-            size="sm"
-            onPress={handleBackToLogin}
-            icon="←"
-          >
+          <Button variant="ghost" size="sm" onPress={handleBackToLogin} icon="←">
             Voltar
           </Button>
         }
@@ -247,12 +231,7 @@ export default function RegisterScreen() {
               Já tem uma conta?
             </Text>
 
-            <Button
-              variant="outline"
-              size="lg"
-              fullWidth
-              onPress={handleBackToLogin}
-            >
+            <Button variant="outline" size="lg" fullWidth onPress={handleBackToLogin}>
               Fazer login
             </Button>
           </Card.Body>

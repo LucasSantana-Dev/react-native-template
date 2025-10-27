@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 
 import { TextInputProps, TextStyle, ViewStyle } from 'react-native';
 
+import { Control, FieldValues, Path } from 'react-hook-form';
+
 // ========== INPUT VARIANTS ==========
 export type InputVariant = 'default' | 'outline' | 'filled';
 
@@ -12,7 +14,8 @@ export type InputSize = 'sm' | 'md' | 'lg';
 export type InputState = 'default' | 'focused' | 'error' | 'disabled';
 
 // ========== INPUT PROPS ==========
-export interface InputProps extends Omit<TextInputProps, 'style'> {
+export interface InputProps<TFieldValues extends FieldValues = FieldValues>
+  extends Omit<TextInputProps, 'style'> {
   /** Input label */
   label?: string;
 
@@ -87,6 +90,12 @@ export interface InputProps extends Omit<TextInputProps, 'style'> {
 
   /** Test ID */
   testID?: string;
+
+  // React Hook Form integration
+  /** Control from react-hook-form */
+  control?: Control<TFieldValues>;
+  /** Field name for react-hook-form */
+  name?: Path<TFieldValues>;
 }
 
 // ========== INPUT STYLES ==========
@@ -137,16 +146,19 @@ export interface InputSizeStyles {
     inputContainer: ViewStyle;
     input: TextStyle;
     label: TextStyle;
+    icon: TextStyle;
   };
   md: {
     inputContainer: ViewStyle;
     input: TextStyle;
     label: TextStyle;
+    icon: TextStyle;
   };
   lg: {
     inputContainer: ViewStyle;
     input: TextStyle;
     label: TextStyle;
+    icon: TextStyle;
   };
 }
 
@@ -155,17 +167,21 @@ export interface InputStateStyles {
   default: {
     inputContainer: ViewStyle;
     input: TextStyle;
+    label: TextStyle;
   };
   focused: {
     inputContainer: ViewStyle;
     input: TextStyle;
+    label: TextStyle;
   };
   error: {
     inputContainer: ViewStyle;
     input: TextStyle;
+    label: TextStyle;
   };
   disabled: {
     inputContainer: ViewStyle;
     input: TextStyle;
+    label: TextStyle;
   };
 }

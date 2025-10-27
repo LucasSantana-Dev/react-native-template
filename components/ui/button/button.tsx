@@ -1,16 +1,9 @@
 import React from 'react';
 
-import {
-    ActivityIndicator,
-    Text,
-    TouchableOpacity,
-    View
-} from 'react-native';
+import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 
 import { getButtonStyles, getIconConfig, getLoadingStyles } from './styles';
 import { ButtonProps } from './types';
-
-import { useThemeColors } from '@/context/theme-context';
 
 /**
  * Production-ready Button component with multiple variants, sizes, and states
@@ -38,7 +31,7 @@ export const Button: React.FC<ButtonProps> = ({
   style,
   textStyle,
   icon,
-  iconSize,
+  iconSize: _iconSize,
   iconColor,
   iconPosition = 'left',
   loading = false,
@@ -52,8 +45,6 @@ export const Button: React.FC<ButtonProps> = ({
   onPress,
   ...props
 }) => {
-  const colors = useThemeColors();
-
   // Determine if button should be disabled
   const isDisabled = disabled || loading || state === 'disabled';
 
