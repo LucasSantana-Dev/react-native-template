@@ -1,18 +1,40 @@
 import React from 'react';
 
 import {
-    KeyboardAvoidingView,
-    Platform,
-    RefreshControl,
-    ScrollView,
-    View,
-    ViewStyle,
+  KeyboardAvoidingView,
+  Platform,
+  RefreshControlProps,
+  ScrollView,
+  ScrollViewProps,
+  View,
+  ViewStyle,
 } from 'react-native';
 
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { theme } from '@/config/theme';
 import { useThemeColors } from '@/context/theme-context';
+
+// ========== HELPER FUNCTIONS ==========
+/**
+ * Get safe area style based on insets and safeArea prop
+ */
+const getSafeAreaStyle = (insets: EdgeInsets, safeArea: boolean): ViewStyle => ({
+  paddingTop: safeArea ? insets.top : 0,
+  paddingBottom: safeArea ? insets.bottom : 0,
+  paddingLeft: safeArea ? insets.left : 0,
+  paddingRight: safeArea ? insets.right : 0,
+});
+
+/**
+ * Get background style based on backgroundColor and colors
+ */
+const getBackgroundStyle = (
+  backgroundColor: string | undefined,
+  colors: { background: string }
+): ViewStyle => ({
+  backgroundColor: backgroundColor || colors.background,
+});
 
 // ========== SCREEN CONTAINER PROPS ==========
 export interface ScreenContainerProps {
@@ -32,10 +54,10 @@ export interface ScreenContainerProps {
   scrollable?: boolean;
 
   /** Scroll view props */
-  scrollViewProps?: any;
+  scrollViewProps?: ScrollViewProps;
 
   /** Refresh control */
-  refreshControl?: React.ReactElement<RefreshControl>;
+  refreshControl?: React.ReactElement<RefreshControlProps>;
 
   /** Background color */
   backgroundColor?: string;
@@ -92,11 +114,8 @@ export const ScreenContainer: React.FC<ScreenContainerProps> = ({
   // Base container style
   const containerStyle: ViewStyle = {
     flex: 1,
-    backgroundColor: backgroundColor || colors.background,
-    paddingTop: safeArea ? insets.top : 0,
-    paddingBottom: safeArea ? insets.bottom : 0,
-    paddingLeft: safeArea ? insets.left : 0,
-    paddingRight: safeArea ? insets.right : 0,
+    ...getBackgroundStyle(backgroundColor, colors),
+    ...getSafeAreaStyle(insets, safeArea),
     paddingHorizontal: horizontalPadding,
     paddingVertical: verticalPadding,
   };

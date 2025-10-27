@@ -1,4 +1,5 @@
-// ========== FEATURE TYPE ==========
+import { ThemeColors } from '@/types/theme';
+
 export interface Feature {
   id: string;
   title: string;
@@ -7,96 +8,74 @@ export interface Feature {
   color: string;
 }
 
-// ========== FEATURE DATA ==========
-export const FEATURES: Feature[] = [
-  {
-    id: 'components',
-    title: 'Componentes UI',
-    description: 'Biblioteca completa de componentes reutilizáveis',
-    icon: '🎨',
-    color: '#6366F1',
-  },
-  {
-    id: 'navigation',
-    title: 'Navegação',
-    description: 'Sistema de navegação com Expo Router',
-    icon: '🧭',
-    color: '#8B5CF6',
-  },
-  {
-    id: 'state',
-    title: 'Gerenciamento de Estado',
-    description: 'Context API e hooks personalizados',
-    icon: '📊',
-    color: '#06B6D4',
-  },
-  {
-    id: 'forms',
-    title: 'Formulários',
-    description: 'Validação com Zod e React Hook Form',
-    icon: '📝',
-    color: '#10B981',
-  },
-  {
-    id: 'theming',
-    title: 'Tema',
-    description: 'Sistema de temas claro/escuro',
-    icon: '🎭',
-    color: '#F59E0B',
-  },
-  {
-    id: 'utils',
-    title: 'Utilitários',
-    description: 'Funções auxiliares e helpers',
-    icon: '🔧',
-    color: '#EF4444',
-  },
-  {
-    id: 'testing',
-    title: 'Testes',
-    description: 'Configuração de testes unitários e E2E',
-    icon: '🧪',
-    color: '#84CC16',
-  },
-  {
-    id: 'performance',
-    title: 'Performance',
-    description: 'Otimizações e métricas de performance',
-    icon: '⚡',
-    color: '#F97316',
-  },
-];
-
-// ========== DOCUMENTATION LINKS ==========
 export const DOCUMENTATION_LINKS = [
   {
-    title: 'Expo Documentation',
-    description: 'Documentação oficial do Expo',
-    url: 'https://docs.expo.dev/',
-    icon: '📚',
-  },
-  {
-    title: 'React Native Documentation',
-    description: 'Documentação oficial do React Native',
+    title: 'React Native',
     url: 'https://reactnative.dev/',
+    description: 'Documentação oficial do React Native',
     icon: '⚛️',
   },
   {
-    title: 'TypeScript Handbook',
-    description: 'Guia completo do TypeScript',
+    title: 'Expo',
+    url: 'https://docs.expo.dev/',
+    description: 'Documentação oficial do Expo',
+    icon: '📱',
+  },
+  {
+    title: 'TypeScript',
     url: 'https://www.typescriptlang.org/docs/',
-    icon: '📘',
+    description: 'Documentação oficial do TypeScript',
+    icon: '🔷',
   },
   {
     title: 'React Hook Form',
-    description: 'Documentação do React Hook Form',
     url: 'https://react-hook-form.com/',
-    icon: '📋',
+    description: 'Documentação do React Hook Form',
+    icon: '📝',
+  },
+];
+
+export const getFeatures = (colors: ThemeColors): Feature[] => [
+  {
+    id: '1',
+    title: 'Componentes UI',
+    description: 'Button, Card, Input e outros componentes prontos para uso',
+    icon: '🎨',
+    color: colors.primary,
   },
   {
-    title: 'Zod Documentation',
-    description: 'Documentação do Zod para validação',
-    url: 'https://zod.dev/',
-    icon: '✅',
+    id: '2',
+    title: 'Sistema de Tema',
+    description: 'Cores, tipografia e espaçamentos consistentes',
+    icon: '🎯',
+    color: colors.secondary,
+  },
+  {
+    id: '3',
+    title: 'Utilitários Brasileiros',
+    description: 'Formatação de CPF, telefone, CEP e moeda',
+    icon: '🇧🇷',
+    color: colors.success,
+  },
+  {
+    id: '4',
+    title: 'Navegação',
+    description: 'Expo Router com navegação tipada e lazy loading',
+    icon: '🧭',
+    color: colors.warning,
+  },
+  {
+    id: '5',
+    title: 'Performance',
+    description: 'Otimizações para listas grandes e carregamento lazy',
+    icon: '⚡',
+    color: colors.info,
+  },
+  {
+    id: '6',
+    title: 'Testes',
+    description: 'Jest e Detox configurados para testes unitários e E2E',
+    icon: '🧪',
+    color: colors.error,
   },
 ];

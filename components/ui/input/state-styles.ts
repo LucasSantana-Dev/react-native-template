@@ -1,8 +1,16 @@
+/**
+ * Input state style functions
+ *
+ * Contains functions for generating input state styles.
+ */
+
 import { InputStateStyles } from './types';
 
 import { theme } from '@/config/theme';
 
-// ========== INPUT STATE STYLES ==========
+/**
+ * Get input state styles
+ */
 export const getInputStateStyles = (): InputStateStyles => ({
   default: {
     inputContainer: {
@@ -12,17 +20,13 @@ export const getInputStateStyles = (): InputStateStyles => ({
       color: theme.colors.text,
     },
     label: {
-      color: theme.colors.textSecondary,
+      color: theme.colors.text,
     },
   },
   focused: {
     inputContainer: {
       borderColor: theme.colors.primary,
-      shadowColor: theme.colors.primary,
-      shadowOffset: { width: 0, height: 0 },
-      shadowOpacity: 0.2,
-      shadowRadius: 4,
-      elevation: 2,
+      borderWidth: 2,
     },
     input: {
       color: theme.colors.text,
@@ -34,7 +38,7 @@ export const getInputStateStyles = (): InputStateStyles => ({
   error: {
     inputContainer: {
       borderColor: theme.colors.error,
-      backgroundColor: `${theme.colors.error}10`,
+      borderWidth: 2,
     },
     input: {
       color: theme.colors.text,
@@ -45,9 +49,8 @@ export const getInputStateStyles = (): InputStateStyles => ({
   },
   disabled: {
     inputContainer: {
-      backgroundColor: theme.colors.backgroundLight,
+      backgroundColor: theme.colors.surfaceVariant,
       borderColor: theme.colors.borderLight,
-      opacity: 0.6,
     },
     input: {
       color: theme.colors.textDisabled,

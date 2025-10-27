@@ -1,14 +1,22 @@
+/**
+ * Input variant style functions
+ *
+ * Contains functions for generating input variant styles.
+ */
+
 import { InputVariantStyles } from './types';
 
 import { theme } from '@/config/theme';
 
-// ========== INPUT VARIANT STYLES ==========
+/**
+ * Get input variant styles
+ */
 export const getInputVariantStyles = (): InputVariantStyles => ({
   default: {
     inputContainer: {
       backgroundColor: theme.colors.surface,
-      borderWidth: 1,
       borderColor: theme.colors.border,
+      borderWidth: 1,
     },
     input: {
       color: theme.colors.text,
@@ -17,8 +25,8 @@ export const getInputVariantStyles = (): InputVariantStyles => ({
   outline: {
     inputContainer: {
       backgroundColor: 'transparent',
-      borderWidth: 2,
       borderColor: theme.colors.border,
+      borderWidth: 1,
     },
     input: {
       color: theme.colors.text,
@@ -26,10 +34,9 @@ export const getInputVariantStyles = (): InputVariantStyles => ({
   },
   filled: {
     inputContainer: {
-      backgroundColor: theme.colors.backgroundLight,
+      backgroundColor: theme.colors.surfaceVariant,
+      borderColor: 'transparent',
       borderWidth: 0,
-      borderBottomWidth: 2,
-      borderBottomColor: theme.colors.border,
     },
     input: {
       color: theme.colors.text,

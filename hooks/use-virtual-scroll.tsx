@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { FlatListProps, ListRenderItem, Text } from 'react-native';
+import { FlatListProps, ListRenderItem } from 'react-native';
 
 // ========== VIRTUAL SCROLL HOOK ==========
 
@@ -81,15 +81,15 @@ export const useVirtualScroll = <T extends Record<string, any>>({
   );
 
   // Scroll to specific index
-  const scrollToIndex = useCallback((index: number, animated: boolean = true) => {
+  const scrollToIndex = useCallback((_index: number, _animated: boolean = true) => {
     // This would be implemented with FlatList ref
-    console.log(`Scroll to index ${index}, animated: ${animated}`);
+    // console.log(`Scroll to index ${index}, animated: ${animated}`);
   }, []);
 
   // Scroll to specific offset
-  const scrollToOffset = useCallback((offset: number, animated: boolean = true) => {
+  const scrollToOffset = useCallback((_offset: number, _animated: boolean = true) => {
     // This would be implemented with FlatList ref
-    console.log(`Scroll to offset ${offset}, animated: ${animated}`);
+    // console.log(`Scroll to offset ${offset}, animated: ${animated}`);
   }, []);
 
   // Scroll to top

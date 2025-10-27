@@ -1,7 +1,13 @@
 import React from 'react';
 
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { GestureResponderEvent, TouchableOpacity } from 'react-native';
 
+import {
+  getButtonState,
+  hasButtonIcon,
+  renderButtonContent,
+  shouldRenderText,
+} from './button-helpers';
 import { getButtonStyles, getIconConfig, getLoadingStyles } from './styles';
 import { ButtonProps } from './types';
 
@@ -45,14 +51,14 @@ export const Button: React.FC<ButtonProps> = ({
   onPress,
   ...props
 }) => {
-  // Determine if button should be disabled
-  const isDisabled = disabled || loading || state === 'disabled';
+  // Get button state using helper
+  const { isDisabled } = getButtonState(disabled, loading, state);
 
-  // Determine if we have text content
-  const hasText = !rawChildren && children && !forceIcon;
+  // Determine if we have text content using helper
+  const hasText = shouldRenderText(rawChildren, children, forceIcon);
 
-  // Determine if we have an icon
-  const hasIcon = Boolean(icon);
+  // Determine if we have an icon using helper
+  const hasIcon = hasButtonIcon(icon);
 
   // Get button styles
   const buttonStyles = getButtonStyles(variant, size, isDisabled, fullWidth);
@@ -64,88 +70,26 @@ export const Button: React.FC<ButtonProps> = ({
   const loadingStyles = getLoadingStyles();
 
   // Handle press events
-  const handlePress = (event: any) => {
+  const handlePress = (event: GestureResponderEvent) => {
     if (isDisabled || loading) return;
     onPress?.(event);
   };
 
-  // Render icon component
-  const renderIcon = () => {
-    if (!hasIcon || !iconConfig) return null;
-
-    // For now, we'll use a simple Text component for icons
-    // In a real app, you'd use react-native-vector-icons
-    return (
-      <Text
-        style={{
-          fontSize: iconConfig.size,
-          color: iconConfig.color,
-          marginRight: iconPosition === 'left' ? iconConfig.margin : 0,
-          marginLeft: iconPosition === 'right' ? iconConfig.margin : 0,
-        }}
-      >
-        {icon}
-      </Text>
-    );
-  };
-
-  // Render loading indicator
-  const renderLoading = () => {
-    if (!loading) return null;
-
-    return (
-      <ActivityIndicator
-        size="small"
-        color={buttonStyles.text.color}
-        style={loadingStyles.indicator}
-      />
-    );
-  };
-
-  // Render text content
-  const renderText = () => {
-    if (!hasText || rawChildren) return children;
-
-    return (
-      <Text
-        style={[
-          buttonStyles.text,
-          textStyle,
-          hasIcon && iconPosition === 'left' && { marginLeft: 8 },
-          hasIcon && iconPosition === 'right' && { marginRight: 8 },
-        ]}
-      >
-        {children}
-      </Text>
-    );
-  };
-
-  // Render content based on state
-  const renderContent = () => {
-    if (loading) {
-      return (
-        <View style={loadingStyles.container}>
-          {renderLoading()}
-          {hasText && renderText()}
-        </View>
-      );
-    }
-
-    if (hasIcon && !hasText) {
-      return renderIcon();
-    }
-
-    if (hasIcon && hasText) {
-      return (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {iconPosition === 'left' && renderIcon()}
-          {renderText()}
-          {iconPosition === 'right' && renderIcon()}
-        </View>
-      );
-    }
-
-    return renderText();
+  // Prepare button content props
+  const buttonContentProps = {
+    icon,
+    iconSize: _iconSize,
+    iconColor,
+    iconPosition,
+    children,
+    loading: Boolean(loading),
+    hasText,
+    hasIcon,
+    rawChildren,
+    buttonStyles,
+    iconConfig: (iconConfig || {}) as Record<string, unknown>,
+    loadingStyles,
+    textStyle: (textStyle || {}) as Record<string, unknown>,
   };
 
   return (
@@ -163,7 +107,7 @@ export const Button: React.FC<ButtonProps> = ({
       testID={testID}
       {...props}
     >
-      {renderContent()}
+      {renderButtonContent(buttonContentProps)}
     </TouchableOpacity>
   );
 };

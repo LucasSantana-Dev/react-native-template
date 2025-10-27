@@ -3,10 +3,17 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+interface ProfileFormValues {
+  name: string;
+  email: string;
+  cpf: string;
+  phone: string;
+}
+
 interface FormState {
-  values: ProfileForm;
-  errors: Partial<Record<keyof ProfileForm, string>>;
-  touched: Partial<Record<keyof ProfileForm, boolean>>;
+  values: ProfileFormValues;
+  errors: Partial<Record<keyof ProfileFormValues, string>>;
+  touched: Partial<Record<keyof ProfileFormValues, boolean>>;
   isSubmitting: boolean;
 }
 
@@ -15,7 +22,7 @@ interface ProfileFormProps {
   setFieldValue: (field: string, value: string) => void;
   setFieldTouched: (field: string) => void;
   isLoading: boolean;
-  onSave: (values: ProfileForm) => void;
+  onSave: (values: ProfileFormValues) => void;
   formattedCPF: string;
   formattedPhone: string;
 }

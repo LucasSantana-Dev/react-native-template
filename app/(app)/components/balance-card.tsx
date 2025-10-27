@@ -8,7 +8,7 @@ import { useThemeColors } from '@/context/theme-context';
 import { formatBRL } from '@/lib/utils/currency';
 
 interface BalanceCardProps {
-  balance: number;
+  balance: { total: number; available: number; pending: number };
   onInvest: () => void;
   onTransfer: () => void;
 }
@@ -36,8 +36,16 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({ balance, onInvest, onT
             marginBottom: 16,
           }}
         >
-          {formatBRL(balance)}
+          {formatBRL(balance.available)}
         </Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+          <Text style={{ fontSize: 14, color: colors.textSecondary }}>
+            Total: {formatBRL(balance.total)}
+          </Text>
+          <Text style={{ fontSize: 14, color: colors.textSecondary }}>
+            Pendente: {formatBRL(balance.pending)}
+          </Text>
+        </View>
         <View
           style={{
             flexDirection: 'row',

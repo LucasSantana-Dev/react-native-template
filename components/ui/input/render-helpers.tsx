@@ -1,71 +1,72 @@
+/**
+ * Input render helper functions
+ *
+ * Contains helper functions for rendering different parts of the Input component.
+ * These functions are extracted to reduce complexity and improve maintainability.
+ */
+
 import React from 'react';
 
-import { Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+import {
+  NativeSyntheticEvent,
+  Text,
+  TextInput,
+  TextInputFocusEventData,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 
-// ========== HELPER INTERFACES ==========
-interface IconStyles {
-  fontSize: number;
-  marginHorizontal: number;
-  marginRight: number;
-  marginLeft: number;
-  container: ViewStyle;
-  icon: TextStyle;
-}
-
-interface InputStyles {
-  container: ViewStyle;
-  labelContainer: ViewStyle;
-  label: TextStyle;
-  inputContainer: ViewStyle;
-  input: TextStyle;
-  error: TextStyle;
-  helper: TextStyle;
-  leftIcon: ViewStyle;
-  rightIcon: ViewStyle;
-  errorContainer: ViewStyle;
-}
-
-interface RequiredStyles {
-  required: TextStyle;
-}
-
-interface RenderLabelConfig {
-  label?: string;
-  required: boolean;
-  inputStyles: InputStyles;
-  labelContainerStyle?: ViewStyle;
-  labelStyle?: TextStyle;
-  requiredStyles: RequiredStyles;
-}
-
-interface RenderIconConfig {
-  icon: string | React.ReactNode;
-  onIconPress?: () => void;
-  iconStyles: IconStyles;
-  inputStyles: InputStyles;
-  isDisabled: boolean;
-}
-
-interface RenderErrorConfig {
-  error?: string;
-  inputStyles: InputStyles;
-  errorContainerStyle?: ViewStyle;
-}
-
-interface RenderHelperConfig {
-  helperText?: string;
-  inputStyles: InputStyles;
-  errorContainerStyle?: ViewStyle;
-}
-
-// ========== RENDER HELPER FUNCTIONS ==========
+import { theme } from '@/config/theme';
 
 /**
- * Renders input label with optional required indicator
+ * Props for render functions
  */
-export const renderInputLabel = (config: RenderLabelConfig) => {
-  const { label, required, inputStyles, labelContainerStyle, labelStyle, requiredStyles } = config;
+interface RenderProps {
+  label?: string;
+  required?: boolean;
+  leftIcon?: string | React.ReactNode;
+  rightIcon?: string | React.ReactNode;
+  onLeftIconPress?: () => void;
+  onRightIconPress?: () => void;
+  error?: string;
+  helperText?: string;
+  isDisabled: boolean;
+  inputStyles: Record<string, ViewStyle | TextStyle>;
+  iconStyles: Record<string, ViewStyle | TextStyle>;
+  requiredStyles: Record<string, TextStyle>;
+  labelContainerStyle?: ViewStyle;
+  labelStyle?: TextStyle;
+  inputContainerStyle?: ViewStyle;
+  errorContainerStyle?: ViewStyle;
+  textStyle?: TextStyle;
+  placeholder?: string;
+  value?: string;
+  onChangeText?: (text: string) => void;
+  onFocus?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  onBlur?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  testID?: string;
+  ref?: React.Ref<TextInput>;
+  props?: Record<string, unknown>;
+}
 
+/**
+ * Render the input label
+ */
+export const renderLabel = ({
+  label,
+  required,
+  inputStyles,
+  requiredStyles,
+  labelContainerStyle,
+  labelStyle,
+}: Pick<
+  RenderProps,
+  'label' | 'required' | 'inputStyles' | 'requiredStyles' | 'labelContainerStyle' | 'labelStyle'
+>) => {
   if (!label) return null;
 
   return (
@@ -79,53 +80,69 @@ export const renderInputLabel = (config: RenderLabelConfig) => {
 };
 
 /**
- * Renders left icon with optional press handler
+ * Render the left icon
  */
-export const renderInputLeftIcon = (config: RenderIconConfig) => {
-  const { icon, onIconPress, iconStyles, inputStyles, isDisabled } = config;
+export const renderLeftIcon = ({
+  leftIcon,
+  onLeftIconPress,
+  isDisabled,
+  inputStyles,
+  iconStyles,
+}: Pick<
+  RenderProps,
+  'leftIcon' | 'onLeftIconPress' | 'isDisabled' | 'inputStyles' | 'iconStyles'
+>) => {
+  if (!leftIcon) return null;
 
-  if (!icon) return null;
-
-  const IconComponent = onIconPress ? TouchableOpacity : View;
+  const IconComponent = onLeftIconPress ? TouchableOpacity : View;
 
   return (
     <IconComponent
       style={[iconStyles.container, inputStyles.leftIcon]}
-      onPress={onIconPress}
+      onPress={onLeftIconPress}
       disabled={isDisabled}
     >
-      {typeof icon === 'string' ? <Text style={iconStyles.icon}>{icon}</Text> : icon}
+      {typeof leftIcon === 'string' ? <Text style={iconStyles.icon}>{leftIcon}</Text> : leftIcon}
     </IconComponent>
   );
 };
 
 /**
- * Renders right icon with optional press handler
+ * Render the right icon
  */
-export const renderInputRightIcon = (config: RenderIconConfig) => {
-  const { icon, onIconPress, iconStyles, inputStyles, isDisabled } = config;
+export const renderRightIcon = ({
+  rightIcon,
+  onRightIconPress,
+  isDisabled,
+  inputStyles,
+  iconStyles,
+}: Pick<
+  RenderProps,
+  'rightIcon' | 'onRightIconPress' | 'isDisabled' | 'inputStyles' | 'iconStyles'
+>) => {
+  if (!rightIcon) return null;
 
-  if (!icon) return null;
-
-  const IconComponent = onIconPress ? TouchableOpacity : View;
+  const IconComponent = onRightIconPress ? TouchableOpacity : View;
 
   return (
     <IconComponent
       style={[iconStyles.container, inputStyles.rightIcon]}
-      onPress={onIconPress}
+      onPress={onRightIconPress}
       disabled={isDisabled}
     >
-      {typeof icon === 'string' ? <Text style={iconStyles.icon}>{icon}</Text> : icon}
+      {typeof rightIcon === 'string' ? <Text style={iconStyles.icon}>{rightIcon}</Text> : rightIcon}
     </IconComponent>
   );
 };
 
 /**
- * Renders error message
+ * Render the error message
  */
-export const renderInputError = (config: RenderErrorConfig) => {
-  const { error, inputStyles, errorContainerStyle } = config;
-
+export const renderErrorMessage = ({
+  error,
+  inputStyles,
+  errorContainerStyle,
+}: Pick<RenderProps, 'error' | 'inputStyles' | 'errorContainerStyle'>) => {
   if (!error) return null;
 
   return (
@@ -136,11 +153,13 @@ export const renderInputError = (config: RenderErrorConfig) => {
 };
 
 /**
- * Renders helper text
+ * Render the helper text
  */
-export const renderInputHelper = (config: RenderHelperConfig) => {
-  const { helperText, inputStyles, errorContainerStyle } = config;
-
+export const renderHelperText = ({
+  helperText,
+  inputStyles,
+  errorContainerStyle,
+}: Pick<RenderProps, 'helperText' | 'inputStyles' | 'errorContainerStyle'>) => {
   if (!helperText) return null;
 
   return (
@@ -149,3 +168,53 @@ export const renderInputHelper = (config: RenderHelperConfig) => {
     </View>
   );
 };
+
+/**
+ * Render the input field
+ */
+export const renderInputField = ({
+  ref,
+  inputStyles,
+  textStyle,
+  placeholder,
+  value,
+  onChangeText,
+  isDisabled,
+  onFocus,
+  onBlur,
+  accessibilityLabel,
+  accessibilityHint,
+  testID,
+  props,
+}: Pick<
+  RenderProps,
+  | 'ref'
+  | 'inputStyles'
+  | 'textStyle'
+  | 'placeholder'
+  | 'value'
+  | 'onChangeText'
+  | 'isDisabled'
+  | 'onFocus'
+  | 'onBlur'
+  | 'accessibilityLabel'
+  | 'accessibilityHint'
+  | 'testID'
+  | 'props'
+>) => (
+  <TextInput
+    ref={ref}
+    style={[inputStyles.input, textStyle]}
+    placeholder={placeholder}
+    placeholderTextColor={theme.colors.textTertiary}
+    value={value}
+    onChangeText={onChangeText}
+    editable={!isDisabled}
+    onFocus={onFocus as any}
+    onBlur={onBlur as any}
+    accessibilityLabel={accessibilityLabel}
+    accessibilityHint={accessibilityHint}
+    testID={testID}
+    {...props}
+  />
+);

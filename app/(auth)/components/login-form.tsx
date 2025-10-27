@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import { Text } from 'react-native';
 
-import { Control, FieldErrors } from 'react-hook-form';
+import { FieldErrors } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -12,18 +12,22 @@ import { useThemeColors } from '@/context/theme-context';
 import { LoginFormData } from '@/lib/schemas/auth';
 
 interface LoginFormProps {
-  control: Control<LoginFormData>;
   formState: {
+    values: {
+      email: string;
+      password: string;
+    };
     errors: FieldErrors<LoginFormData>;
     isSubmitting: boolean;
   };
+  setFieldValue: (field: string, value: string) => void;
   isLoading: boolean;
   onLogin: () => void;
   onForgotPassword: () => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = React.memo(
-  ({ control, formState, isLoading, onLogin, onForgotPassword }) => {
+  ({ formState, setFieldValue, isLoading, onLogin, onForgotPassword }) => {
     const colors = useThemeColors();
 
     // Memoize styles
@@ -35,7 +39,7 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(
         marginBottom: 24,
         textAlign: 'center' as const,
       }),
-      [colors.text],
+      [colors.text]
     );
 
     const forgotPasswordStyle = useMemo(
@@ -43,14 +47,14 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(
         alignSelf: 'flex-end' as const,
         marginBottom: 24,
       }),
-      [],
+      []
     );
 
     const cardStyle = useMemo(
       () => ({
         marginBottom: 24,
       }),
-      [],
+      []
     );
 
     return (
@@ -61,8 +65,8 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(
           <Input
             label="Email"
             placeholder="Digite seu email"
-            control={control}
-            name="email"
+            value={formState.values.email}
+            onChangeText={(value) => setFieldValue('email', value)}
             error={formState.errors.email?.message}
             keyboardType="email-address"
             autoCapitalize="none"
@@ -73,8 +77,8 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(
           <Input
             label="Senha"
             placeholder="Digite sua senha"
-            control={control}
-            name="password"
+            value={formState.values.password}
+            onChangeText={(value) => setFieldValue('password', value)}
             error={formState.errors.password?.message}
             secureTextEntry
             leftIcon="🔒"
@@ -97,5 +101,5 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(
         </Card.Body>
       </Card>
     );
-  },
+  }
 );

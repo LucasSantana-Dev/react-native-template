@@ -83,7 +83,7 @@ const CardComponent: React.FC<CardProps> = ({
 
   return (
     <CardContainer
-      style={[cardStyles.card, (pressableStyles as any).card || {}, style]}
+      style={[cardStyles.card as ViewStyle, (pressableStyles as { card?: ViewStyle }).card, style]}
       onPress={handlePress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}

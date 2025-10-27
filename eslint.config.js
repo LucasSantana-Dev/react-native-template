@@ -204,6 +204,7 @@ export default [
       '**/*.test.{js,jsx,ts,tsx}',
       '**/*.spec.{js,jsx,ts,tsx}',
       'jest.setup.js',
+      'jest.setup.after.js',
       '**/__tests__/**/*.{js,jsx,ts,tsx}',
     ],
     languageOptions: {
@@ -226,6 +227,9 @@ export default [
         test: 'readonly',
         expect: 'readonly',
         jest: 'readonly',
+        window: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
       },
     },
     rules: {

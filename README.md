@@ -335,7 +335,8 @@ const {
 ### Brazilian Utilities
 
 ```typescript
-import { formatCPF, validateCPF, formatBRL } from '@/lib/utils/brazilian';
+import { formatCPF, validateCPF } from '@/lib/utils/cpf';
+import { formatBRL } from '@/lib/utils/currency';
 import { formatCurrency } from '@/lib/utils/currency';
 
 // CPF formatting

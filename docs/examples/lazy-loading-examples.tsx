@@ -14,7 +14,7 @@ import {
   ScreenLoader,
   SkeletonLoader,
 } from '@/components/common/loading-fallback';
-import { AvatarImage, HeroImage, LazyImage } from '@/components/ui/lazy-image';
+import { LazyImage } from '@/components/ui/lazy-image';
 import {
   useLazyLoad,
   useLazyLoadManager,
@@ -113,7 +113,6 @@ export const LazyImageExample: React.FC = () => {
   return (
     <LazyImage
       source={{ uri: 'https://example.com/image.jpg' }}
-      blurhash="L6PZfSi_.AyE_3t7t7R**0o#DgR4"
       style={{ width: 200, height: 200 }}
     />
   );
@@ -123,7 +122,12 @@ export const LazyImageExample: React.FC = () => {
  * Example: Avatar with fallback
  */
 export const AvatarExample: React.FC = () => {
-  return <AvatarImage source={{ uri: 'https://example.com/avatar.jpg' }} size={60} fallback="👤" />;
+  return (
+    <LazyImage
+      source={{ uri: 'https://example.com/avatar.jpg' }}
+      style={{ width: 60, height: 60, borderRadius: 30 }}
+    />
+  );
 };
 
 /**
@@ -131,10 +135,9 @@ export const AvatarExample: React.FC = () => {
  */
 export const HeroImageExample: React.FC = () => {
   return (
-    <HeroImage
+    <LazyImage
       source={{ uri: 'https://example.com/hero.jpg' }}
-      height={200}
-      title="Hero Image Title"
+      style={{ width: '100%', height: 200 }}
     />
   );
 };

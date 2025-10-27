@@ -45,7 +45,7 @@ export interface UseAsyncOperationOptions {
  * ```typescript
  * const { data, isLoading, error, execute } = useApiCall(
  *   (id) => apiClient.getUser(id),
- *   { onSuccess: (user) => console.log('User loaded:', user) }
+ *   { onSuccess: (user) => // console.log('User loaded:', user) }
  * );
  * ```
  */

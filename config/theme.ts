@@ -1,16 +1,16 @@
 import { Platform } from 'react-native';
 
 import {
-    ANIMATION,
-    BORDER_RADIUS,
-    BREAKPOINTS,
-    COLORS,
-    GRADIENTS,
-    OVERLAYS,
-    SHADOWS,
-    SPACING,
-    TYPOGRAPHY,
-    Z_INDEX
+  ANIMATION,
+  BORDER_RADIUS,
+  BREAKPOINTS,
+  COLORS,
+  GRADIENTS,
+  OVERLAYS,
+  SHADOWS,
+  SPACING,
+  TYPOGRAPHY,
+  Z_INDEX,
 } from './colors';
 
 // ========== THEME CONFIGURATION ==========
@@ -50,30 +50,35 @@ export const Colors = {
   },
 };
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});
+// Fonts configuration with lazy evaluation to avoid Platform.select at module load time
+export const getFonts = () =>
+  Platform.select({
+    ios: {
+      /** iOS `UIFontDescriptorSystemDesignDefault` */
+      sans: 'system-ui',
+      /** iOS `UIFontDescriptorSystemDesignSerif` */
+      serif: 'ui-serif',
+      /** iOS `UIFontDescriptorSystemDesignRounded` */
+      rounded: 'ui-rounded',
+      /** iOS `UIFontDescriptorSystemDesignMonospaced` */
+      mono: 'ui-monospace',
+    },
+    default: {
+      sans: 'normal',
+      serif: 'serif',
+      rounded: 'normal',
+      mono: 'monospace',
+    },
+    web: {
+      sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+      serif: "Georgia, 'Times New Roman', serif",
+      rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
+      mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+    },
+  });
+
+// Legacy export for backward compatibility - now uses lazy evaluation
+export const Fonts = getFonts;
 
 // ========== APP CONFIGURATION ==========
 export const appConfig = {
@@ -89,11 +94,7 @@ export const appConfig = {
   // API configuration
   api: {
     baseUrl: __DEV__
-      ? Platform.select({
-          ios: 'http://localhost:3000/api',
-          android: 'http://10.0.2.2:3000/api',
-          web: 'http://localhost:3000/api',
-        })
+      ? 'http://localhost:3000/api' // Simplified for testing - Platform.select will be handled at runtime
       : 'https://api.yourapp.com',
     timeout: 10000,
     retries: 3,

@@ -1,33 +1,31 @@
 import { useState } from 'react';
 
-import { Alert, ScrollView, Text } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
 
 import { useRouter } from 'expo-router';
 
+import { LoginForm } from './components/login-form';
+import { LoginPrompt } from './components/login-prompt';
+
 import { HeaderLayout } from '@/components/layout/header-layout';
 import { ScreenContainer } from '@/components/layout/screen-container';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/auth-context';
 import { useThemeColors } from '@/context/theme-context';
-import { useFormData } from '@/hooks/use-form-data';
-import { isValidEmail } from '@/lib/utils/brazilian';
+import { useFormData } from '@/hooks/form/use-form-data';
+import { logger } from '@/lib/utils/logger';
+import { isValidEmail } from '@/lib/utils/validation';
 
-// ========== LOGIN FORM TYPES ==========
 interface LoginForm {
   email: string;
   password: string;
 }
 
-// ========== LOGIN SCREEN ==========
 export default function LoginScreen() {
   const router = useRouter();
   const { signIn } = useAuth();
   const colors = useThemeColors();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Form validation
   const validation = {
     email: (value: string) => {
       if (!value) return 'Email é obrigatório';
@@ -41,18 +39,13 @@ export default function LoginScreen() {
     },
   };
 
-  // Form management
-  const { formState, setFieldValue, setFieldTouched, handleSubmit } = useFormData<LoginForm>({
-    initialValues: {
-      email: '',
-      password: '',
-    },
+  const { data, errors, handleSubmit } = useFormData<LoginForm>({
+    initialValues: { email: '', password: '' },
     validation,
     validateOnChange: true,
     validateOnBlur: true,
   });
 
-  // Handle login
   const handleLogin = async (values: LoginForm) => {
     try {
       setIsLoading(true);
@@ -60,18 +53,18 @@ export default function LoginScreen() {
       router.replace('/(tabs)');
     } catch (error) {
       Alert.alert('Erro', 'Falha ao fazer login. Verifique suas credenciais.');
-      console.error('Login error:', error);
+      logger.error('Login error:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handle forgot password
   const handleForgotPassword = () => {
     Alert.alert('Recuperar Senha', 'Funcionalidade em desenvolvimento');
   };
 
-  // Handle register
   const handleRegister = () => {
     router.push('/(auth)/register');
   };
@@ -83,92 +76,37 @@ export default function LoginScreen() {
         subtitle="Entre com sua conta"
         backgroundColor={colors.background}
       />
-
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{ padding: 16 }}
         showsVerticalScrollIndicator={false}
       >
-        <Card variant="elevated" size="lg" style={{ marginBottom: 24 }}>
-          <Card.Body>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: '600',
-                color: colors.text,
-                marginBottom: 24,
-                textAlign: 'center',
-              }}
-            >
-              Bem-vindo de volta!
-            </Text>
-
-            <Input
-              label="Email"
-              placeholder="Digite seu email"
-              value={formState.data.email.value}
-              onChangeText={(value) => setFieldValue('email', value)}
-              onBlur={() => setFieldTouched('email')}
-              error={formState.data.email.error}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              leftIcon="📧"
-            />
-
-            <Input
-              label="Senha"
-              placeholder="Digite sua senha"
-              value={formState.data.password.value}
-              onChangeText={(value) => setFieldValue('password', value)}
-              onBlur={() => setFieldTouched('password')}
-              error={formState.data.password.error}
-              secureTextEntry
-              leftIcon="🔒"
-            />
-
-            <Button
-              variant="primary"
-              size="lg"
-              fullWidth
-              loading={isLoading}
-              disabled={!formState.isValid || isLoading}
-              onPress={handleSubmit(handleLogin)}
-              style={{ marginTop: 16 }}
-            >
-              Entrar
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="md"
-              fullWidth
-              onPress={handleForgotPassword}
-              style={{ marginTop: 12 }}
-            >
-              Esqueci minha senha
-            </Button>
-          </Card.Body>
-        </Card>
-
-        <Card variant="outlined" size="md">
-          <Card.Body>
-            <Text
-              style={{
-                fontSize: 16,
-                color: colors.textSecondary,
-                textAlign: 'center',
-                marginBottom: 16,
-              }}
-            >
-              Não tem uma conta?
-            </Text>
-
-            <Button variant="outline" size="lg" fullWidth onPress={handleRegister}>
-              Criar conta
-            </Button>
-          </Card.Body>
-        </Card>
+        <LoginForm
+          formState={{
+            values: {
+              email: data.email.value,
+              password: data.password.value,
+            },
+            errors: {
+              email: errors.email ? { message: errors.email, type: 'validation' } : undefined,
+              password: errors.password
+                ? { message: errors.password, type: 'validation' }
+                : undefined,
+            },
+            isSubmitting: isLoading,
+          }}
+          setFieldValue={(field: string, value: string) => {
+            if (field === 'email') {
+              data.email.value = value;
+            } else if (field === 'password') {
+              data.password.value = value;
+            }
+          }}
+          isLoading={isLoading}
+          onLogin={() => handleSubmit(handleLogin)()}
+          onForgotPassword={handleForgotPassword}
+        />
+        <LoginPrompt onBackToLogin={handleRegister} />
       </ScrollView>
     </ScreenContainer>
   );

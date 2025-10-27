@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { useThemeColors } from '@/context/theme-context';
 
@@ -14,34 +14,38 @@ interface Feature {
 
 interface FeatureCardProps {
   feature: Feature;
-  _isTablet: boolean;
   onPress: (featureId: string) => void;
+  isTablet: boolean;
 }
 
-export const FeatureCard: React.FC<FeatureCardProps> = ({
-  feature,
-  _isTablet: _isTablet,
-  onPress,
-}) => {
+export const FeatureCard: React.FC<FeatureCardProps> = ({ feature, onPress, isTablet }) => {
   const colors = useThemeColors();
 
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => onPress(feature.id)}
-      style={{
-        backgroundColor: colors.card,
-        borderRadius: 12,
-        padding: 16,
-        borderWidth: 1,
-        borderColor: colors.border,
-        marginBottom: 12,
-      }}
+      style={({ pressed }) => [
+        {
+          backgroundColor: colors.surface,
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 12,
+          borderWidth: 1,
+          borderColor: colors.border,
+          opacity: pressed ? 0.8 : 1,
+          transform: [{ scale: pressed ? 0.98 : 1 }],
+        },
+        isTablet && {
+          flex: 1,
+          marginHorizontal: 6,
+        },
+      ]}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
         <Text style={{ fontSize: 24, marginRight: 12 }}>{feature.icon}</Text>
         <Text
           style={{
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: '600',
             color: colors.text,
             flex: 1,
@@ -59,6 +63,6 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
       >
         {feature.description}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };

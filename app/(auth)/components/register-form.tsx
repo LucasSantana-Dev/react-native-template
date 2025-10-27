@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import { Text } from 'react-native';
 
-import { Control, FieldErrors } from 'react-hook-form';
+import { FieldErrors } from 'react-hook-form';
 
 import { RegisterFormFields } from './register-form-fields';
 
@@ -13,11 +13,19 @@ import { useThemeColors } from '@/context/theme-context';
 import { RegisterFormData } from '@/lib/schemas/auth';
 
 interface RegisterFormProps {
-  control: Control<RegisterFormData>;
   formState: {
+    values: {
+      name: string;
+      email: string;
+      cpf: string;
+      phone: string;
+      password: string;
+      confirmPassword: string;
+    };
     errors: FieldErrors<RegisterFormData>;
     isSubmitting: boolean;
   };
+  setFieldValue: (field: string, value: string) => void;
   isLoading: boolean;
   onRegister: () => void;
   formattedCPF: string;
@@ -25,7 +33,7 @@ interface RegisterFormProps {
 }
 
 export const RegisterForm: React.FC<RegisterFormProps> = React.memo(
-  ({ control, formState, isLoading, onRegister, formattedCPF, formattedPhone }) => {
+  ({ formState, setFieldValue, isLoading, onRegister, formattedCPF, formattedPhone }) => {
     const colors = useThemeColors();
 
     // Memoize styles
@@ -37,21 +45,21 @@ export const RegisterForm: React.FC<RegisterFormProps> = React.memo(
         marginBottom: 24,
         textAlign: 'center' as const,
       }),
-      [colors.text],
+      [colors.text]
     );
 
     const cardStyle = useMemo(
       () => ({
         marginBottom: 24,
       }),
-      [],
+      []
     );
 
     const buttonStyle = useMemo(
       () => ({
         marginTop: 16,
       }),
-      [],
+      []
     );
 
     return (
@@ -60,7 +68,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = React.memo(
           <Text style={titleStyle}>Crie sua conta</Text>
 
           <RegisterFormFields
-            control={control}
+            values={formState.values}
+            setFieldValue={setFieldValue}
             errors={formState.errors}
             formattedCPF={formattedCPF}
             formattedPhone={formattedPhone}
@@ -80,5 +89,5 @@ export const RegisterForm: React.FC<RegisterFormProps> = React.memo(
         </Card.Body>
       </Card>
     );
-  },
+  }
 );

@@ -22,17 +22,17 @@ export const useInputStyles = ({
   hasRightIcon,
 }: UseInputStylesProps) => {
   return useMemo(() => {
-    const inputStyles = getInputStyles(
+    const inputStyles = getInputStyles({
       variant,
       size,
-      inputState,
-      isDisabled,
+      state: inputState,
+      disabled: isDisabled,
       readonly,
       hasLeftIcon,
-      hasRightIcon
-    );
+      hasRightIcon,
+    });
 
-    const iconStyles = getIconStyles('left');
+    const iconStyles = getIconStyles();
     const requiredStyles = getRequiredLabelStyles();
 
     return {

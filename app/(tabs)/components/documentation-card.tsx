@@ -58,21 +58,23 @@ export const DocumentationCard: React.FC = React.memo(() => {
       <Card.Body>
         <Text style={titleStyle}>📚 Documentação</Text>
         <View style={linkContainerStyle}>
-          {DOCUMENTATION_LINKS.map((link) => (
-            <Button
-              key={link.title}
-              variant="ghost"
-              size="md"
-              onPress={() => handleLinkPress(link.url)}
-              style={linkStyle}
-            >
-              <Text style={{ fontSize: 20 }}>{link.icon}</Text>
-              <View style={linkTextStyle}>
-                <Text style={linkTitleStyle}>{link.title}</Text>
-                <Text style={linkDescriptionStyle}>{link.description}</Text>
-              </View>
-            </Button>
-          ))}
+          {DOCUMENTATION_LINKS.map(
+            (link: { title: string; url: string; description: string; icon: string }) => (
+              <Button
+                key={link.title}
+                variant="ghost"
+                size="md"
+                onPress={() => handleLinkPress(link.url)}
+                style={linkStyle}
+              >
+                <Text style={{ fontSize: 20 }}>{link.icon}</Text>
+                <View style={linkTextStyle}>
+                  <Text style={linkTitleStyle}>{link.title}</Text>
+                  <Text style={linkDescriptionStyle}>{link.description}</Text>
+                </View>
+              </Button>
+            )
+          )}
         </View>
       </Card.Body>
     </Card>

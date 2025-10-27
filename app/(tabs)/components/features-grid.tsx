@@ -39,7 +39,7 @@ export const FeaturesGrid: React.FC<FeaturesGridProps> = ({
             minWidth: isTablet ? 300 : undefined,
           }}
         >
-          <FeatureCard feature={feature} _isTablet={isTablet} onPress={onFeaturePress} />
+          <FeatureCard feature={feature} isTablet={isTablet} onPress={onFeaturePress} />
         </View>
       ))}
     </View>

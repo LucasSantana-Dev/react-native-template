@@ -4,11 +4,11 @@ import { Text, View } from 'react-native';
 
 // Mock performance object for development
 const performanceMock = {
-  mark: (name: string) => {
-    console.log(`Performance mark: ${name}`);
+  mark: (_name: string) => {
+    // console.log(`Performance mark: ${name}`);
   },
-  measure: (name: string, startMark: string, endMark: string) => {
-    console.log(`Performance measure: ${name} from ${startMark} to ${endMark}`);
+  measure: (_name: string, _startMark: string, _endMark: string) => {
+    // console.log(`Performance measure: ${name} from ${startMark} to ${endMark}`);
   },
   memory: {
     usedJSHeapSize: 0,
@@ -63,7 +63,7 @@ export class PerformanceTracker {
    * @example
    * ```tsx
    * const duration = PerformanceTracker.getInstance().endTiming('screen-load');
-   * console.log(`Screen loaded in ${duration}ms`);
+   * // console.log(`Screen loaded in ${duration}ms`);
    * ```
    */
   endTiming(name: string): number {
@@ -403,10 +403,10 @@ export const PerformanceOverlay: React.FC<{
  *   renderList(data);
  * }, 100);
  *
- * console.log(`Average: ${results.average}ms`);
+ * // console.log(`Average: ${results.average}ms`);
  * ```
  */
-export const benchmark = async <T>(
+export async function benchmark<T>(
   name: string,
   fn: () => T | Promise<T>,
   iterations: number = 1
@@ -418,7 +418,7 @@ export const benchmark = async <T>(
   minTime: number;
   maxTime: number;
   results: T[];
-}> => {
+}> {
   const times: number[] = [];
   const results: T[] = [];
 
@@ -445,7 +445,7 @@ export const benchmark = async <T>(
     maxTime,
     results,
   };
-};
+}
 
 // Export singleton instance
 export const performanceTracker = PerformanceTracker.getInstance();

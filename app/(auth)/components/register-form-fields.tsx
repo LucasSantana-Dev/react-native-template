@@ -2,20 +2,28 @@ import React from 'react';
 
 import { View } from 'react-native';
 
-import { Control, FieldErrors } from 'react-hook-form';
+import { FieldErrors } from 'react-hook-form';
 
 import { Input } from '@/components/ui/input';
 import { RegisterFormData } from '@/lib/schemas/auth';
 
 interface RegisterFormFieldsProps {
-  control: Control<RegisterFormData>;
+  values: {
+    name: string;
+    email: string;
+    cpf: string;
+    phone: string;
+    password: string;
+    confirmPassword: string;
+  };
+  setFieldValue: (field: string, value: string) => void;
   errors: FieldErrors<RegisterFormData>;
   formattedCPF: string;
   formattedPhone: string;
 }
 
 export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
-  ({ control, errors, formattedCPF, formattedPhone }) => {
+  ({ values, setFieldValue, errors, formattedCPF, formattedPhone }) => {
     const fieldContainerStyle = {
       marginBottom: 16,
     };
@@ -24,8 +32,8 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
       <View>
         <View style={fieldContainerStyle}>
           <Input
-            control={control}
-            name="name"
+            value={values.name}
+            onChangeText={(value) => setFieldValue('name', value)}
             label="Nome completo"
             placeholder="Digite seu nome completo"
             error={errors.name?.message}
@@ -35,8 +43,8 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
 
         <View style={fieldContainerStyle}>
           <Input
-            control={control}
-            name="email"
+            value={values.email}
+            onChangeText={(value) => setFieldValue('email', value)}
             label="E-mail"
             placeholder="Digite seu e-mail"
             keyboardType="email-address"
@@ -48,11 +56,10 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
 
         <View style={fieldContainerStyle}>
           <Input
-            control={control}
-            name="cpf"
+            value={formattedCPF}
+            onChangeText={(value) => setFieldValue('cpf', value)}
             label="CPF"
             placeholder="000.000.000-00"
-            value={formattedCPF}
             keyboardType="numeric"
             maxLength={14}
             error={errors.cpf?.message}
@@ -62,11 +69,10 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
 
         <View style={fieldContainerStyle}>
           <Input
-            control={control}
-            name="phone"
+            value={formattedPhone}
+            onChangeText={(value) => setFieldValue('phone', value)}
             label="Telefone"
             placeholder="(00) 00000-0000"
-            value={formattedPhone}
             keyboardType="phone-pad"
             maxLength={15}
             error={errors.phone?.message}
@@ -76,8 +82,8 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
 
         <View style={fieldContainerStyle}>
           <Input
-            control={control}
-            name="password"
+            value={values.password}
+            onChangeText={(value) => setFieldValue('password', value)}
             label="Senha"
             placeholder="Digite sua senha"
             secureTextEntry
@@ -88,8 +94,8 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
 
         <View style={fieldContainerStyle}>
           <Input
-            control={control}
-            name="confirmPassword"
+            value={values.confirmPassword}
+            onChangeText={(value) => setFieldValue('confirmPassword', value)}
             label="Confirmar senha"
             placeholder="Confirme sua senha"
             secureTextEntry
@@ -99,7 +105,7 @@ export const RegisterFormFields: React.FC<RegisterFormFieldsProps> = React.memo(
         </View>
       </View>
     );
-  },
+  }
 );
 
 RegisterFormFields.displayName = 'RegisterFormFields';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, DimensionValue, Text, View } from 'react-native';
 
 import { theme } from '@/config/theme';
 import { useThemeColors } from '@/context/theme-context';
@@ -168,7 +168,7 @@ export const ErrorFallback: React.FC<{
  */
 export const SkeletonLoader: React.FC<{
   height?: number;
-  width?: number | string;
+  width?: DimensionValue;
   borderRadius?: number;
 }> = ({ height = 20, width = '100%', borderRadius = 4 }) => {
   const colors = useThemeColors();
@@ -177,7 +177,7 @@ export const SkeletonLoader: React.FC<{
     <View
       style={{
         height,
-            width: width as number | string,
+        width,
         backgroundColor: colors.surface,
         borderRadius,
         opacity: 0.6,

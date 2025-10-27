@@ -1,78 +1,86 @@
 import { useState } from 'react';
 
-import { Alert, ScrollView, Text, View } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
 
-import { useRouter } from 'expo-router';
+import { ProfileActions } from './components/profile-actions';
+import { ProfileForm } from './components/profile-form';
+import { ProfileHeader } from './components/profile-header';
+import { useProfileHandler } from './hooks/use-profile-handler';
+import { profileValidation } from './validation/profile-validation';
 
-import { HeaderLayout } from '@/components/layout/header-layout';
-import { ScreenContainer } from '@/components/layout/screen-container';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { useAuth } from '@/context/auth-context';
-import { useThemeColors } from '@/context/theme-context';
-import { useFormData } from '@/hooks/use-form-data';
-import { isValidEmail, validateCPF, validatePhone } from '@/lib/utils/brazilian';
-
-
-// ========== PROFILE FORM TYPES ==========
-interface ProfileForm {
+interface ProfileFormValues {
   name: string;
   email: string;
   cpf: string;
   phone: string;
 }
 
+// Helper functions to reduce complexity
+const createPasswordChangeHandler = () => {
+  return () => Alert.alert('Alterar Senha', 'Funcionalidade em desenvolvimento');
+};
+
+const createDeleteAccountHandler = () => {
+  return () => {
+    Alert.alert(
+      'Excluir Conta',
+      'Esta ação não pode ser desfeita. Tem certeza que deseja excluir sua conta?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Excluir',
+          style: 'destructive',
+          onPress: () => Alert.alert('Conta Excluída', 'Sua conta foi excluída com sucesso.'),
+        },
+      ]
+    );
+  };
+};
+
+const getUserWithDefaults = (user: User | null) => {
+  return user
+    ? {
+        ...user,
+        createdAt: user.createdAt || new Date().toISOString(),
+        updatedAt: user.updatedAt || new Date().toISOString(),
+      }
+    : {
+        id: '',
+        name: 'Usuário',
+        email: 'usuario@email.com',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+};
+
+import { HeaderLayout } from '@/components/layout/header-layout';
+import { ScreenContainer } from '@/components/layout/screen-container';
+import { Button } from '@/components/ui/button';
+import { useAuth, User } from '@/context/auth-context';
+import { useThemeColors } from '@/context/theme-context';
+import { useFormData } from '@/hooks/form/use-form-data';
+
 // ========== PROFILE SCREEN ==========
 export default function ProfileScreen() {
-  const router = useRouter();
-  const { user, updateUser, signOut } = useAuth();
+  const { user } = useAuth();
   const colors = useThemeColors();
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Form validation
-  const validation = {
-    name: (value: string) => {
-      if (!value) return 'Nome é obrigatório';
-      if (value.length < 2) return 'Nome deve ter pelo menos 2 caracteres';
-      return undefined;
-    },
-    email: (value: string) => {
-      if (!value) return 'Email é obrigatório';
-      if (!isValidEmail(value)) return 'Email inválido';
-      return undefined;
-    },
-    cpf: (value: string) => {
-      if (!value) return 'CPF é obrigatório';
-      if (!validateCPF(value)) return 'CPF inválido';
-      return undefined;
-    },
-    phone: (value: string) => {
-      if (!value) return 'Telefone é obrigatório';
-      if (!validatePhone(value)) return 'Telefone inválido';
-      return undefined;
-    },
-  };
+  const { isLoading, handleSubmit, handleSignOut } = useProfileHandler();
 
   // Form management
-  const {
-    formState,
-    setFieldValue,
-    setFieldTouched,
-    handleSubmit,
-    resetForm,
-  } = useFormData<ProfileForm>({
+  const formData = useFormData<ProfileFormValues>({
     initialValues: {
       name: user?.name || '',
       email: user?.email || '',
       cpf: user?.cpf || '',
       phone: user?.phone || '',
     },
-    validation,
+    validation: profileValidation,
     validateOnChange: true,
     validateOnBlur: true,
   });
+
+  const { data, errors, setFieldValue, setFieldTouched, resetForm } = formData;
 
   // Handle edit toggle
   const handleEditToggle = () => {
@@ -83,65 +91,21 @@ export default function ProfileScreen() {
   };
 
   // Handle save profile
-  const handleSaveProfile = async (values: ProfileForm) => {
+  const handleSaveProfile = async (values: ProfileFormValues) => {
     try {
-      setIsLoading(true);
-
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      updateUser(values);
+      await handleSubmit(values);
       setIsEditing(false);
       Alert.alert('Sucesso', 'Perfil atualizado com sucesso!');
-    } catch (error) {
+    } catch {
       Alert.alert('Erro', 'Falha ao atualizar perfil. Tente novamente.');
-      console.error('Profile update error:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  // Handle sign out
-  const handleSignOut = async () => {
-    Alert.alert(
-      'Sair',
-      'Tem certeza que deseja sair da sua conta?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Sair',
-          style: 'destructive',
-          onPress: async () => {
-            await signOut();
-            router.replace('/(auth)/login');
-          },
-        },
-      ]
-    );
-  };
-
   // Handle change password
-  const handleChangePassword = () => {
-    Alert.alert('Alterar Senha', 'Funcionalidade em desenvolvimento');
-  };
+  const handleChangePassword = createPasswordChangeHandler();
 
   // Handle delete account
-  const handleDeleteAccount = () => {
-    Alert.alert(
-      'Excluir Conta',
-      'Esta ação não pode ser desfeita. Tem certeza que deseja excluir sua conta?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Excluir',
-          style: 'destructive',
-          onPress: () => {
-            Alert.alert('Conta Excluída', 'Sua conta foi excluída com sucesso.');
-          },
-        },
-      ]
-    );
-  };
+  const handleDeleteAccount = createDeleteAccountHandler();
 
   return (
     <ScreenContainer safeArea>
@@ -166,270 +130,40 @@ export default function ProfileScreen() {
         contentContainerStyle={{ padding: 16 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Profile Info */}
-        <Card variant="elevated" size="lg" style={{ marginBottom: 24 }}>
-          <Card.Body>
-            <View
-              style={{
-                alignItems: 'center',
-                marginBottom: 24,
-              }}
-            >
-              <View
-                style={{
-                  width: 80,
-                  height: 80,
-                  borderRadius: 40,
-                  backgroundColor: colors.primary,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 12,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 32,
-                    color: colors.white,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}
-                </Text>
-              </View>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: '600',
-                  color: colors.text,
-                }}
-              >
-                {user?.name || 'Usuário'}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: colors.textSecondary,
-                }}
-              >
-                {user?.email || 'usuario@email.com'}
-              </Text>
-            </View>
+        <ProfileHeader user={getUserWithDefaults(user)} />
 
-            {isEditing ? (
-              <>
-                <Input
-                  label="Nome completo"
-                  placeholder="Digite seu nome completo"
-                  value={formState.data.name.value}
-                  onChangeText={(value) => setFieldValue('name', value)}
-                  onBlur={() => setFieldTouched('name')}
-                  error={formState.data.name.error}
-                  leftIcon="👤"
-                />
+        <ProfileForm
+          formState={{
+            values: {
+              name: data.name.value,
+              email: data.email.value,
+              cpf: data.cpf.value,
+              phone: data.phone.value,
+            },
+            errors,
+            touched: {
+              name: data.name.touched,
+              email: data.email.touched,
+              cpf: data.cpf.touched,
+              phone: data.phone.touched,
+            },
+            isSubmitting: isLoading,
+          }}
+          setFieldValue={(field: string, value: string) =>
+            setFieldValue(field as keyof ProfileFormValues, value)
+          }
+          setFieldTouched={(field: string) => setFieldTouched(field as keyof ProfileFormValues)}
+          isLoading={isLoading}
+          onSave={handleSaveProfile}
+          formattedCPF={data.cpf.value}
+          formattedPhone={data.phone.value}
+        />
 
-                <Input
-                  label="Email"
-                  placeholder="Digite seu email"
-                  value={formState.data.email.value}
-                  onChangeText={(value) => setFieldValue('email', value)}
-                  onBlur={() => setFieldTouched('email')}
-                  error={formState.data.email.error}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  leftIcon="📧"
-                />
-
-                <Input
-                  label="CPF"
-                  placeholder="000.000.000-00"
-                  value={formState.data.cpf.value}
-                  onChangeText={(value) => setFieldValue('cpf', value)}
-                  onBlur={() => setFieldTouched('cpf')}
-                  error={formState.data.cpf.error}
-                  keyboardType="numeric"
-                  leftIcon="🆔"
-                />
-
-                <Input
-                  label="Telefone"
-                  placeholder="(00) 00000-0000"
-                  value={formState.data.phone.value}
-                  onChangeText={(value) => setFieldValue('phone', value)}
-                  onBlur={() => setFieldTouched('phone')}
-                  error={formState.data.phone.error}
-                  keyboardType="phone-pad"
-                  leftIcon="📱"
-                />
-
-                <Button
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  loading={isLoading}
-                  disabled={!formState.isValid || isLoading}
-                  onPress={handleSubmit(handleSaveProfile)}
-                  style={{ marginTop: 16 }}
-                >
-                  Salvar alterações
-                </Button>
-              </>
-            ) : (
-              <View style={{ gap: 16 }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingVertical: 12,
-                    borderBottomWidth: 1,
-                    borderBottomColor: colors.border,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: colors.textSecondary,
-                    }}
-                  >
-                    Nome
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: '500',
-                      color: colors.text,
-                    }}
-                  >
-                    {user?.name || 'Não informado'}
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingVertical: 12,
-                    borderBottomWidth: 1,
-                    borderBottomColor: colors.border,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: colors.textSecondary,
-                    }}
-                  >
-                    Email
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: '500',
-                      color: colors.text,
-                    }}
-                  >
-                    {user?.email || 'Não informado'}
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingVertical: 12,
-                    borderBottomWidth: 1,
-                    borderBottomColor: colors.border,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: colors.textSecondary,
-                    }}
-                  >
-                    CPF
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: '500',
-                      color: colors.text,
-                    }}
-                  >
-                    {user?.cpf || 'Não informado'}
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingVertical: 12,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: colors.textSecondary,
-                    }}
-                  >
-                    Telefone
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: '500',
-                      color: colors.text,
-                    }}
-                  >
-                    {user?.phone || 'Não informado'}
-                  </Text>
-                </View>
-              </View>
-            )}
-          </Card.Body>
-        </Card>
-
-        {/* Actions */}
-        <Card variant="outlined" size="md" style={{ marginBottom: 24 }}>
-          <Card.Body>
-            <Button
-              variant="ghost"
-              size="lg"
-              fullWidth
-              icon="🔒"
-              onPress={handleChangePassword}
-              style={{ marginBottom: 12 }}
-            >
-              Alterar senha
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="lg"
-              fullWidth
-              icon="🚪"
-              onPress={handleSignOut}
-              style={{ marginBottom: 12 }}
-            >
-              Sair da conta
-            </Button>
-
-            <Button
-              variant="danger"
-              size="lg"
-              fullWidth
-              icon="🗑️"
-              onPress={handleDeleteAccount}
-            >
-              Excluir conta
-            </Button>
-          </Card.Body>
-        </Card>
+        <ProfileActions
+          onChangePassword={handleChangePassword}
+          onSignOut={handleSignOut}
+          onDeleteAccount={handleDeleteAccount}
+        />
       </ScrollView>
     </ScreenContainer>
   );

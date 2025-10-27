@@ -1,67 +1,70 @@
+/**
+ * Input size style functions
+ *
+ * Contains functions for generating input size styles.
+ */
+
 import { InputSizeStyles } from './types';
 
-import { theme } from '@/config/theme';
-
-// ========== INPUT SIZE STYLES ==========
+/**
+ * Get input size styles
+ */
 export const getInputSizeStyles = (): InputSizeStyles => ({
   sm: {
     inputContainer: {
-      paddingVertical: theme.spacing.xs,
-      paddingHorizontal: theme.spacing.sm,
-      minHeight: 36,
+      height: 40,
+      paddingHorizontal: 12,
+      borderRadius: 6,
     },
     input: {
-      fontSize: theme.typography.fontSize.sm,
-      lineHeight: theme.typography.lineHeight.sm,
+      fontSize: 14,
+      lineHeight: 20,
     },
     label: {
-      fontSize: theme.typography.fontSize.xs,
-      lineHeight: theme.typography.lineHeight.xs,
-      marginBottom: theme.spacing.xs,
+      fontSize: 12,
+      lineHeight: 16,
+      marginBottom: 4,
     },
     icon: {
       fontSize: 16,
-      marginHorizontal: theme.spacing.xs,
     },
   },
   md: {
     inputContainer: {
-      paddingVertical: theme.spacing.sm,
-      paddingHorizontal: theme.spacing.md,
-      minHeight: 44,
+      height: 48,
+      paddingHorizontal: 16,
+      borderRadius: 8,
     },
     input: {
-      fontSize: theme.typography.fontSize.md,
-      lineHeight: theme.typography.lineHeight.md,
+      fontSize: 16,
+      lineHeight: 24,
     },
     label: {
-      fontSize: theme.typography.fontSize.sm,
-      lineHeight: theme.typography.lineHeight.sm,
-      marginBottom: theme.spacing.sm,
+      fontSize: 14,
+      lineHeight: 20,
+      marginBottom: 6,
     },
     icon: {
       fontSize: 18,
-      marginHorizontal: theme.spacing.sm,
     },
   },
   lg: {
     inputContainer: {
-      paddingVertical: theme.spacing.md,
-      paddingHorizontal: theme.spacing.lg,
-      minHeight: 52,
+      height: 56,
+      paddingHorizontal: 20,
+      borderRadius: 10,
     },
     input: {
-      fontSize: theme.typography.fontSize.lg,
-      lineHeight: theme.typography.lineHeight.lg,
+      fontSize: 18,
+      lineHeight: 28,
     },
     label: {
-      fontSize: theme.typography.fontSize.md,
-      lineHeight: theme.typography.lineHeight.md,
-      marginBottom: theme.spacing.md,
+      fontSize: 16,
+      lineHeight: 24,
+      marginBottom: 8,
     },
     icon: {
       fontSize: 20,
-      marginHorizontal: theme.spacing.md,
     },
   },
 });
