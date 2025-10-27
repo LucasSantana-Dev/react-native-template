@@ -36,8 +36,9 @@ describe('CPF Utils', () => {
   describe('validateCPF', () => {
     it('should validate correct CPF', () => {
       expect(validateCPF('11144477735')).toBe(true);
-      expect(validateCPF('12345678901')).toBe(true);
       expect(validateCPF('111.444.777-35')).toBe(true);
+      // Use a valid CPF instead of 12345678901
+      expect(validateCPF('12345678909')).toBe(true);
     });
 
     it('should reject invalid CPF', () => {

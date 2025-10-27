@@ -12,6 +12,9 @@ export function formatCPF(cpf: string): string {
   // Remove all non-numeric characters
   const cleaned = cleanCPF(cpf);
 
+  // If no numeric characters, return original string
+  if (cleaned.length === 0) return cpf;
+
   // Apply CPF mask
   if (cleaned.length <= 3) {
     return cleaned;
@@ -33,6 +36,20 @@ export function cleanCPF(cpf: string): string {
 }
 
 /**
+ * Calculate CPF check digit
+ */
+function calculateCheckDigit(digits: string, multiplier: number): number {
+  let sum = 0;
+  for (let i = 0; i < digits.length; i++) {
+    const digit = digits[i];
+    if (digit === undefined) return -1;
+    sum += parseInt(digit) * (multiplier - i);
+  }
+  const remainder = sum % 11;
+  return remainder < 2 ? 0 : 11 - remainder;
+}
+
+/**
  * Validate CPF format and check digits
  */
 export function validateCPF(cpf: string): boolean {
@@ -46,25 +63,11 @@ export function validateCPF(cpf: string): boolean {
   // Check for invalid sequences (all same digits)
   if (/^(\d)\1{10}$/.test(cleaned)) return false;
 
-  // Calculate first check digit
-  let sum = 0;
-  for (let i = 0; i < 9; i++) {
-    const digit = cleaned[i];
-    if (digit === undefined) return false;
-    sum += parseInt(digit) * (10 - i);
-  }
-  let remainder = sum % 11;
-  const firstDigit = remainder < 2 ? 0 : 11 - remainder;
+  // Calculate check digits
+  const firstDigit = calculateCheckDigit(cleaned.slice(0, 9), 10);
+  const secondDigit = calculateCheckDigit(cleaned.slice(0, 10), 11);
 
-  // Calculate second check digit
-  sum = 0;
-  for (let i = 0; i < 10; i++) {
-    const digit = cleaned[i];
-    if (digit === undefined) return false;
-    sum += parseInt(digit) * (11 - i);
-  }
-  remainder = sum % 11;
-  const secondDigit = remainder < 2 ? 0 : 11 - remainder;
+  if (firstDigit === -1 || secondDigit === -1) return false;
 
   // Check if calculated digits match the provided ones
   const digit9 = cleaned[9];
