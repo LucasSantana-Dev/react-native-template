@@ -29,28 +29,30 @@ import { ButtonProps } from './types';
  * </Button>
  * ```
  */
-export const Button: React.FC<ButtonProps> = ({
-  children,
-  variant = 'primary',
-  size = 'md',
-  state = 'default',
-  style,
-  textStyle,
-  icon,
-  iconSize: _iconSize,
-  iconColor,
-  iconPosition = 'left',
-  loading = false,
-  disabled = false,
-  fullWidth = false,
-  forceIcon = false,
-  rawChildren = false,
-  accessibilityLabel,
-  accessibilityHint,
-  testID,
-  onPress,
-  ...props
-}) => {
+export const Button: React.FC<ButtonProps> = (props) => {
+  const {
+    children,
+    variant = 'primary',
+    size = 'md',
+    state = 'default',
+    style,
+    textStyle,
+    icon,
+    iconSize: _iconSize,
+    iconColor,
+    iconPosition = 'left',
+    loading = false,
+    disabled = false,
+    fullWidth = false,
+    forceIcon = false,
+    rawChildren = false,
+    accessibilityLabel,
+    accessibilityHint,
+    testID,
+    onPress,
+    ...restProps
+  } = props;
+
   // Get button state using helper
   const { isDisabled } = getButtonState(disabled, loading, state);
 
@@ -105,7 +107,7 @@ export const Button: React.FC<ButtonProps> = ({
         busy: loading,
       }}
       testID={testID}
-      {...props}
+      {...restProps}
     >
       {renderButtonContent(buttonContentProps)}
     </TouchableOpacity>

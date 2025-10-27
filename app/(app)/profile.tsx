@@ -82,7 +82,7 @@ export default function ProfileScreen() {
 
   const { data, errors, setFieldValue, setFieldTouched, resetForm } = formData;
 
-  // Handle edit toggle
+  // Event handlers
   const handleEditToggle = () => {
     if (isEditing) {
       resetForm();
@@ -90,7 +90,6 @@ export default function ProfileScreen() {
     setIsEditing(!isEditing);
   };
 
-  // Handle save profile
   const handleSaveProfile = async (values: ProfileFormValues) => {
     try {
       await handleSubmit(values);
@@ -101,10 +100,7 @@ export default function ProfileScreen() {
     }
   };
 
-  // Handle change password
   const handleChangePassword = createPasswordChangeHandler();
-
-  // Handle delete account
   const handleDeleteAccount = createDeleteAccountHandler();
 
   return (
