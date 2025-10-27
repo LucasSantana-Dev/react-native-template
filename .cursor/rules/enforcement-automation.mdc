@@ -1,0 +1,23 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+## Enforcement & Automation
+
+**Automated gates**
+
+* Pre-commit: format -> lint autofix -> compile -> fast tests
+* CI: full lint -> compile -> build -> test -> coverage -> security scans
+* PR protection: must pass CI + at least 1 reviewer
+
+**Tooling suggestions (React Native/TypeScript stack)**
+
+* Linting and formatting tools: ESLint, Prettier, TypeScript compiler
+* Pre-commit hooks to run fast checks (Husky)
+* Commit message policy enforcement (conventional commits)
+* Dependency update automation (Dependabot for npm/yarn/pnpm)
+* Security scanning (npm audit, yarn audit, CodeQL)
+* Automated changelogs & releases
+* React Native specific: Metro bundler checks, EAS Build validation

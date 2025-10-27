@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    target-branch: 'release/*'
+    versioning-strategy: 'increase'
+    groups:
+      dependencies:
+        patterns:
+          - '*'
+    labels:
+      - 'dependencies'
+      - 'npm'
+      - 'release'
+    open-pull-requests-limit: 5
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    target-branch: 'release/*'
+    labels:
+      - 'dependencies'
+      - 'github-actions'
+      - 'release'
+    open-pull-requests-limit: 3

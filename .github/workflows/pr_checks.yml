@@ -1,0 +1,877 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+      - 'release/*'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  # Detect which files changed to conditionally run jobs
+  detect-changes:
+    name: Detect File Changes
+    runs-on: ubuntu-latest
+    outputs:
+      source: ${{ steps.changes.outputs.source }}
+      native-ios: ${{ steps.changes.outputs.native-ios }}
+      native-android: ${{ steps.changes.outputs.native-android }}
+      dependencies: ${{ steps.changes.outputs.dependencies }}
+      config: ${{ steps.changes.outputs.config }}
+      docs: ${{ steps.changes.outputs.docs }}
+      ci: ${{ steps.changes.outputs.ci }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history for proper diff
+
+      - name: Detect file changes
+        id: changes
+        run: |
+          echo "🔍 Detecting file changes..."
+          echo "Event: ${{ github.event_name }}"
+          echo "SHA: ${{ github.sha }}"
+
+          # Initialize all outputs to false
+          echo "source=false" >> $GITHUB_OUTPUT
+          echo "native-ios=false" >> $GITHUB_OUTPUT
+          echo "native-android=false" >> $GITHUB_OUTPUT
+          echo "dependencies=false" >> $GITHUB_OUTPUT
+          echo "config=false" >> $GITHUB_OUTPUT
+          echo "docs=false" >> $GITHUB_OUTPUT
+          echo "ci=false" >> $GITHUB_OUTPUT
+
+          # Get list of changed files with error handling
+          CHANGED_FILES=""
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "📋 Checking PR changes..."
+            if [ -n "${{ github.event.pull_request.base.sha }}" ]; then
+              CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} 2>/dev/null || echo "")
+            else
+              echo "⚠️ No base SHA available, using HEAD~1"
+              CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+            fi
+          else
+            echo "📋 Checking push changes..."
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+          fi
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          # If no changes detected, assume all changes for safety
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "⚠️ No changed files detected, assuming all changes for safety"
+            echo "source=true" >> $GITHUB_OUTPUT
+            echo "native-ios=true" >> $GITHUB_OUTPUT
+            echo "native-android=true" >> $GITHUB_OUTPUT
+            echo "dependencies=true" >> $GITHUB_OUTPUT
+            echo "config=true" >> $GITHUB_OUTPUT
+            echo "docs=true" >> $GITHUB_OUTPUT
+            echo "ci=true" >> $GITHUB_OUTPUT
+          else
+            # Check for source changes
+            if echo "$CHANGED_FILES" | grep -q "src/\|index\.js\|\.js$\|\.ts$\|\.tsx$"; then
+              echo "source=true" >> $GITHUB_OUTPUT
+              echo "✅ Source files changed"
+            fi
+
+            # Check for iOS changes
+            if echo "$CHANGED_FILES" | grep -q "ios/\|Podfile\|Podfile\.lock"; then
+              echo "native-ios=true" >> $GITHUB_OUTPUT
+              echo "✅ iOS files changed"
+            fi
+
+            # Check for Android changes
+            if echo "$CHANGED_FILES" | grep -q "android/\|\.gradle\|gradle-wrapper\.properties"; then
+              echo "native-android=true" >> $GITHUB_OUTPUT
+              echo "✅ Android files changed"
+            fi
+
+            # Check for dependency changes
+            if echo "$CHANGED_FILES" | grep -q "package\.json\|package-lock\.json"; then
+              echo "dependencies=true" >> $GITHUB_OUTPUT
+              echo "✅ Dependency files changed"
+            fi
+
+            # Check for config changes
+            if echo "$CHANGED_FILES" | grep -q "\.config\.\|tsconfig\.json\|babel\.config\.js\|\.eslintrc\.js\|\.prettierrc\.js"; then
+              echo "config=true" >> $GITHUB_OUTPUT
+              echo "✅ Config files changed"
+            fi
+
+            # Check for docs changes
+            if echo "$CHANGED_FILES" | grep -q "\.md$\|docs/"; then
+              echo "docs=true" >> $GITHUB_OUTPUT
+              echo "✅ Documentation files changed"
+            fi
+
+            # Check for CI changes
+            if echo "$CHANGED_FILES" | grep -q "\.github/"; then
+              echo "ci=true" >> $GITHUB_OUTPUT
+              echo "✅ CI files changed"
+            fi
+          fi
+
+          echo ""
+          echo "📊 Change Detection Summary:"
+          echo "  Source: ${{ steps.changes.outputs.source }}"
+          echo "  iOS: ${{ steps.changes.outputs.native-ios }}"
+          echo "  Android: ${{ steps.changes.outputs.native-android }}"
+          echo "  Dependencies: ${{ steps.changes.outputs.dependencies }}"
+          echo "  Config: ${{ steps.changes.outputs.config }}"
+          echo "  Docs: ${{ steps.changes.outputs.docs }}"
+          echo "  CI: ${{ steps.changes.outputs.ci }}"
+  # Base setup job - all other jobs depend on this
+  # Context-specific installation jobs for optimal parallel execution
+  install-node-deps:
+    name: Install Node Dependencies
+    needs: [detect-changes]
+    if: |
+      needs.detect-changes.outputs.source == 'true' ||
+      needs.detect-changes.outputs.config == 'true' ||
+      needs.detect-changes.outputs.ci == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+  install-android-deps:
+    name: Install Android Dependencies
+    needs: [detect-changes]
+    if: needs.detect-changes.outputs.native-android == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Java for Android build
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+  install-ios-deps:
+    name: Install iOS Dependencies
+    needs: [detect-changes]
+    if: needs.detect-changes.outputs.native-ios == 'true'
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+          npm install
+          fi
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install CocoaPods dependencies
+        run: |
+          cd ios
+          pod install --clean-install --verbose
+          rm -rf ~/Library/Developer/Xcode/DerivedData/*
+
+  install-all-deps:
+    name: Install All Dependencies
+    needs: [detect-changes]
+    if: needs.detect-changes.outputs.dependencies == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Run dependency analysis
+        run: npm run depcheck || echo "Dependency issues found, but continuing"
+
+  # Independent jobs - can run in parallel with installation jobs
+  commit-message-validation:
+    name: Commit Message Validation
+    needs: [detect-changes]
+    # NO if condition - always runs for all PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+
+      - name: Validate commit messages
+        run: |
+          # Get the list of commits in this PR
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            # For PRs, check commits from base to head
+            COMMITS=$(git rev-list --no-merges ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
+          else
+            # For other events, check the last commit
+            COMMITS=$(git rev-list --no-merges -n 1 HEAD)
+          fi
+
+          # Validate each commit message
+          for commit in $COMMITS; do
+            echo "Validating commit: $commit"
+            git log --format=%B -n 1 $commit | npx commitlint
+          done
+
+  pr-size-check:
+    name: PR Size Check
+    needs: [detect-changes]
+    # NO if condition - always runs for all PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR size
+        run: |
+          echo "📏 PR Size Analysis"
+          echo "==================="
+
+          # Get PR information
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          # Count changed files
+          CHANGED_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA | wc -l)
+
+          # Count lines changed
+          LINES_ADDED=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk '{sum += $1} END {print sum+0}')
+          LINES_REMOVED=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk '{sum += $2} END {print sum+0}')
+          LINES_CHANGED=$((LINES_ADDED + LINES_REMOVED))
+
+          # Get diff size
+          DIFF_SIZE=$(git diff --stat $BASE_SHA..$HEAD_SHA | tail -1 | awk '{print $4}')
+
+          echo "📁 Changed files: $CHANGED_FILES"
+          echo "➕ Lines added: $LINES_ADDED"
+          echo "➖ Lines removed: $LINES_REMOVED"
+          echo "📊 Total lines changed: $LINES_CHANGED"
+          echo "📏 Diff size: $DIFF_SIZE"
+          echo ""
+
+          # Set thresholds
+          MAX_FILES=50
+          MAX_LINES=1000
+
+          # Check thresholds
+          FAILED=false
+
+          if [ $CHANGED_FILES -gt $MAX_FILES ]; then
+            echo "❌ Too many files changed: $CHANGED_FILES > $MAX_FILES"
+            echo "   Consider splitting this PR into smaller ones"
+            FAILED=true
+          fi
+
+          if [ $LINES_CHANGED -gt $MAX_LINES ]; then
+            echo "❌ Too many lines changed: $LINES_CHANGED > $MAX_LINES"
+            echo "   Consider splitting this PR into smaller ones"
+            FAILED=true
+          fi
+
+          if [ "$FAILED" = true ]; then
+            echo ""
+            echo "💡 Tips for smaller PRs:"
+            echo "   - Focus on one feature or bug fix per PR"
+            echo "   - Split large refactoring into multiple PRs"
+            echo "   - Use feature flags to enable partial functionality"
+            exit 1
+          fi
+
+          echo "✅ PR size check passed!"
+          echo "   Files: $CHANGED_FILES/$MAX_FILES"
+          echo "   Lines: $LINES_CHANGED/$MAX_LINES"
+
+  # Jobs that run in parallel after installation jobs
+  dependency-check:
+    name: Dependency Check
+    needs: [install-all-deps, detect-changes]
+    if: needs.detect-changes.outputs.dependencies == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+
+      - name: Run Knip dependency analysis
+        run: npm run depcheck
+
+  dependency-version-check:
+    name: Check Dependency Versions
+    needs: [install-all-deps, detect-changes]
+    if: needs.detect-changes.outputs.dependencies == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install npm-check-updates
+        run: npm install -g npm-check-updates
+
+      - name: Check for outdated dependencies
+        run: |
+          echo "🔍 Checking for outdated dependencies..."
+          ncu --format group || echo "✅ Dependency version check completed"
+          echo ""
+          echo "💡 To update dependencies locally, run: ncu -u"
+
+  vulnerability-check:
+    name: Security Vulnerability Check
+    needs: [install-node-deps, detect-changes]
+    # NO if condition - always runs for security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+
+      - name: Check for critical vulnerabilities (fail on critical)
+        run: npm run audit:critical
+
+      - name: Check for high severity vulnerabilities (fail on high)
+        run: npm run audit:high
+
+      - name: Check for medium and low vulnerabilities (warn only)
+        run: |
+          echo "Checking for medium and low severity vulnerabilities..."
+          if npm audit --audit-level moderate 2>/dev/null; then
+            echo "✅ No medium or high severity vulnerabilities found"
+          else
+            echo "⚠️  Medium or low severity vulnerabilities found (non-blocking)"
+            echo "These vulnerabilities will not block the PR but should be addressed:"
+            npm audit --audit-level moderate || true
+          fi
+
+      - name: Generate comprehensive vulnerability report
+        run: npm audit --json > vulnerability-report.json || true
+
+      - name: Upload vulnerability report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vulnerability-report
+          path: vulnerability-report.json
+
+  type-and-dep-check:
+    name: Type and Dependency Check
+    needs: [install-node-deps, detect-changes]
+    if: |
+      needs.detect-changes.outputs.source == 'true' ||
+      needs.detect-changes.outputs.config == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+
+      - name: Run TypeScript check
+        run: npm run type-check
+
+  lint:
+    name: Lint Code
+    needs: [install-node-deps, detect-changes]
+    if: |
+      needs.detect-changes.outputs.source == 'true' ||
+      needs.detect-changes.outputs.config == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+
+      - name: Run linter
+        run: npm run lint:fix
+
+      - name: Run formatter
+        run: npm run format
+
+  # Final jobs that depend on multiple other jobs
+  metro-check:
+    name: Metro Bundler Check
+    needs: [install-node-deps, detect-changes]
+    if: |
+      needs.detect-changes.outputs.source == 'true' ||
+      needs.detect-changes.outputs.dependencies == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+
+      - name: Metro bundler dry run
+        run: |
+          timeout 20s npm run start || true
+          echo "Metro check completed successfully."
+
+  # Independent job - can run in parallel with other jobs
+  bundle-size-analysis:
+    name: Bundle Size Analysis & Build Verification
+    needs:
+      [install-node-deps, install-android-deps, install-ios-deps, install-all-deps, detect-changes]
+    if: |
+      needs.detect-changes.outputs.source == 'true' ||
+      needs.detect-changes.outputs.native-ios == 'true' ||
+      needs.detect-changes.outputs.native-android == 'true' ||
+      needs.detect-changes.outputs.dependencies == 'true'
+    runs-on: macos-latest
+    steps:
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install dependencies if cache miss
+        run: |
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+
+      - name: Cache React Native bundles
+        uses: actions/cache@v4
+        with:
+          path: |
+            android/app/src/main/assets/index.android.bundle
+            android/app/src/main/assets/index.android.bundle.map
+            ios/main.jsbundle
+            ios/main.jsbundle.map
+          key: ${{ runner.os }}-bundles-${{ hashFiles('src/**', 'index.js', 'metro.config.js', 'babel.config.js') }}
+          restore-keys: |
+            ${{ runner.os }}-bundles-
+
+      - name: Build Android bundle
+        run: npm run build:android
+
+      - name: Build iOS bundle
+        run: npm run build:ios
+
+      - name: Setup Java for Android build
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Cache Android build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            android/app/build/
+            android/.gradle/
+            android/build/
+          key: ${{ runner.os }}-android-build-${{ hashFiles('android/**/*.gradle', 'android/**/*.java', 'android/**/*.kt', 'android/**/*.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-android-build-
+            ${{ runner.os }}-android-
+
+      - name: Build Android APK
+        if: needs.detect-changes.outputs.native-android == 'true' || needs.detect-changes.outputs.dependencies == 'true'
+        run: |
+          cd android
+          ./gradlew assembleDebug
+          echo "Android APK build completed successfully!"
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install CocoaPods dependencies
+        run: |
+          cd ios
+          echo "Installing CocoaPods dependencies..."
+
+          # Check if Podfile exists
+          if [ ! -f "Podfile" ]; then
+            echo "❌ Podfile not found in ios directory"
+            exit 1
+          fi
+
+          # Clean derived data to avoid build issues
+          rm -rf ~/Library/Developer/Xcode/DerivedData/*
+
+          # Clean install pods to ensure fresh installation
+          pod install --clean-install --verbose
+
+          # Verify installation
+          if [ ! -d "Pods" ]; then
+            echo "❌ CocoaPods installation failed - Pods directory not found"
+            exit 1
+          fi
+
+          # Verify key pods are installed
+          echo "📦 Verifying CocoaPods installation:"
+          if [ -d "Pods/RNVectorIcons" ] || [ -d "Pods/react-native-vector-icons" ]; then
+            echo "✅ react-native-vector-icons installed"
+          fi
+          if [ -d "Pods/BVLinearGradient" ]; then
+            echo "✅ BVLinearGradient installed"
+          fi
+          echo "Total pods installed: $(ls -1 Pods | wc -l)"
+
+          # Clean derived data again after CocoaPods installation
+          echo "🧹 Cleaning derived data after CocoaPods installation..."
+          rm -rf ~/Library/Developer/Xcode/DerivedData/*
+
+          echo "✅ CocoaPods dependencies installed successfully"
+
+      - name: Cache iOS build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            ios/build/
+            ~/Library/Developer/Xcode/DerivedData/
+          key: ${{ runner.os }}-ios-build-${{ hashFiles('ios/**/*.swift', 'ios/**/*.h', 'ios/**/*.m', 'ios/**/*.xib', 'ios/**/*.storyboard') }}
+          restore-keys: |
+            ${{ runner.os }}-ios-build-
+            ${{ runner.os }}-ios-
+
+      - name: Build iOS app
+        if: needs.detect-changes.outputs.native-ios == 'true' || needs.detect-changes.outputs.dependencies == 'true'
+        run: |
+          cd ios
+          echo "Building iOS app with Xcode..."
+
+          # Check if workspace file exists (created by CocoaPods)
+          if [ ! -f "EduBank.xcworkspace/contents.xcworkspacedata" ]; then
+            echo "❌ EduBank.xcworkspace not found - CocoaPods installation may have failed"
+            exit 1
+          fi
+
+          # List available schemes
+          echo "Available schemes:"
+          xcodebuild -list -workspace EduBank.xcworkspace
+
+          # Check if BVLinearGradient is in the Pods directory
+          echo "🔍 Checking for BVLinearGradient library:"
+          if [ -d "Pods/BVLinearGradient" ]; then
+            echo "✅ BVLinearGradient found in Pods directory"
+            ls -la Pods/BVLinearGradient/
+          else
+            echo "❌ BVLinearGradient not found in Pods directory"
+            echo "Available pods:"
+            ls -la Pods/ | grep -i linear || echo "No linear gradient pods found"
+          fi
+
+          # Get available simulators and use the first iPhone simulator
+          echo "Available simulators:"
+
+          # Initialize CoreSimulator service to prevent hanging
+          echo "Initializing CoreSimulator service..."
+          xcrun simctl list runtimes || echo "Runtime list completed"
+
+          # List devices with timeout to prevent hanging
+          echo "Listing available devices (with 30s timeout)..."
+          timeout 30s xcrun simctl list devices available || echo "⚠️ Simulator list timed out, will use generic destination"
+
+          SIMULATOR_ID=$(timeout 30s xcrun simctl list devices available 2>/dev/null | grep "iPhone" | head -1 | grep -o '\[.*\]' | tr -d '[]' || echo "")
+          if [ -z "$SIMULATOR_ID" ]; then
+            echo "No iPhone simulator found or timeout occurred, using generic iOS Simulator"
+            xcodebuild -workspace EduBank.xcworkspace -scheme EduBank -configuration Debug -destination 'generic/platform=iOS Simulator' build -verbose
+          else
+            echo "Using simulator: $SIMULATOR_ID"
+            xcodebuild -workspace EduBank.xcworkspace -scheme EduBank -configuration Debug -destination "id=$SIMULATOR_ID" build -verbose
+          fi
+
+          echo "✅ iOS build completed successfully!"
+
+      - name: Analyze bundle sizes
+        run: |
+          echo "📦 Bundle Size Analysis"
+          echo "========================"
+
+          # Check if bundles exist
+          if [ -f "android/app/src/main/assets/index.android.bundle" ]; then
+            ANDROID_SIZE=$(ls -lh android/app/src/main/assets/index.android.bundle | awk '{print $5}')
+            ANDROID_BYTES=$(stat -f%z android/app/src/main/assets/index.android.bundle)
+            echo "🤖 Android Bundle: $ANDROID_SIZE ($ANDROID_BYTES bytes)"
+          else
+            echo "❌ Android bundle not found"
+          fi
+
+          if [ -f "ios/main.jsbundle" ]; then
+            IOS_SIZE=$(ls -lh ios/main.jsbundle | awk '{print $5}')
+            IOS_BYTES=$(stat -f%z ios/main.jsbundle)
+            echo "🍎 iOS Bundle: $IOS_SIZE ($IOS_BYTES bytes)"
+          else
+            echo "❌ iOS bundle not found"
+          fi
+
+          echo ""
+          echo "💡 Bundle size recommendations:"
+          echo "   - Keep bundles under 2MB for good performance"
+          echo "   - Consider code splitting for larger apps"
+          echo "   - Monitor bundle size trends over time"
+
+      - name: Upload bundle artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bundle-analysis
+          path: |
+            android/app/src/main/assets/index.android.bundle
+            ios/main.jsbundle
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk

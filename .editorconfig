@@ -1,0 +1,117 @@
+root = true
+
+# Configurações globais - aplicadas a todos os arquivos
+[*]
+charset = utf-8
+end_of_line = auto # Alinhado com Prettier endOfLine
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space # Alinhado com Prettier useTabs: false
+indent_size = 2 # Alinhado com Prettier tabWidth
+max_line_length = 100 # Alinhado com Prettier printWidth e ESLint max-len
+max_lines = 200 # Alinhado com ESLint max-lines
+
+# Arquivos JavaScript/TypeScript
+[*.{js,jsx,ts,tsx}]
+charset = utf-8
+end_of_line = auto
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_line_length = 100
+max_lines = 200
+
+# Arquivos JSON
+[*.json]
+charset = utf-8
+end_of_line = auto
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_line_length = 100
+max_lines = 200
+
+# Arquivos YAML
+[*.{yml,yaml}]
+charset = utf-8
+end_of_line = auto
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_line_length = 100
+max_lines = 200
+
+# Arquivos Markdown
+[*.md]
+charset = utf-8
+end_of_line = auto
+insert_final_newline = true
+trim_trailing_whitespace = false
+indent_style = space
+indent_size = 2
+max_line_length = 80 # Alinhado com Prettier printWidth para markdown
+max_lines = 200
+
+# Scripts Shell
+[*.sh]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_lines = 200
+
+# Package.json específico
+[package.json]
+charset = utf-8
+end_of_line = auto
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_line_length = 120 # Alinhado com Prettier printWidth para package.json
+max_lines = 200
+
+# Arquivos Gradle
+[*.{gradle,properties}]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_lines = 200
+
+# Arquivos XML
+[*.xml]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_lines = 200
+
+# Arquivos Swift
+[*.swift]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_lines = 200
+
+# Arquivos Kotlin
+[*.kt]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_lines = 200

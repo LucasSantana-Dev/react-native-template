@@ -1,0 +1,37 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "context/**/*.{ts,tsx}",
+    "hooks/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "services/**/*.{ts,tsx}"
+  ],
+  "project": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "config/**/*.{ts,tsx}",
+    "context/**/*.{ts,tsx}",
+    "hooks/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "services/**/*.{ts,tsx}",
+    "types/**/*.ts",
+    "*.{js,ts,tsx,json}"
+  ],
+  "ignore": [
+    "node_modules/**",
+    ".expo/**",
+    ".expo-shared/**",
+    "ios/**",
+    "android/**",
+    "*.lock",
+    "*.log",
+    "metro.config.js",
+    "babel.config.js"
+  ],
+  "ignoreDependencies": ["metro-*", "react-native-*", "@react-native/*", "expo-*", "@expo/*"],
+  "ignoreBinaries": ["ncu", "rimraf", "expo"],
+  "ignoreExportsUsedInFile": true,
+  "includeEntryExports": true
+}

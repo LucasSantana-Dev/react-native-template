@@ -1,0 +1,25 @@
+---
+description: Testing strategy and quality gates. Apply when creating or updating tests, or modifying quality thresholds.
+alwaysApply: false
+---
+
+## Testing & Quality Gates
+When to apply: creating or updating tests, or modifying quality thresholds.
+
+* Use Jest + React Native Testing Library for unit and integration tests.
+* Use React Native Testing Library's render/fireEvent for component testing.
+* Add integration tests where appropriate (e.g., API interactions, navigation, state management).
+* Minimum recommended coverage threshold: **85%** (raise per project risk).
+* Test behavior, not implementation details.
+* Test file naming conventions:
+  * Unit: `*.test.ts` or `*.test.tsx`
+  * Integration: `*.integration.test.ts` or `*.integration.test.tsx`
+  * E2E: placed under `e2e/` directory (using Detox or Maestro)
+
+**React Native Testing Stack:**
+* Jest for test runner and assertions
+* React Native Testing Library for component testing
+* Detox or Maestro for E2E testing
+* Mock Service Worker (MSW) for API mocking
+
+**CI must run:** lint → build → test → quality checks.
