@@ -37,6 +37,34 @@ A modern, well-structured React Native template built with Expo, TypeScript, and
 - **useAuth**: Authentication state management
 - **useTheme**: Theme-aware styling and colors
 
+### 🧪 Testing
+
+- **Unit Tests**: Jest + React Native Testing Library for component testing
+- **Integration Tests**: Testing component interactions and flows
+- **E2E Tests**: Detox for end-to-end testing on real devices/simulators
+- **Coverage**: Comprehensive test coverage with quality gates
+
+See [Testing Documentation](docs/testing/README.md) for detailed guides.
+
+### 📐 Code Quality
+
+- **ESLint**: Enforced code quality and consistency rules
+- **Prettier**: Automatic code formatting on save and commit
+- **Knip**: Dead code detection and unused dependency tracking
+- **lint-staged**: Pre-commit validation with Husky hooks
+- **TypeScript**: Strict type checking for safety
+
+See [Code Quality Documentation](docs/code-quality/README.md) for setup and usage.
+
+### 🔍 Discoverability
+
+- **Deep Linking**: Universal Links (iOS) and App Links (Android) support
+- **ASO**: App Store Optimization with proper metadata
+- **Accessibility**: WCAG-compliant for inclusive user experience
+- **Web SEO**: Optimized for search engines when using Expo web
+
+See [SEO & Discoverability Documentation](docs/seo-discoverability/README.md) for implementation guides.
+
 ### 🔐 Authentication
 
 - **AuthContext**: Generic authentication state management
