@@ -1,0 +1,562 @@
+---
+description: TypeScript patterns, type safety, and advanced features
+alwaysApply: true
+---
+
+# TypeScript Patterns & Best Practices
+
+## Type Safety Guidelines
+
+### Strict Type Usage
+
+Always use strict TypeScript patterns:
+
+```typescript
+// ✅ Good - Explicit types
+interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: Date;
+  isActive: boolean;
+}
+
+const createUser = (userData: Omit<UserProfile, 'id' | 'createdAt'>): UserProfile => {
+  return {
+    id: generateId(),
+    createdAt: new Date(),
+    ...userData,
+  };
+};
+
+// ❌ Avoid - Any types
+const createUser = (userData: any): any => {
+  // Implementation
+};
+```
+
+### Type Guards
+
+Use type guards for type narrowing:
+
+```typescript
+// ✅ Good - Type guard
+const isString = (value: unknown): value is string => {
+  return typeof value === 'string';
+};
+
+const processValue = (value: unknown) => {
+  if (isString(value)) {
+    // TypeScript knows value is string here
+    return value.toUpperCase();
+  }
+  return String(value);
+};
+
+// ❌ Avoid - Type assertions without validation
+const processValue = (value: unknown) => {
+  return (value as string).toUpperCase(); // Unsafe
+};
+```
+
+### Generic Constraints
+
+Use generic constraints appropriately:
+
+```typescript
+// ✅ Good - Constrained generic
+interface ApiResponse<T extends Record<string, unknown>> {
+  data: T;
+  status: 'success' | 'error';
+  message?: string;
+}
+
+const fetchUser = async (id: string): Promise<ApiResponse<UserProfile>> => {
+  // Implementation
+};
+
+// ✅ Good - Generic with multiple constraints
+interface Repository<T, K extends keyof T> {
+  findById(id: T[K]): Promise<T | null>;
+  save(entity: T): Promise<T>;
+  delete(id: T[K]): Promise<boolean>;
+}
+```
+
+## Interface Design Patterns
+
+### Discriminated Unions
+
+Use discriminated unions for type safety:
+
+```typescript
+// ✅ Good - Discriminated union
+type LoadingState =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: UserProfile }
+  | { status: 'error'; error: string };
+
+const handleState = (state: LoadingState) => {
+  switch (state.status) {
+    case 'idle':
+      return 'Ready to load';
+    case 'loading':
+      return 'Loading...';
+    case 'success':
+      return `User: ${state.data.name}`; // TypeScript knows data exists
+    case 'error':
+      return `Error: ${state.error}`; // TypeScript knows error exists
+  }
+};
+```
+
+### Utility Types
+
+Leverage TypeScript utility types:
+
+```typescript
+// ✅ Good - Utility types
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Create types for different use cases
+type UserCreate = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
+type UserUpdate = Partial<Pick<User, 'name' | 'email'>>;
+type UserPublic = Omit<User, 'password'>;
+type UserKeys = keyof User; // 'id' | 'name' | 'email' | 'password' | 'createdAt' | 'updatedAt'
+
+// ✅ Good - Mapped types
+type FormData<T> = {
+  [K in keyof T]: {
+    value: T[K];
+    error?: string;
+    touched: boolean;
+  };
+};
+
+type UserForm = FormData<UserCreate>;
+```
+
+### Conditional Types
+
+Use conditional types for complex type logic:
+
+```typescript
+// ✅ Good - Conditional types
+type NonNullable<T> = T extends null | undefined ? never : T;
+
+type ApiResponse<T> = T extends string
+  ? { message: T }
+  : T extends number
+    ? { count: T }
+    : { data: T };
+
+// Usage
+type StringResponse = ApiResponse<string>; // { message: string }
+type NumberResponse = ApiResponse<number>; // { count: number }
+type ObjectResponse = ApiResponse<User>; // { data: User }
+```
+
+## React-Specific TypeScript Patterns
+
+### Component Props
+
+Define comprehensive component props:
+
+```typescript
+// ✅ Good - Component props with variants
+interface ButtonProps {
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+  loading?: boolean;
+  onPress?: () => void;
+  style?: ViewStyle;
+  testID?: string;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+}
+
+// ✅ Good - Generic component props
+interface ListProps<T> {
+  data: T[];
+  renderItem: (item: T, index: number) => React.ReactNode;
+  keyExtractor: (item: T, index: number) => string;
+  onItemPress?: (item: T, index: number) => void;
+  emptyComponent?: React.ComponentType;
+  loading?: boolean;
+}
+```
+
+### Hook Types
+
+Type custom hooks properly:
+
+```typescript
+// ✅ Good - Hook return type
+interface UseFormDataReturn<T> {
+  data: T;
+  errors: Partial<Record<keyof T, string>>;
+  updateField: <K extends keyof T>(field: K, value: T[K]) => void;
+  setFieldError: <K extends keyof T>(field: K, error: string) => void;
+  clearErrors: () => void;
+  reset: (newData?: Partial<T>) => void;
+  isValid: boolean;
+}
+
+const useFormData = <T extends Record<string, any>>(initialData: T): UseFormDataReturn<T> => {
+  // Implementation
+};
+```
+
+### Context Types
+
+Type React contexts properly:
+
+```typescript
+// ✅ Good - Context type definition
+interface ThemeContextType {
+  colors: ThemeColors;
+  isDark: boolean;
+  toggleTheme: () => void;
+  setTheme: (theme: 'light' | 'dark') => void;
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+// ✅ Good - Context hook with type guard
+export const useTheme = (): ThemeContextType => {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+};
+```
+
+## API and Service Types
+
+### API Response Types
+
+Define comprehensive API types:
+
+```typescript
+// ✅ Good - API response types
+interface BaseApiResponse {
+  success: boolean;
+  message?: string;
+  timestamp: string;
+}
+
+interface SuccessResponse<T> extends BaseApiResponse {
+  success: true;
+  data: T;
+}
+
+interface ErrorResponse extends BaseApiResponse {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: Record<string, unknown>;
+  };
+}
+
+type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
+
+// ✅ Good - API client types
+interface ApiClient {
+  get<T>(url: string, config?: RequestConfig): Promise<ApiResponse<T>>;
+  post<T>(url: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>>;
+  put<T>(url: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>>;
+  delete<T>(url: string, config?: RequestConfig): Promise<ApiResponse<T>>;
+}
+
+interface RequestConfig {
+  headers?: Record<string, string>;
+  timeout?: number;
+  retries?: number;
+}
+```
+
+### Service Layer Types
+
+Type service layers comprehensively:
+
+```typescript
+// ✅ Good - Service interface
+interface UserService {
+  getUsers(filters?: UserFilters): Promise<User[]>;
+  getUserById(id: string): Promise<User | null>;
+  createUser(userData: UserCreate): Promise<User>;
+  updateUser(id: string, updates: UserUpdate): Promise<User>;
+  deleteUser(id: string): Promise<boolean>;
+}
+
+interface UserFilters {
+  isActive?: boolean;
+  role?: UserRole;
+  search?: string;
+  limit?: number;
+  offset?: number;
+}
+
+// ✅ Good - Service implementation type
+class UserServiceImpl implements UserService {
+  constructor(private apiClient: ApiClient) {}
+
+  async getUsers(filters?: UserFilters): Promise<User[]> {
+    // Implementation
+  }
+}
+```
+
+## Error Handling Types
+
+### Error Types
+
+Define comprehensive error types:
+
+```typescript
+// ✅ Good - Error type hierarchy
+abstract class AppError extends Error {
+  abstract readonly code: string;
+  abstract readonly statusCode: number;
+  readonly timestamp: Date;
+  readonly context?: Record<string, unknown>;
+
+  constructor(message: string, context?: Record<string, unknown>) {
+    super(message);
+    this.name = this.constructor.name;
+    this.timestamp = new Date();
+    this.context = context;
+  }
+}
+
+class ValidationError extends AppError {
+  readonly code = 'VALIDATION_ERROR';
+  readonly statusCode = 400;
+}
+
+class NetworkError extends AppError {
+  readonly code = 'NETWORK_ERROR';
+  readonly statusCode = 0;
+}
+
+class AuthenticationError extends AppError {
+  readonly code = 'AUTH_ERROR';
+  readonly statusCode = 401;
+}
+
+// ✅ Good - Error handling utility
+type ErrorHandler<T> = (error: AppError) => T;
+
+const handleError = <T>(
+  error: unknown,
+  handlers: {
+    validation?: ErrorHandler<T>;
+    network?: ErrorHandler<T>;
+    auth?: ErrorHandler<T>;
+    default?: ErrorHandler<T>;
+  }
+): T => {
+  if (error instanceof ValidationError && handlers.validation) {
+    return handlers.validation(error);
+  }
+  if (error instanceof NetworkError && handlers.network) {
+    return handlers.network(error);
+  }
+  if (error instanceof AuthenticationError && handlers.auth) {
+    return handlers.auth(error);
+  }
+  if (handlers.default) {
+    return handlers.default(error as AppError);
+  }
+  throw error;
+};
+```
+
+## Performance and Optimization Types
+
+### Memoization Types
+
+Type memoized functions properly:
+
+```typescript
+// ✅ Good - Memoized function types
+type MemoizedFunction<TArgs extends readonly unknown[], TReturn> = (...args: TArgs) => TReturn;
+
+const createMemoizedCallback = <TArgs extends readonly unknown[], TReturn>(
+  fn: (...args: TArgs) => TReturn,
+  deps: React.DependencyList
+): MemoizedFunction<TArgs, TReturn> => {
+  return useCallback(fn, deps);
+};
+
+// ✅ Good - Memoized component types
+type MemoizedComponent<P> = React.MemoExoticComponent<React.FC<P>>;
+
+const createMemoizedComponent = <P extends object>(
+  Component: React.FC<P>
+): MemoizedComponent<P> => {
+  return React.memo(Component);
+};
+```
+
+### Async Types
+
+Type async operations properly:
+
+```typescript
+// ✅ Good - Async operation types
+type AsyncState<T> =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: T }
+  | { status: 'error'; error: AppError };
+
+type AsyncAction<T> =
+  | { type: 'RESET' }
+  | { type: 'LOADING' }
+  | { type: 'SUCCESS'; data: T }
+  | { type: 'ERROR'; error: AppError };
+
+// ✅ Good - Async hook types
+interface UseAsyncReturn<T> {
+  state: AsyncState<T>;
+  execute: (...args: any[]) => Promise<void>;
+  reset: () => void;
+  isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
+}
+```
+
+## Testing Types
+
+### Test Utility Types
+
+Define types for testing utilities:
+
+```typescript
+// ✅ Good - Test utility types
+type MockFunction<T extends (...args: any[]) => any> = jest.MockedFunction<T>;
+
+type MockApiClient = {
+  [K in keyof ApiClient]: MockFunction<ApiClient[K]>;
+};
+
+type TestWrapperProps = {
+  children: React.ReactNode;
+  initialRoute?: string;
+  theme?: 'light' | 'dark';
+  user?: User | null;
+};
+
+// ✅ Good - Test data factory types
+type TestDataFactory<T> = (overrides?: Partial<T>) => T;
+
+const createTestUser: TestDataFactory<User> = (overrides = {}) => ({
+  id: 'test-id',
+  name: 'Test User',
+  email: 'test@example.com',
+  password: 'password123',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  ...overrides,
+});
+```
+
+## Common Anti-patterns to Avoid
+
+### Type Safety Anti-patterns
+
+```typescript
+// ❌ Avoid - Any types
+const processData = (data: any): any => {
+  return data.someProperty;
+};
+
+// ✅ Good - Proper typing
+const processData = <T extends { someProperty: unknown }>(data: T): T['someProperty'] => {
+  return data.someProperty;
+};
+
+// ❌ Avoid - Type assertions without validation
+const user = response.data as User;
+
+// ✅ Good - Type guard with validation
+const isUser = (data: unknown): data is User => {
+  return typeof data === 'object' && data !== null && 'id' in data && 'name' in data;
+};
+
+const user = isUser(response.data) ? response.data : null;
+```
+
+### Interface Design Anti-patterns
+
+```typescript
+// ❌ Avoid - Overly broad interfaces
+interface ComponentProps {
+  [key: string]: any;
+}
+
+// ✅ Good - Specific interfaces
+interface ButtonProps {
+  children: React.ReactNode;
+  onPress: () => void;
+  variant?: 'primary' | 'secondary';
+  disabled?: boolean;
+}
+
+// ❌ Avoid - Optional properties without defaults
+interface User {
+  name?: string;
+  email?: string;
+  age?: number;
+}
+
+// ✅ Good - Required properties with optional extras
+interface User {
+  name: string;
+  email: string;
+  age?: number;
+  preferences?: UserPreferences;
+}
+```
+
+### Generic Usage Anti-patterns
+
+```typescript
+// ❌ Avoid - Unnecessary generics
+interface SimpleProps<T> {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+// ✅ Good - Simple interface when generics aren't needed
+interface SimpleProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+// ❌ Avoid - Generic without constraints
+function processData<T>(data: T): T {
+  return data;
+}
+
+// ✅ Good - Constrained generic
+function processData<T extends Record<string, unknown>>(data: T): T {
+  return data;
+}
+```
+
+Remember: TypeScript is about making code more maintainable and catching errors at compile time. Always prioritize type safety over convenience, and use the type system to express your intent clearly.

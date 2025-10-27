@@ -1,0 +1,516 @@
+---
+description: React Native specific patterns and best practices
+alwaysApply: true
+---
+
+# React Native Patterns & Best Practices
+
+## Component Creation Patterns
+
+### Functional Components with Hooks
+
+Always use functional components with hooks instead of class components:
+
+```typescript
+// ✅ Good
+export const Button: React.FC<ButtonProps> = ({ variant, size, onPress, children }) => {
+  const { colors } = useThemeColors();
+
+  return (
+    <TouchableOpacity style={getButtonStyles(variant, size)} onPress={onPress}>
+      <Text style={getTextStyles(variant, size)}>{children}</Text>
+    </TouchableOpacity>
+  );
+};
+
+// ❌ Avoid
+export class Button extends React.Component<ButtonProps> {
+  render() {
+    // Class component implementation
+  }
+}
+```
+
+### Compound Component Pattern
+
+Use compound components for complex UI elements:
+
+```typescript
+// ✅ Good - Compound component
+export const Card: React.FC<CardProps> & {
+  Header: typeof CardHeader;
+  Body: typeof CardBody;
+  Footer: typeof CardFooter;
+} = ({ children, ...props }) => {
+  return <View style={styles.card}>{children}</View>;
+};
+
+Card.Header = CardHeader;
+Card.Body = CardBody;
+Card.Footer = CardFooter;
+
+// Usage
+<Card>
+  <Card.Header>Title</Card.Header>
+  <Card.Body>Content</Card.Body>
+  <Card.Footer>Actions</Card.Footer>
+</Card>
+```
+
+### Custom Hook Patterns
+
+Create custom hooks for reusable logic:
+
+```typescript
+// ✅ Good - Custom hook
+export const useFormData = <T extends Record<string, any>>(initialData: T) => {
+  const [data, setData] = useState<T>(initialData);
+  const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
+
+  const updateField = useCallback(
+    (field: keyof T, value: T[keyof T]) => {
+      setData((prev) => ({ ...prev, [field]: value }));
+      // Clear error when user starts typing
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: undefined }));
+      }
+    },
+    [errors]
+  );
+
+  return { data, errors, updateField, setErrors };
+};
+```
+
+## Styling Patterns
+
+### StyleSheet.create Usage
+
+Always use StyleSheet.create for styles:
+
+```typescript
+// ✅ Good
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+    padding: spacing.md,
+  },
+  title: {
+    ...typography.h2,
+    color: colors.textPrimary,
+    marginBottom: spacing.sm,
+  },
+});
+
+// ❌ Avoid inline styles
+<View style={{ flex: 1, backgroundColor: 'white' }}>
+```
+
+### Theme Integration
+
+Always use theme values through context:
+
+```typescript
+// ✅ Good
+const { colors, spacing, typography } = useThemeColors();
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.background,
+    padding: spacing.md,
+  },
+});
+
+// ❌ Avoid hardcoded values
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#ffffff',
+    padding: 16,
+  },
+});
+```
+
+### Responsive Design
+
+Use responsive utilities for different screen sizes:
+
+```typescript
+// ✅ Good
+const { width, height } = useScreenDimensions();
+const isTablet = width >= breakpoints.md;
+
+const styles = StyleSheet.create({
+  container: {
+    padding: isTablet ? spacing.lg : spacing.md,
+    flexDirection: isTablet ? 'row' : 'column',
+  },
+});
+```
+
+## Navigation Patterns
+
+### Expo Router Usage
+
+Use Expo Router for navigation:
+
+```typescript
+// ✅ Good
+import { useRouter } from 'expo-router';
+
+const router = useRouter();
+
+const handleNavigation = () => {
+  router.push('/profile');
+  router.back();
+  router.replace('/(auth)/login');
+};
+
+// ❌ Avoid react-navigation directly
+import { useNavigation } from '@react-navigation/native';
+```
+
+### Screen Structure
+
+Follow consistent screen structure:
+
+```typescript
+// ✅ Good - Screen component structure
+export default function ProfileScreen() {
+  const { user } = useAuth();
+  const { colors } = useThemeColors();
+
+  return (
+    <ScreenContainer>
+      <ScrollContainer>
+        <Card>
+          <Card.Header>
+            <Text style={styles.title}>Profile</Text>
+          </Card.Header>
+          <Card.Body>
+            {/* Screen content */}
+          </Card.Body>
+        </Card>
+      </ScrollContainer>
+    </ScreenContainer>
+  );
+}
+```
+
+## State Management Patterns
+
+### Context Usage
+
+Use context for global state:
+
+```typescript
+// ✅ Good - Context pattern
+interface ThemeContextType {
+  colors: ThemeColors;
+  isDark: boolean;
+  toggleTheme: () => void;
+}
+
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isDark, setIsDark] = useState(false);
+
+  const toggleTheme = useCallback(() => {
+    setIsDark(prev => !prev);
+  }, []);
+
+  const value = useMemo(() => ({
+    colors: isDark ? darkColors : lightColors,
+    isDark,
+    toggleTheme,
+  }), [isDark, toggleTheme]);
+
+  return (
+    <ThemeContext.Provider value={value}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+```
+
+### Local State Management
+
+Use appropriate hooks for local state:
+
+```typescript
+// ✅ Good - Appropriate hook usage
+const [isLoading, setIsLoading] = useState(false);
+const [data, setData] = useState<User[]>([]);
+
+const memoizedData = useMemo(() => data.filter((user) => user.isActive), [data]);
+
+const handleFetch = useCallback(async () => {
+  setIsLoading(true);
+  try {
+    const users = await apiClient.getUsers();
+    setData(users);
+  } finally {
+    setIsLoading(false);
+  }
+}, []);
+```
+
+## Performance Patterns
+
+### Memoization
+
+Use memoization appropriately:
+
+```typescript
+// ✅ Good - Memoized component
+export const ExpensiveComponent = React.memo<Props>(({ data, onPress }) => {
+  const processedData = useMemo(() =>
+    data.map(item => processItem(item)), [data]
+  );
+
+  const handlePress = useCallback((id: string) => {
+    onPress(id);
+  }, [onPress]);
+
+  return (
+    <FlatList
+      data={processedData}
+      renderItem={({ item }) => (
+        <ItemComponent item={item} onPress={handlePress} />
+      )}
+    />
+  );
+});
+```
+
+### List Optimization
+
+Use FlatList for large lists:
+
+```typescript
+// ✅ Good - FlatList usage
+<FlatList
+  data={items}
+  renderItem={({ item }) => <ItemComponent item={item} />}
+  keyExtractor={(item) => item.id}
+  getItemLayout={(data, index) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index,
+  })}
+  removeClippedSubviews={true}
+  maxToRenderPerBatch={10}
+  windowSize={10}
+/>
+
+// ❌ Avoid ScrollView for large lists
+<ScrollView>
+  {items.map(item => <ItemComponent key={item.id} item={item} />)}
+</ScrollView>
+```
+
+## Error Handling Patterns
+
+### Error Boundaries
+
+Implement error boundaries for component errors:
+
+```typescript
+// ✅ Good - Error boundary
+export class ErrorBoundary extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error): State {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    Sentry.captureException(error, { extra: errorInfo });
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <ErrorFallback onRetry={() => this.setState({ hasError: false })} />;
+    }
+
+    return this.props.children;
+  }
+}
+```
+
+### Async Error Handling
+
+Handle async operations properly:
+
+```typescript
+// ✅ Good - Async error handling
+const [isLoading, setIsLoading] = useState(false);
+const [error, setError] = useState<string | null>(null);
+
+const handleAsyncOperation = useCallback(async () => {
+  setIsLoading(true);
+  setError(null);
+
+  try {
+    const result = await apiClient.performOperation();
+    // Handle success
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+    setError(errorMessage);
+    Sentry.captureException(err);
+  } finally {
+    setIsLoading(false);
+  }
+}, []);
+```
+
+## Testing Patterns
+
+### Component Testing
+
+Test component behavior, not implementation:
+
+```typescript
+// ✅ Good - Behavior testing
+describe('Button Component', () => {
+  it('should call onPress when pressed', () => {
+    const mockOnPress = jest.fn();
+    const { getByText } = render(
+      <Button onPress={mockOnPress}>Click me</Button>
+    );
+
+    fireEvent.press(getByText('Click me'));
+    expect(mockOnPress).toHaveBeenCalledTimes(1);
+  });
+
+  it('should show loading state when loading prop is true', () => {
+    const { getByTestId } = render(
+      <Button loading>Loading</Button>
+    );
+
+    expect(getByTestId('loading-indicator')).toBeTruthy();
+  });
+});
+```
+
+### Hook Testing
+
+Test custom hooks with renderHook:
+
+```typescript
+// ✅ Good - Hook testing
+describe('useFormData', () => {
+  it('should update field value', () => {
+    const { result } = renderHook(() => useFormData({ name: '', email: '' }));
+
+    act(() => {
+      result.current.updateField('name', 'John');
+    });
+
+    expect(result.current.data.name).toBe('John');
+  });
+});
+```
+
+## Accessibility Patterns
+
+### Accessibility Props
+
+Always include accessibility props:
+
+```typescript
+// ✅ Good - Accessible component
+<TouchableOpacity
+  accessible={true}
+  accessibilityLabel="Submit form"
+  accessibilityHint="Double tap to submit the form"
+  accessibilityRole="button"
+  onPress={handleSubmit}
+>
+  <Text>Submit</Text>
+</TouchableOpacity>
+```
+
+### Screen Reader Support
+
+Ensure screen reader compatibility:
+
+```typescript
+// ✅ Good - Screen reader support
+<View accessible={true} accessibilityLabel="User profile">
+  <Text accessibilityRole="header">John Doe</Text>
+  <Text accessibilityRole="text">Software Developer</Text>
+  <Text accessibilityRole="text">john@example.com</Text>
+</View>
+```
+
+## Common Anti-patterns to Avoid
+
+### Performance Anti-patterns
+
+```typescript
+// ❌ Avoid - Inline functions in render
+<FlatList
+  data={items}
+  renderItem={({ item }) => (
+    <ItemComponent
+      onPress={() => handlePress(item.id)} // Creates new function on each render
+    />
+  )}
+/>
+
+// ✅ Good - Memoized callback
+const handleItemPress = useCallback((id: string) => {
+  // Handle press
+}, []);
+
+<FlatList
+  data={items}
+  renderItem={({ item }) => (
+    <ItemComponent onPress={handleItemPress} />
+  )}
+/>
+```
+
+### State Management Anti-patterns
+
+```typescript
+// ❌ Avoid - Direct state mutation
+const [user, setUser] = useState({ name: 'John', age: 30 });
+
+const updateAge = () => {
+  user.age = 31; // Direct mutation
+  setUser(user);
+};
+
+// ✅ Good - Immutable updates
+const updateAge = () => {
+  setUser((prev) => ({ ...prev, age: 31 }));
+};
+```
+
+### Styling Anti-patterns
+
+```typescript
+// ❌ Avoid - Inline styles
+<View style={{ flex: 1, backgroundColor: 'white', padding: 16 }}>
+  <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Title</Text>
+</View>
+
+// ✅ Good - StyleSheet.create
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+    padding: spacing.md,
+  },
+  title: {
+    ...typography.h2,
+    color: colors.textPrimary,
+  },
+});
+```
+
+Remember: These patterns ensure maintainable, performant, and accessible React Native applications. Always prioritize user experience and code readability.

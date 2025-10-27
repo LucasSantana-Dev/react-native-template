@@ -1,0 +1,792 @@
+---
+description: Boilerplate templates for components, hooks, services, and tests
+alwaysApply: false
+globs: ['**/*.tsx', '**/*.ts', '**/*.test.ts', '**/*.test.tsx']
+---
+
+# Code Templates & Boilerplate Patterns
+
+## Component Templates
+
+### Basic Functional Component
+
+```typescript
+import React from 'react';
+import { View, Text, ViewStyle } from 'react-native';
+
+import { useThemeColors } from '@/context/theme-context';
+
+interface ComponentNameProps {
+  // Define props here
+  children?: React.ReactNode;
+  style?: ViewStyle;
+  testID?: string;
+}
+
+export const ComponentName: React.FC<ComponentNameProps> = ({
+  children,
+  style,
+  testID,
+  ...props
+}) => {
+  const { colors, spacing } = useThemeColors();
+
+  return (
+    <View style={[styles.container, style]} testID={testID} {...props}>
+      {children}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    // Add styles here
+  },
+});
+```
+
+### Compound Component Pattern
+
+```typescript
+import React from 'react';
+import { View, ViewStyle } from 'react-native';
+
+import { useThemeColors } from '@/context/theme-context';
+
+interface CardProps {
+  children: React.ReactNode;
+  variant?: 'elevated' | 'outlined' | 'flat';
+  size?: 'sm' | 'md' | 'lg';
+  style?: ViewStyle;
+  testID?: string;
+}
+
+interface CardComponent extends React.FC<CardProps> {
+  Header: typeof CardHeader;
+  Body: typeof CardBody;
+  Footer: typeof CardFooter;
+}
+
+export const Card: CardComponent = ({ children, variant = 'elevated', size = 'md', style, testID }) => {
+  const { colors, spacing } = useThemeColors();
+
+  const cardStyles = getCardStyles(variant, size, colors, spacing);
+
+  return (
+    <View style={[cardStyles.card, style]} testID={testID}>
+      {children}
+    </View>
+  );
+};
+
+// Sub-components
+export const CardHeader: React.FC<{ children: React.ReactNode; style?: ViewStyle }> = ({
+  children,
+  style,
+}) => <View style={[styles.header, style]}>{children}</View>;
+
+export const CardBody: React.FC<{ children: React.ReactNode; style?: ViewStyle }> = ({
+  children,
+  style,
+}) => <View style={[styles.body, style]}>{children}</View>;
+
+export const CardFooter: React.FC<{ children: React.ReactNode; style?: ViewStyle }> = ({
+  children,
+  style,
+}) => <View style={[styles.footer, style]}>{children}</View>;
+
+// Attach sub-components
+Card.Header = CardHeader;
+Card.Body = CardBody;
+Card.Footer = CardFooter;
+
+const styles = StyleSheet.create({
+  header: {
+    // Header styles
+  },
+  body: {
+    // Body styles
+  },
+  footer: {
+    // Footer styles
+  },
+});
+```
+
+### Screen Component Template
+
+```typescript
+import React from 'react';
+import { useRouter } from 'expo-router';
+
+import { ScreenContainer } from '@/components/layout/screen-container';
+import { ScrollContainer } from '@/components/layout/scroll-container';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useThemeColors } from '@/context/theme-context';
+
+export default function ScreenName() {
+  const router = useRouter();
+  const { colors } = useThemeColors();
+
+  const handleAction = () => {
+    // Handle action
+  };
+
+  return (
+    <ScreenContainer>
+      <ScrollContainer>
+        <Card>
+          <Card.Header>
+            <Text style={styles.title}>Screen Title</Text>
+          </Card.Header>
+          <Card.Body>
+            {/* Screen content */}
+            <Button onPress={handleAction}>
+              Action Button
+            </Button>
+          </Card.Body>
+        </Card>
+      </ScrollContainer>
+    </ScreenContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  title: {
+    // Title styles
+  },
+});
+```
+
+## Hook Templates
+
+### Custom Hook with State
+
+```typescript
+import { useState, useCallback, useMemo } from 'react';
+
+interface UseHookNameState {
+  // Define state shape
+  isLoading: boolean;
+  data: DataType | null;
+  error: string | null;
+}
+
+interface UseHookNameReturn extends UseHookNameState {
+  // Define return methods
+  execute: () => Promise<void>;
+  reset: () => void;
+  updateData: (data: DataType) => void;
+}
+
+export const useHookName = (initialData?: DataType): UseHookNameReturn => {
+  const [state, setState] = useState<UseHookNameState>({
+    isLoading: false,
+    data: initialData || null,
+    error: null,
+  });
+
+  const execute = useCallback(async () => {
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+    try {
+      // Perform async operation
+      const result = await someAsyncOperation();
+      setState((prev) => ({ ...prev, data: result, isLoading: false }));
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        isLoading: false,
+      }));
+    }
+  }, []);
+
+  const reset = useCallback(() => {
+    setState({
+      isLoading: false,
+      data: null,
+      error: null,
+    });
+  }, []);
+
+  const updateData = useCallback((data: DataType) => {
+    setState((prev) => ({ ...prev, data }));
+  }, []);
+
+  return {
+    ...state,
+    execute,
+    reset,
+    updateData,
+  };
+};
+```
+
+### Form Hook Template
+
+```typescript
+import { useState, useCallback, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+// Define validation schema
+const formSchema = z.object({
+  // Define form fields
+  email: z.string().email('Invalid email'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+interface UseFormHookReturn {
+  control: Control<FormData>;
+  handleSubmit: UseFormHandleSubmit<FormData>;
+  formState: FormState<FormData>;
+  errors: FieldErrors<FormData>;
+  reset: () => void;
+  onSubmit: (data: FormData) => Promise<void>;
+  isSubmitting: boolean;
+}
+
+export const useFormHook = (): UseFormHookReturn => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { control, handleSubmit, formState, reset } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = useCallback(async (data: FormData) => {
+    setIsSubmitting(true);
+    try {
+      // Handle form submission
+      await submitForm(data);
+    } catch (error) {
+      // Handle error
+      console.error('Form submission error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, []);
+
+  return {
+    control,
+    handleSubmit,
+    formState,
+    errors: formState.errors,
+    reset,
+    onSubmit,
+    isSubmitting,
+  };
+};
+```
+
+## Context Templates
+
+### Theme Context Template
+
+```typescript
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+
+import { ThemeColors, ThemeMode } from '@/types/theme';
+import { lightColors, darkColors } from '@/config/colors';
+
+interface ThemeContextType {
+  colors: ThemeColors;
+  isDark: boolean;
+  mode: ThemeMode;
+  toggleTheme: () => void;
+  setTheme: (mode: ThemeMode) => void;
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+interface ThemeProviderProps {
+  children: React.ReactNode;
+  initialMode?: ThemeMode;
+}
+
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({
+  children,
+  initialMode = 'system'
+}) => {
+  const [mode, setMode] = useState<ThemeMode>(initialMode);
+  const [isDark, setIsDark] = useState(false);
+
+  const toggleTheme = useCallback(() => {
+    setIsDark(prev => !prev);
+  }, []);
+
+  const setTheme = useCallback((newMode: ThemeMode) => {
+    setMode(newMode);
+    if (newMode === 'dark') {
+      setIsDark(true);
+    } else if (newMode === 'light') {
+      setIsDark(false);
+    } else {
+      // Handle system mode
+      // You might want to use a library like react-native-appearance
+      setIsDark(false); // Default to light for now
+    }
+  }, []);
+
+  const colors = useMemo(() =>
+    isDark ? darkColors : lightColors,
+    [isDark]
+  );
+
+  const value = useMemo(() => ({
+    colors,
+    isDark,
+    mode,
+    toggleTheme,
+    setTheme,
+  }), [colors, isDark, mode, toggleTheme, setTheme]);
+
+  return (
+    <ThemeContext.Provider value={value}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+export const useTheme = (): ThemeContextType => {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+};
+```
+
+### Auth Context Template
+
+```typescript
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+
+import { User, LoginCredentials, RegisterData } from '@/types/auth';
+import { authService } from '@/services/auth/auth-service';
+import { storage } from '@/services/storage/async-storage';
+
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
+  logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const isAuthenticated = !!user;
+
+  const login = useCallback(async (credentials: LoginCredentials) => {
+    setIsLoading(true);
+    try {
+      const userData = await authService.login(credentials);
+      setUser(userData);
+      await storage.setItem('user', JSON.stringify(userData));
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const register = useCallback(async (data: RegisterData) => {
+    setIsLoading(true);
+    try {
+      const userData = await authService.register(data);
+      setUser(userData);
+      await storage.setItem('user', JSON.stringify(userData));
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const logout = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await authService.logout();
+      setUser(null);
+      await storage.removeItem('user');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const refreshUser = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      const userData = await authService.getCurrentUser();
+      setUser(userData);
+      await storage.setItem('user', JSON.stringify(userData));
+    } catch (error) {
+      console.error('Refresh user error:', error);
+      // If refresh fails, logout user
+      await logout();
+    }
+  }, [user, logout]);
+
+  // Check for existing session on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const storedUser = await storage.getItem('user');
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  const value = useMemo(() => ({
+    user,
+    isLoading,
+    isAuthenticated,
+    login,
+    register,
+    logout,
+    refreshUser,
+  }), [user, isLoading, login, register, logout, refreshUser]);
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+```
+
+## Service Templates
+
+### API Service Template
+
+```typescript
+import { apiClient } from './client';
+import { ApiResponse, User, CreateUserData, UpdateUserData } from '@/types';
+
+export class UserService {
+  private baseUrl = '/users';
+
+  async getUsers(): Promise<ApiResponse<User[]>> {
+    return apiClient.get<User[]>(this.baseUrl);
+  }
+
+  async getUserById(id: string): Promise<ApiResponse<User>> {
+    return apiClient.get<User>(`${this.baseUrl}/${id}`);
+  }
+
+  async createUser(userData: CreateUserData): Promise<ApiResponse<User>> {
+    return apiClient.post<User>(this.baseUrl, userData);
+  }
+
+  async updateUser(id: string, updates: UpdateUserData): Promise<ApiResponse<User>> {
+    return apiClient.put<User>(`${this.baseUrl}/${id}`, updates);
+  }
+
+  async deleteUser(id: string): Promise<ApiResponse<boolean>> {
+    return apiClient.delete<boolean>(`${this.baseUrl}/${id}`);
+  }
+}
+
+export const userService = new UserService();
+```
+
+### Storage Service Template
+
+```typescript
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+
+export class StorageService {
+  // AsyncStorage for non-sensitive data
+  async setItem<T>(key: string, value: T): Promise<void> {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem(key, jsonValue);
+    } catch (error) {
+      console.error('Storage setItem error:', error);
+      throw error;
+    }
+  }
+
+  async getItem<T>(key: string): Promise<T | null> {
+    try {
+      const jsonValue = await AsyncStorage.getItem(key);
+      return jsonValue ? JSON.parse(jsonValue) : null;
+    } catch (error) {
+      console.error('Storage getItem error:', error);
+      return null;
+    }
+  }
+
+  async removeItem(key: string): Promise<void> {
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch (error) {
+      console.error('Storage removeItem error:', error);
+      throw error;
+    }
+  }
+
+  async clear(): Promise<void> {
+    try {
+      await AsyncStorage.clear();
+    } catch (error) {
+      console.error('Storage clear error:', error);
+      throw error;
+    }
+  }
+
+  // SecureStore for sensitive data
+  async setSecureItem(key: string, value: string): Promise<void> {
+    try {
+      await SecureStore.setItemAsync(key, value);
+    } catch (error) {
+      console.error('Secure storage setItem error:', error);
+      throw error;
+    }
+  }
+
+  async getSecureItem(key: string): Promise<string | null> {
+    try {
+      return await SecureStore.getItemAsync(key);
+    } catch (error) {
+      console.error('Secure storage getItem error:', error);
+      return null;
+    }
+  }
+
+  async removeSecureItem(key: string): Promise<void> {
+    try {
+      await SecureStore.deleteItemAsync(key);
+    } catch (error) {
+      console.error('Secure storage removeItem error:', error);
+      throw error;
+    }
+  }
+}
+
+export const storage = new StorageService();
+```
+
+## Test Templates
+
+### Component Test Template
+
+```typescript
+import React from 'react';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
+
+import { ComponentName } from './component-name';
+import { ThemeProvider } from '@/context/theme-context';
+
+const renderWithTheme = (component: React.ReactElement) => {
+  return render(
+    <ThemeProvider>
+      {component}
+    </ThemeProvider>
+  );
+};
+
+describe('ComponentName', () => {
+  it('should render correctly', () => {
+    const { getByTestId } = renderWithTheme(
+      <ComponentName testID="component">Test Content</ComponentName>
+    );
+
+    expect(getByTestId('component')).toBeTruthy();
+  });
+
+  it('should handle press events', () => {
+    const mockOnPress = jest.fn();
+    const { getByTestId } = renderWithTheme(
+      <ComponentName onPress={mockOnPress} testID="component">
+        Test Content
+      </ComponentName>
+    );
+
+    fireEvent.press(getByTestId('component'));
+    expect(mockOnPress).toHaveBeenCalledTimes(1);
+  });
+
+  it('should show loading state', () => {
+    const { getByTestId } = renderWithTheme(
+      <ComponentName loading testID="component">
+        Test Content
+      </ComponentName>
+    );
+
+    expect(getByTestId('loading-indicator')).toBeTruthy();
+  });
+});
+```
+
+### Hook Test Template
+
+```typescript
+import { renderHook, act } from '@testing-library/react-native';
+
+import { useHookName } from './use-hook-name';
+
+describe('useHookName', () => {
+  it('should initialize with default state', () => {
+    const { result } = renderHook(() => useHookName());
+
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.data).toBeNull();
+    expect(result.current.error).toBeNull();
+  });
+
+  it('should execute async operation', async () => {
+    const { result } = renderHook(() => useHookName());
+
+    await act(async () => {
+      await result.current.execute();
+    });
+
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.data).toBeDefined();
+  });
+
+  it('should handle errors', async () => {
+    const { result } = renderHook(() => useHookName());
+
+    // Mock error scenario
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    await act(async () => {
+      await result.current.execute();
+    });
+
+    expect(result.current.error).toBeDefined();
+    expect(result.current.isLoading).toBe(false);
+  });
+});
+```
+
+## Utility Templates
+
+### Validation Utility Template
+
+```typescript
+import { z } from 'zod';
+
+// CPF validation
+export const cpfSchema = z.string().refine((cpf) => {
+  const cleanCpf = cpf.replace(/\D/g, '');
+  return cleanCpf.length === 11 && isValidCPF(cleanCpf);
+}, 'Invalid CPF');
+
+export const validateCPF = (cpf: string): boolean => {
+  try {
+    cpfSchema.parse(cpf);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+// Email validation
+export const emailSchema = z.string().email('Invalid email format');
+
+export const validateEmail = (email: string): boolean => {
+  try {
+    emailSchema.parse(email);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+// Phone validation
+export const phoneSchema = z.string().refine((phone) => {
+  const cleanPhone = phone.replace(/\D/g, '');
+  return cleanPhone.length >= 10 && cleanPhone.length <= 11;
+}, 'Invalid phone number');
+
+export const validatePhone = (phone: string): boolean => {
+  try {
+    phoneSchema.parse(phone);
+    return true;
+  } catch {
+    return false;
+  }
+};
+```
+
+### Formatting Utility Template
+
+```typescript
+// Currency formatting
+export const formatCurrency = (value: number): string => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(value);
+};
+
+// Date formatting
+export const formatDate = (date: Date, format: 'short' | 'long' = 'short'): string => {
+  const options: Intl.DateTimeFormatOptions =
+    format === 'short'
+      ? { day: '2-digit', month: '2-digit', year: 'numeric' }
+      : { day: '2-digit', month: 'long', year: 'numeric' };
+
+  return new Intl.DateTimeFormat('pt-BR', options).format(date);
+};
+
+// CPF formatting
+export const formatCPF = (cpf: string): string => {
+  const cleanCpf = cpf.replace(/\D/g, '');
+  return cleanCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+};
+
+// Phone formatting
+export const formatPhone = (phone: string): string => {
+  const cleanPhone = phone.replace(/\D/g, '');
+  if (cleanPhone.length === 11) {
+    return cleanPhone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+  }
+  return cleanPhone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+};
+```
+
+These templates provide consistent patterns for common development tasks. Use them as starting points and customize based on specific requirements.

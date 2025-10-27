@@ -1,0 +1,409 @@
+# React Native Expo Template - Cursor Rules
+
+## Project Context
+
+This is a modern React Native template built with Expo, TypeScript, and enterprise-grade tools. The project follows a modular architecture with a comprehensive design system and production-ready features.
+
+### Technology Stack
+
+- **React Native** with Expo SDK 54+
+- **TypeScript** with strict mode
+- **Expo Router** for file-based navigation
+- **Zustand** for state management
+- **React Hook Form** + **Zod** for form validation
+- **Sentry** for error tracking and performance monitoring
+- **Detox** for E2E testing
+- **Jest** + **React Native Testing Library** for unit testing
+
+### Architecture Decisions
+
+- **Modular Structure**: Feature-based organization with clear separation of concerns
+- **Compound Components**: UI components with Header/Body/Footer patterns
+- **Theme System**: Comprehensive design system with light/dark mode support
+- **Context API**: For global state (theme, auth) with custom hooks
+- **Service Layer**: Abstracted API and storage services
+- **Type Safety**: Strict TypeScript with comprehensive type definitions
+
+## Code Style & Standards
+
+### TypeScript Rules
+
+- Use strict mode consistently - no `any` types
+- Define explicit return types for functions
+- Use `unknown` instead of `any` for type safety
+- Implement type guards for type narrowing
+- Define interfaces for complex objects
+- Use type aliases for union types
+- Prefer `interface` over `type` for object shapes
+- Use generic constraints appropriately
+
+### Naming Conventions
+
+- **Components**: PascalCase (e.g., `Button`, `CardHeader`)
+- **Functions/Variables**: camelCase (e.g., `handlePress`, `isLoading`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `API_BASE_URL`)
+- **Files**: kebab-case (e.g., `button.tsx`, `use-form-data.ts`)
+- **Directories**: kebab-case (e.g., `ui/`, `auth-context/`)
+- **Types/Interfaces**: PascalCase with descriptive suffixes (e.g., `ButtonProps`, `UserProfile`)
+
+### Import Organization
+
+```typescript
+// 1. React and React Native imports
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+
+// 2. Third-party libraries
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+// 3. Expo imports
+import { useRouter } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
+
+// 4. Internal imports (absolute paths)
+import { Button } from '@/components/ui/button';
+import { useThemeColors } from '@/context/theme-context';
+import { validateCPF } from '@/lib/helpers/validation';
+
+// 5. Relative imports
+import { styles } from './styles';
+import { ComponentProps } from './types';
+```
+
+## React Native Expo Best Practices
+
+### Component Structure
+
+- Use functional components with hooks
+- Implement proper prop interfaces with JSDoc
+- Use compound component patterns for complex UI
+- Implement proper accessibility props
+- Use React.memo for performance optimization when needed
+
+### Expo SDK Usage
+
+- Prefer Expo SDK features over bare React Native when available
+- Use `expo-constants` for environment variables
+- Implement proper navigation with Expo Router
+- Use Expo's asset system for images and fonts
+- Leverage `expo-secure-store` for sensitive data
+- Implement OTA updates with `expo-updates`
+
+### Performance Guidelines
+
+- Use `React.memo` for expensive components
+- Implement `useMemo` and `useCallback` appropriately
+- Avoid inline styles in render (use StyleSheet.create)
+- Use FlatList for large lists
+- Lazy load heavy components
+- Optimize image sizes and use appropriate formats
+- Use `nativeDriver` for animations
+
+### Error Handling
+
+- Implement proper error boundaries
+- Use try-catch for async operations
+- Provide user-friendly error messages
+- Log errors to Sentry for monitoring
+- Handle network errors gracefully
+- Implement retry mechanisms for failed requests
+
+## Project-Specific Guidelines
+
+### Theme System Usage
+
+```typescript
+// Always use theme through context
+const { colors, spacing, typography } = useThemeColors();
+
+// Use theme values in styles
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.background,
+    padding: spacing.md,
+  },
+  title: {
+    ...typography.h2,
+    color: colors.textPrimary,
+  },
+});
+```
+
+### Component Library Patterns
+
+- Follow compound component structure (Header, Body, Footer)
+- Implement consistent prop interfaces
+- Use variant-based styling
+- Provide proper TypeScript definitions
+- Include comprehensive JSDoc documentation
+- Support accessibility features
+
+### Form Validation Approach
+
+```typescript
+// Use react-hook-form with Zod validation
+const schema = z.object({
+  email: z.string().email('Invalid email'),
+  password: z.string().min(8, 'Password too short'),
+});
+
+const {
+  control,
+  handleSubmit,
+  formState: { errors },
+} = useForm({
+  resolver: zodResolver(schema),
+});
+```
+
+### API Client Usage
+
+```typescript
+// Use the centralized API client
+import { apiClient } from '@/services/api/client';
+
+const response = await apiClient.get('/users');
+const user = await apiClient.post('/users', userData);
+```
+
+### Storage Patterns
+
+```typescript
+// Use appropriate storage for data type
+import { storage } from '@/services/storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+
+// Non-sensitive data
+await storage.setItem('userPreferences', preferences);
+
+// Sensitive data
+await SecureStore.setItemAsync('authToken', token);
+```
+
+## Quality & Testing
+
+### Testing Approach
+
+- **Unit Tests**: Jest + React Native Testing Library
+- **E2E Tests**: Detox for critical user flows
+- **Component Tests**: Test behavior, not implementation
+- **Integration Tests**: Test service layer interactions
+
+### Code Quality Tools
+
+- **ESLint**: Enforce coding standards
+- **Prettier**: Consistent code formatting
+- **TypeScript**: Type safety and better DX
+- **Knip**: Dead code detection
+- **Husky**: Pre-commit hooks for quality gates
+
+### Commit Message Conventions
+
+```
+feat(component): add Button component with variants
+fix(api): handle network timeout errors
+docs(readme): update installation instructions
+chore(deps): update dependencies to latest versions
+test(button): add unit tests for Button component
+```
+
+## Common Patterns
+
+### Authentication Flow
+
+```typescript
+// Use auth context for global state
+const { user, login, logout, isLoading } = useAuth();
+
+// Handle login
+const handleLogin = async (credentials: LoginCredentials) => {
+  try {
+    await login(credentials);
+    router.push('/(app)');
+  } catch (error) {
+    // Handle error
+  }
+};
+```
+
+### Loading States Management
+
+```typescript
+const [isLoading, setIsLoading] = useState(false);
+const [error, setError] = useState<string | null>(null);
+
+const handleAction = async () => {
+  setIsLoading(true);
+  setError(null);
+  try {
+    await performAction();
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
+```
+
+### Navigation Patterns
+
+```typescript
+// Use Expo Router for navigation
+import { useRouter } from 'expo-router';
+
+const router = useRouter();
+
+// Navigate programmatically
+router.push('/profile');
+router.back();
+router.replace('/(auth)/login');
+```
+
+## Anti-patterns to Avoid
+
+### Performance Anti-patterns
+
+- ❌ Inline arrow functions in render methods
+- ❌ Direct state mutations
+- ❌ Excessive nesting of components
+- ❌ Using `useEffect` for derived state
+- ❌ Prop drilling (use context or composition)
+
+### Code Quality Anti-patterns
+
+- ❌ Using `any` type
+- ❌ Inline styles in render
+- ❌ Missing error handling
+- ❌ Hardcoded values instead of constants
+- ❌ Missing TypeScript definitions
+
+### Security Anti-patterns
+
+- ❌ Storing sensitive data in AsyncStorage
+- ❌ Not validating user inputs
+- ❌ Exposing API keys in code
+- ❌ Not sanitizing data before rendering
+
+## Documentation Standards
+
+### Component Documentation
+
+````typescript
+/**
+ * Button component with multiple variants and sizes
+ *
+ * @example
+ * ```tsx
+ * <Button variant="primary" size="md" onPress={handlePress}>
+ *   Click me
+ * </Button>
+ * ```
+ */
+export const Button: React.FC<ButtonProps> = ({ variant, size, ...props }) => {
+  // Component implementation
+};
+````
+
+### Function Documentation
+
+```typescript
+/**
+ * Formats a CPF number with proper masking
+ * @param cpf - Raw CPF string (11 digits)
+ * @returns Formatted CPF (xxx.xxx.xxx-xx)
+ * @throws {Error} When CPF is invalid
+ */
+export const formatCPF = (cpf: string): string => {
+  // Implementation
+};
+```
+
+## File Organization
+
+```
+src/
+├── app/                  # Expo Router screens
+│   ├── (auth)/          # Authentication screens
+│   ├── (app)/           # Main app screens
+│   └── (tabs)/          # Tab navigation screens
+├── components/           # Reusable UI components
+│   ├── ui/              # Design system components
+│   ├── common/          # Shared components
+│   ├── layout/          # Layout components
+│   └── features/        # Feature-specific components
+├── context/             # React contexts
+├── hooks/               # Custom React hooks
+├── lib/                 # Utilities and helpers
+│   ├── helpers/         # Helper functions
+│   └── utils/           # Utility functions
+├── services/            # API and storage services
+├── types/               # TypeScript type definitions
+└── config/              # Configuration files
+```
+
+## AI Interaction Guidelines
+
+### When to Use AI
+
+- Boilerplate code generation
+- Type definition creation
+- Test case generation
+- Documentation writing
+- Refactoring assistance
+- Bug investigation and debugging
+
+### When to Review Carefully
+
+- Security-related code
+- Performance-critical sections
+- Complex business logic
+- Authentication flows
+- Data validation logic
+- Error handling implementations
+
+### How to Prompt AI Effectively
+
+- Be specific about requirements and constraints
+- Provide context about the project and existing patterns
+- Reference existing code patterns when asking for similar functionality
+- Ask for explanations of complex code
+- Request multiple approaches when unsure
+- Always review generated code before committing
+
+## Enterprise Features
+
+### Error Tracking
+
+- Use Sentry for crash reporting and performance monitoring
+- Implement proper error boundaries
+- Log errors with context and user information
+
+### Performance Monitoring
+
+- Use Shopify Performance for custom metrics
+- Monitor app startup time and navigation performance
+- Track JavaScript thread performance
+
+### Analytics
+
+- Implement Firebase Analytics for user behavior tracking
+- Use Mixpanel for advanced analytics (optional)
+- Track custom events and user properties
+
+### Testing
+
+- Write comprehensive unit tests for business logic
+- Implement E2E tests for critical user flows
+- Use Detox for reliable mobile testing
+- Maintain high test coverage on critical paths
+
+### Security
+
+- Use expo-secure-store for sensitive data
+- Implement proper input validation
+- Sanitize data before rendering
+- Use HTTPS for all API communications
+- Never commit secrets or API keys
+
+Remember: These rules are designed to enhance productivity while maintaining code quality. Always prioritize readability, maintainability, and user experience over clever code.

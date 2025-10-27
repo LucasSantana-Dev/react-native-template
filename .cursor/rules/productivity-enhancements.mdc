@@ -1,0 +1,262 @@
+---
+description: AI interaction strategies and productivity tips
+alwaysApply: true
+---
+
+# Productivity Enhancements & AI Interaction
+
+## AI Prompting Strategies
+
+### Effective Prompting Techniques
+
+#### Be Specific and Contextual
+
+```typescript
+// ❌ Vague prompt
+"Create a button component"
+
+// ✅ Specific prompt
+"Create a Button component with TypeScript that follows our design system:
+- Variants: primary, secondary, outline, ghost, danger
+- Sizes: sm, md, lg
+- Props: onPress, disabled, loading, children
+- Use our theme system with useThemeColors hook
+- Include proper accessibility props
+- Follow compound component pattern for future extensibility"
+```
+
+#### Provide Context and Examples
+
+```typescript
+// ✅ Good prompt with context
+"Refactor this component to use our established patterns:
+- Use the theme system from @/context/theme-context
+- Follow the compound component pattern like our Card component
+- Add proper TypeScript types
+- Include JSDoc documentation
+- Add accessibility props
+
+Current component:
+[component code here]
+
+Reference our Card component pattern:
+[Card component code here]"
+```
+
+#### Reference Existing Patterns
+
+```typescript
+// ✅ Good prompt referencing existing code
+"Create a Modal component following the same patterns as our Card component:
+- Use compound components (Modal.Header, Modal.Body, Modal.Footer)
+- Follow the same TypeScript interface structure
+- Use the same theme integration approach
+- Include the same accessibility patterns
+
+Reference: components/ui/card/card.tsx"
+```
+
+### Code Generation Templates
+
+#### Component Boilerplate
+
+When asking for new components, always include:
+
+- TypeScript interfaces
+- Theme integration
+- Accessibility props
+- JSDoc documentation
+- Error boundaries where appropriate
+
+#### Hook Creation
+
+For custom hooks, specify:
+
+- Return type interface
+- Parameter types
+- Error handling
+- Cleanup logic
+- Memoization where needed
+
+#### Service Layer
+
+For API services, include:
+
+- TypeScript interfaces
+- Error handling
+- Response typing
+- Request configuration
+- Retry logic
+
+## Code Quality Automation
+
+### Pre-commit Hooks
+
+The project includes automated quality gates:
+
+- ESLint with auto-fix
+- Prettier formatting
+- TypeScript type checking
+- Commit message validation
+
+### AI-Assisted Refactoring
+
+Use AI for:
+
+- Extracting reusable components
+- Simplifying complex functions
+- Adding TypeScript types
+- Improving accessibility
+- Optimizing performance
+
+### Code Review Assistance
+
+Ask AI to:
+
+- Review code for potential issues
+- Suggest improvements
+- Check for accessibility compliance
+- Verify TypeScript best practices
+- Ensure consistent patterns
+
+## Development Workflow
+
+### Component Development
+
+1. Start with TypeScript interface
+2. Create basic structure
+3. Add theme integration
+4. Implement accessibility
+5. Add tests
+6. Document with JSDoc
+
+### Feature Development
+
+1. Plan the feature structure
+2. Create types and interfaces
+3. Implement business logic
+4. Create UI components
+5. Add integration tests
+6. Update documentation
+
+### Bug Fixing
+
+1. Reproduce the issue
+2. Identify root cause
+3. Write failing test
+4. Implement fix
+5. Verify test passes
+6. Update documentation
+
+## Common AI Tasks
+
+### Code Generation
+
+- Component boilerplate
+- Type definitions
+- Test cases
+- Documentation
+- Configuration files
+
+### Code Improvement
+
+- Add TypeScript types
+- Improve accessibility
+- Optimize performance
+- Refactor for clarity
+- Add error handling
+
+### Debugging
+
+- Identify issues
+- Suggest fixes
+- Explain error messages
+- Trace execution flow
+- Optimize solutions
+
+## Anti-patterns to Avoid
+
+### Over-reliance on AI
+
+- Don't use AI for critical business logic without review
+- Always understand generated code
+- Test AI-generated code thoroughly
+- Don't commit without understanding changes
+
+### Poor Prompting
+
+- Avoid vague requests
+- Don't skip context
+- Include relevant examples
+- Specify requirements clearly
+- Ask for explanations when needed
+
+### Code Quality Issues
+
+- Don't skip TypeScript types
+- Always include error handling
+- Don't ignore accessibility
+- Test generated code
+- Follow established patterns
+
+## Productivity Tips
+
+### Use AI for Repetitive Tasks
+
+- Generate boilerplate code
+- Create test cases
+- Write documentation
+- Refactor similar patterns
+- Generate type definitions
+
+### Leverage Context
+
+- Reference existing code
+- Use established patterns
+- Follow project conventions
+- Maintain consistency
+- Build on existing work
+
+### Iterative Improvement
+
+- Start with basic implementation
+- Refine with AI assistance
+- Add features incrementally
+- Test each iteration
+- Document changes
+
+### Learning and Growth
+
+- Ask AI to explain complex code
+- Request multiple approaches
+- Learn from generated solutions
+- Understand the reasoning
+- Apply learnings to future work
+
+## Best Practices
+
+### Code Generation
+
+1. Be specific about requirements
+2. Include context and examples
+3. Reference existing patterns
+4. Ask for explanations
+5. Review and test thoroughly
+
+### Code Review
+
+1. Check for type safety
+2. Verify accessibility
+3. Ensure performance
+4. Test functionality
+5. Update documentation
+
+### Maintenance
+
+1. Keep patterns consistent
+2. Update documentation
+3. Refactor when needed
+4. Remove dead code
+5. Optimize performance
+
+Remember: AI is a powerful tool, but it's most effective when used thoughtfully and with proper oversight. Always understand the code you're working with and use AI to enhance your productivity, not replace your judgment.
