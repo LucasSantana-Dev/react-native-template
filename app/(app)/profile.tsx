@@ -1,12 +1,15 @@
-import { useState } from 'react';
-
-import { Alert, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 
 import { ProfileActions } from './components/profile-actions';
 import { ProfileForm } from './components/profile-form';
 import { ProfileHeader } from './components/profile-header';
-import { useProfileHandler } from './hooks/use-profile-handler';
-import { profileValidation } from './validation/profile-validation';
+import { useProfileScreen } from './hooks/use-profile-screen';
+
+import { HeaderLayout } from '@/components/layout/header-layout';
+import { ScreenContainer } from '@/components/layout/screen-container';
+import { Button } from '@/components/ui/button';
+import { User } from '@/context/auth-context';
+import { FormData } from '@/hooks/form/use-form-data';
 
 interface ProfileFormValues {
   name: string;
@@ -14,28 +17,6 @@ interface ProfileFormValues {
   cpf: string;
   phone: string;
 }
-
-// Helper functions to reduce complexity
-const createPasswordChangeHandler = () => {
-  return () => Alert.alert('Alterar Senha', 'Funcionalidade em desenvolvimento');
-};
-
-const createDeleteAccountHandler = () => {
-  return () => {
-    Alert.alert(
-      'Excluir Conta',
-      'Esta ação não pode ser desfeita. Tem certeza que deseja excluir sua conta?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Excluir',
-          style: 'destructive',
-          onPress: () => Alert.alert('Conta Excluída', 'Sua conta foi excluída com sucesso.'),
-        },
-      ],
-    );
-  };
-};
 
 const getUserWithDefaults = (user: User | null) => {
   return user
@@ -53,55 +34,73 @@ const getUserWithDefaults = (user: User | null) => {
       };
 };
 
-import { HeaderLayout } from '@/components/layout/header-layout';
-import { ScreenContainer } from '@/components/layout/screen-container';
-import { Button } from '@/components/ui/button';
-import { useAuth, User } from '@/context/auth-context';
-import { useThemeColors } from '@/context/theme-context';
-import { useFormData } from '@/hooks/form/use-form-data';
+const prepareFormState = (
+  data: FormData<ProfileFormValues>,
+  errors: Record<string, string>,
+  isLoading: boolean,
+) => ({
+  values: {
+    name: data.name.value,
+    email: data.email.value,
+    cpf: data.cpf.value,
+    phone: data.phone.value,
+  },
+  errors,
+  touched: {
+    name: data.name.touched,
+    email: data.email.touched,
+    cpf: data.cpf.touched,
+    phone: data.phone.touched,
+  },
+  isSubmitting: isLoading,
+});
+
+// Profile form component to reduce complexity
+const ProfileFormSection = ({
+  data,
+  errors,
+  isLoading,
+  setFieldValue,
+  setFieldTouched,
+  handleSaveProfile,
+}: {
+  data: FormData<ProfileFormValues>;
+  errors: Record<string, string>;
+  isLoading: boolean;
+  setFieldValue: (field: keyof ProfileFormValues, value: string) => void;
+  setFieldTouched: (field: keyof ProfileFormValues) => void;
+  handleSaveProfile: (values: ProfileFormValues) => Promise<void>;
+}) => (
+  <ProfileForm
+    formState={prepareFormState(data, errors, isLoading)}
+    setFieldValue={(field: string, value: string) =>
+      setFieldValue(field as keyof ProfileFormValues, value)
+    }
+    setFieldTouched={(field: string) => setFieldTouched(field as keyof ProfileFormValues)}
+    isLoading={isLoading}
+    onSave={handleSaveProfile}
+    formattedCPF={data.cpf.value}
+    formattedPhone={data.phone.value}
+  />
+);
 
 // ========== PROFILE SCREEN ==========
 export default function ProfileScreen() {
-  const { user } = useAuth();
-  const colors = useThemeColors();
-  const [isEditing, setIsEditing] = useState(false);
-  const { isLoading, handleSubmit, handleSignOut } = useProfileHandler();
-
-  // Form management
-  const formData = useFormData<ProfileFormValues>({
-    initialValues: {
-      name: user?.name || '',
-      email: user?.email || '',
-      cpf: user?.cpf || '',
-      phone: user?.phone || '',
-    },
-    validation: profileValidation,
-    validateOnChange: true,
-    validateOnBlur: true,
-  });
-
-  const { data, errors, setFieldValue, setFieldTouched, resetForm } = formData;
-
-  // Event handlers
-  const handleEditToggle = () => {
-    if (isEditing) {
-      resetForm();
-    }
-    setIsEditing(!isEditing);
-  };
-
-  const handleSaveProfile = async (values: ProfileFormValues) => {
-    try {
-      await handleSubmit(values);
-      setIsEditing(false);
-      Alert.alert('Sucesso', 'Perfil atualizado com sucesso!');
-    } catch {
-      Alert.alert('Erro', 'Falha ao atualizar perfil. Tente novamente.');
-    }
-  };
-
-  const handleChangePassword = createPasswordChangeHandler();
-  const handleDeleteAccount = createDeleteAccountHandler();
+  const {
+    user,
+    colors,
+    isEditing,
+    isLoading,
+    handleSignOut,
+    data,
+    errors,
+    setFieldValue,
+    setFieldTouched,
+    handleEditToggle,
+    handleSaveProfile,
+    handleChangePassword,
+    handleDeleteAccount,
+  } = useProfileScreen();
 
   return (
     <ScreenContainer safeArea>
@@ -128,31 +127,13 @@ export default function ProfileScreen() {
       >
         <ProfileHeader user={getUserWithDefaults(user)} />
 
-        <ProfileForm
-          formState={{
-            values: {
-              name: data.name.value,
-              email: data.email.value,
-              cpf: data.cpf.value,
-              phone: data.phone.value,
-            },
-            errors,
-            touched: {
-              name: data.name.touched,
-              email: data.email.touched,
-              cpf: data.cpf.touched,
-              phone: data.phone.touched,
-            },
-            isSubmitting: isLoading,
-          }}
-          setFieldValue={(field: string, value: string) =>
-            setFieldValue(field as keyof ProfileFormValues, value)
-          }
-          setFieldTouched={(field: string) => setFieldTouched(field as keyof ProfileFormValues)}
+        <ProfileFormSection
+          data={data}
+          errors={errors}
           isLoading={isLoading}
-          onSave={handleSaveProfile}
-          formattedCPF={data.cpf.value}
-          formattedPhone={data.phone.value}
+          setFieldValue={setFieldValue}
+          setFieldTouched={setFieldTouched}
+          handleSaveProfile={handleSaveProfile}
         />
 
         <ProfileActions

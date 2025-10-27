@@ -1,14 +1,15 @@
 import React from 'react';
 
-import { GestureResponderEvent, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
+import { prepareButtonContentProps, renderButtonContent } from './button-helpers';
 import {
+  createButtonPressHandler,
+  createButtonStyleConfig,
   getButtonState,
   hasButtonIcon,
-  renderButtonContent,
   shouldRenderText,
-} from './button-helpers';
-import { getButtonStyles, getIconConfig, getLoadingStyles } from './styles';
+} from './button-utils';
 import { ButtonProps } from './types';
 
 /**
@@ -62,37 +63,35 @@ export const Button: React.FC<ButtonProps> = props => {
   // Determine if we have an icon using helper
   const hasIcon = hasButtonIcon(icon);
 
-  // Get button styles
-  const buttonStyles = getButtonStyles(variant, size, isDisabled, fullWidth);
-
-  // Get icon configuration
-  const iconConfig = hasIcon ? getIconConfig(size, iconColor, iconPosition) : null;
-
-  // Get loading styles
-  const loadingStyles = getLoadingStyles();
+  // Get button style configuration
+  const { buttonStyles, iconConfig, loadingStyles } = createButtonStyleConfig({
+    variant,
+    size,
+    isDisabled,
+    fullWidth,
+    iconColor,
+    iconPosition,
+  });
 
   // Handle press events
-  const handlePress = (event: GestureResponderEvent) => {
-    if (isDisabled || loading) return;
-    onPress?.(event);
-  };
+  const handlePress = createButtonPressHandler(isDisabled, loading, onPress);
 
   // Prepare button content props
-  const buttonContentProps = {
+  const buttonContentProps = prepareButtonContentProps({
     icon,
     iconSize: _iconSize,
     iconColor,
     iconPosition,
     children,
-    loading: Boolean(loading),
+    loading,
     hasText,
     hasIcon,
     rawChildren,
     buttonStyles,
-    iconConfig: (iconConfig || {}) as Record<string, unknown>,
+    iconConfig,
     loadingStyles,
-    textStyle: (textStyle || {}) as Record<string, unknown>,
-  };
+    textStyle,
+  });
 
   return (
     <TouchableOpacity

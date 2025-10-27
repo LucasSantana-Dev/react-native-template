@@ -8,7 +8,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { FieldValues } from 'react-hook-form';
+import { Control, FieldValues, RegisterOptions } from 'react-hook-form';
 
 import { renderInputContent, renderInputWithController } from './input-content-renderer';
 import { InputProps } from './types';
@@ -37,10 +37,10 @@ export const renderInput = <T extends FieldValues>(props: InputRendererProps<T>)
 export const renderControlledInput = <T extends FieldValues>(
   props: InputRendererProps<T> & {
     name: string;
-    control: any;
-    rules?: any;
-    defaultValue?: any;
+    control: Control<T>;
+    rules?: RegisterOptions<T>;
+    defaultValue?: unknown;
   },
 ) => {
-  return renderInputWithController(props as any);
+  return renderInputWithController(props);
 };

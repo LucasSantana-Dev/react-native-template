@@ -29,6 +29,58 @@ interface RenderProps {
 }
 
 /**
+ * Input props for button content preparation
+ */
+interface ButtonContentPropsInput {
+  icon?: string | React.ReactNode;
+  iconSize?: number;
+  iconColor?: string;
+  iconPosition?: 'left' | 'right';
+  children?: React.ReactNode;
+  loading?: boolean;
+  hasText: boolean;
+  hasIcon: boolean;
+  rawChildren?: boolean;
+  buttonStyles: Record<string, unknown>;
+  iconConfig: Record<string, unknown> | null;
+  loadingStyles: Record<string, unknown>;
+  textStyle?: Record<string, unknown>;
+}
+
+/**
+ * Prepare button content props to reduce complexity
+ */
+export const prepareButtonContentProps = ({
+  icon,
+  iconSize,
+  iconColor,
+  iconPosition,
+  children,
+  loading,
+  hasText,
+  hasIcon,
+  rawChildren,
+  buttonStyles,
+  iconConfig,
+  loadingStyles,
+  textStyle,
+}: ButtonContentPropsInput) => ({
+  icon,
+  iconSize,
+  iconColor,
+  iconPosition,
+  children,
+  loading: Boolean(loading),
+  hasText,
+  hasIcon,
+  rawChildren,
+  buttonStyles,
+  iconConfig: iconConfig || {},
+  loadingStyles,
+  textStyle: textStyle || {},
+});
+
+/**
  * Render the button icon
  */
 export const renderButtonIcon = ({
@@ -170,58 +222,4 @@ export const renderButtonContent = ({
     hasIcon,
     iconPosition,
   });
-};
-
-/**
- * Get button state helper
- */
-export const getButtonState = (
-  disabled: boolean,
-  loading: boolean,
-  state: string,
-): { isDisabled: boolean } => {
-  const isDisabled = disabled || loading || state === 'disabled';
-  return { isDisabled };
-};
-
-/**
- * Determine if button should render text
- */
-export const shouldRenderText = (
-  rawChildren: boolean,
-  children: React.ReactNode,
-  forceIcon: boolean,
-): boolean => {
-  return Boolean(!rawChildren && children && !forceIcon);
-};
-
-/**
- * Determine if button has an icon
- */
-export const hasButtonIcon = (icon: string | React.ReactNode | undefined): boolean => {
-  return Boolean(icon);
-};
-
-/**
- * Get button variant styles helper
- */
-export const getButtonVariantStyles = (variant: string, isDisabled: boolean) => {
-  // This would contain the logic for determining button styles based on variant
-  // For now, we'll return a placeholder
-  return (
-    {
-      primary: {
-        backgroundColor: isDisabled ? '#ccc' : '#007AFF',
-        borderColor: isDisabled ? '#ccc' : '#007AFF',
-      },
-      secondary: {
-        backgroundColor: isDisabled ? '#f0f0f0' : 'transparent',
-        borderColor: isDisabled ? '#ccc' : '#007AFF',
-      },
-      danger: {
-        backgroundColor: isDisabled ? '#ccc' : '#FF3B30',
-        borderColor: isDisabled ? '#ccc' : '#FF3B30',
-      },
-    }[variant] || {}
-  );
 };

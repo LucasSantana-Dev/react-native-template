@@ -9,7 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { Controller, FieldValues } from 'react-hook-form';
+import { Control, Controller, FieldValues, RegisterOptions } from 'react-hook-form';
 
 import {
   renderErrorMessage,
@@ -31,7 +31,7 @@ interface InputContentRendererProps<T extends FieldValues = FieldValues>
   handleFocus: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   handleBlur: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   ref: React.Ref<TextInput>;
-  inputProps?: any;
+  inputProps?: Omit<TextInputProps, 'style'>;
 }
 
 // Helper function to render common input content
@@ -133,9 +133,9 @@ export const renderInputWithController = <T extends FieldValues>({
   ...inputProps
 }: InputContentRendererProps<T> & {
   name: string;
-  control: any;
-  rules?: any;
-  defaultValue?: any;
+  control: Control<T>;
+  rules?: RegisterOptions<T>;
+  defaultValue?: unknown;
 }) => {
   return (
     <Controller
