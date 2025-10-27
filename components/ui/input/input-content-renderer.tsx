@@ -31,6 +31,7 @@ interface InputContentRendererProps<T extends FieldValues>
   handleFocus: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   handleBlur: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   ref: React.Ref<TextInput>;
+  inputProps?: any;
 }
 
 // Helper function to render common input content
@@ -67,6 +68,7 @@ export const renderInputContent = ({
         labelStyle,
         labelContainerStyle,
         requiredStyles,
+        inputStyles,
       })}
 
       {/* Input Container */}
@@ -77,6 +79,7 @@ export const renderInputContent = ({
           onLeftIconPress,
           iconStyles,
           isDisabled,
+          inputStyles,
         })}
 
         {/* Input Field */}
@@ -97,6 +100,7 @@ export const renderInputContent = ({
           onRightIconPress,
           iconStyles,
           isDisabled,
+          inputStyles,
         })}
 
         {/* Children (for custom content) */}
@@ -129,9 +133,9 @@ export const renderInputWithController = <T extends FieldValues>({
   ...inputProps
 }: InputContentRendererProps<T> & {
   name: string;
-  control: unknown;
-  rules?: unknown;
-  defaultValue?: string;
+  control: any;
+  rules?: any;
+  defaultValue?: any;
 }) => {
   return (
     <Controller
@@ -148,6 +152,7 @@ export const renderInputWithController = <T extends FieldValues>({
             labelStyle: inputProps.labelStyle,
             labelContainerStyle: inputProps.labelContainerStyle,
             requiredStyles,
+            inputStyles,
           })}
 
           {/* Input Container */}
@@ -158,6 +163,7 @@ export const renderInputWithController = <T extends FieldValues>({
               onLeftIconPress: inputProps.onLeftIconPress,
               iconStyles,
               isDisabled,
+              inputStyles,
             })}
 
             {/* Input Field */}
@@ -183,6 +189,7 @@ export const renderInputWithController = <T extends FieldValues>({
               onRightIconPress: inputProps.onRightIconPress,
               iconStyles,
               isDisabled,
+              inputStyles,
             })}
 
             {/* Children (for custom content) */}

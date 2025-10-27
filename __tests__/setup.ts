@@ -21,8 +21,8 @@ jest.mock('@testing-library/react-native', () => {
 });
 
 // Mock global Platform
-global.Platform = {
+(global as any).Platform = {
   OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
+  select: jest.fn((obj: any) => obj.ios || obj.default),
   Version: '14.0',
 };
