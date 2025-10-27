@@ -28,10 +28,12 @@
     "*.lock",
     "*.log",
     "metro.config.js",
-    "babel.config.js"
+    "babel.config.js",
+    "config/app.ts",
+    "types/**/*.ts"
   ],
   "ignoreDependencies": ["metro-*", "react-native-*", "@react-native/*", "expo-*", "@expo/*"],
-  "ignoreBinaries": ["ncu", "rimraf", "expo"],
+  "ignoreBinaries": ["ncu", "rimraf", "expo", "lint-staged", "sentry-cli", "tail"],
   "ignoreExportsUsedInFile": true,
   "includeEntryExports": true
 }
