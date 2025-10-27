@@ -235,5 +235,24 @@ export default [
     },
   },
 
+  // Config files configuration
+  {
+    files: ['*.config.js', '.detoxrc.js', '*.config.cjs'],
+    languageOptions: {
+      globals: {
+        module: 'readonly',
+        require: 'readonly',
+        exports: 'readonly',
+        process: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+      },
+    },
+    rules: {
+      'no-console': 'off', // Allow console in config files
+      'max-lines': 'off', // Allow longer config files
+    },
+  },
+
   prettierConfig,
 ];
