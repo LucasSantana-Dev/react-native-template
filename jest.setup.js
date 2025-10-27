@@ -6,6 +6,13 @@ global.$RefreshReg$ = global.$RefreshReg$ || (() => {});
 global.$RefreshSig$ = global.$RefreshSig$ || (() => () => {});
 global.__DEV__ = global.__DEV__ || true;
 
+// CRITICAL: Mock Platform immediately to prevent undefined errors
+global.Platform = global.Platform || {
+  OS: 'ios',
+  select: jest.fn((obj) => obj.ios || obj.default),
+  Version: '14.0',
+};
+
 // Mock Platform BEFORE any React Native imports
 global.Platform = {
   OS: 'ios',

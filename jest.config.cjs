@@ -1,5 +1,5 @@
 module.exports = {
-  setupFiles: ['<rootDir>/jest.setup.js', '<rootDir>/__tests__/setup.ts'],
+  setupFiles: ['<rootDir>/jest.setup.js', '<rootDir>/__tests__/setup.js'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.after.js'],
   globals: {
     $RefreshReg$: () => {},
