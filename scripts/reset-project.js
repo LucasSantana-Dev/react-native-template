@@ -53,7 +53,7 @@ const createExampleDirectory = async () => {
   console.log(`📁 /${exampleDir} directory created.`);
 };
 
-const processOldDirectories = async (userInput) => {
+const processOldDirectories = async userInput => {
   for (const dir of oldDirs) {
     const oldDirPath = path.join(root, dir);
     if (fs.existsSync(oldDirPath)) {
@@ -87,7 +87,7 @@ const createNewAppDirectory = async () => {
   console.log('📄 app/_layout.tsx created.');
 };
 
-const showCompletionMessage = (userInput) => {
+const showCompletionMessage = userInput => {
   console.log('\n✅ Project reset complete. Next steps:');
   console.log(
     `1. Run \`npx expo start\` to start a development server.\n2. Edit app/index.tsx to edit the main screen.${
@@ -98,7 +98,7 @@ const showCompletionMessage = (userInput) => {
   );
 };
 
-const moveDirectories = async (userInput) => {
+const moveDirectories = async userInput => {
   try {
     if (userInput === 'y') {
       await createExampleDirectory();
