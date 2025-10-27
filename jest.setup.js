@@ -6,44 +6,24 @@ global.$RefreshReg$ = global.$RefreshReg$ || (() => {});
 global.$RefreshSig$ = global.$RefreshSig$ || (() => () => {});
 global.__DEV__ = global.__DEV__ || true;
 
-// Disable React Native Testing Library host component detection
-process.env.RTL_SKIP_AUTO_CLEANUP = 'true';
-process.env.RTL_SKIP_HOST_COMPONENT_DETECTION = 'true';
-process.env.RTL_SKIP_AUTO_DETECT_HOST_COMPONENTS = 'true';
-process.env.RTL_SKIP_HOST_COMPONENT_DETECTION = 'true';
-process.env.RTL_SKIP_HOST_COMPONENT_DETECTION = 'true';
-process.env.RTL_SKIP_HOST_COMPONENT_DETECTION = 'true';
-
-// Also define on window if it exists
-if (typeof window !== 'undefined') {
-  if (typeof window.$RefreshReg$ === 'undefined') {
-    window.$RefreshReg$ = () => {};
-  }
-  if (typeof window.$RefreshSig$ === 'undefined') {
-    window.$RefreshSig$ = () => () => {};
-  }
-}
-
-// React Native globals are defined above
-
-// Mock React Native bridge
-global.__fbBatchedBridgeConfig = {
-  remoteModuleConfig: [],
-  localModuleConfig: [],
+// Mock Platform BEFORE any React Native imports
+global.Platform = {
+  OS: 'ios',
+  select: jest.fn((obj) => obj.ios || obj.default),
+  Version: '14.0',
 };
 
-// Mock Platform
+// Mock Platform module
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'ios',
   select: jest.fn((obj) => obj.ios || obj.default),
   Version: '14.0',
 }));
 
-// Mock Platform globally for React Native Testing Library
-global.Platform = {
-  OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
-  Version: '14.0',
+// Mock React Native bridge
+global.__fbBatchedBridgeConfig = {
+  remoteModuleConfig: [],
+  localModuleConfig: [],
 };
 
 // Mock Dimensions API
@@ -68,13 +48,6 @@ jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => ({
   })),
 }));
 
-// Mock Platform specifically
-jest.mock('react-native/Libraries/Utilities/Platform', () => ({
-  OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
-  Version: '14.0',
-}));
-
 // Mock PixelRatio to prevent errors in StyleSheet
 jest.mock('react-native/Libraries/Utilities/PixelRatio', () => ({
   get: jest.fn(() => 2),
@@ -82,13 +55,6 @@ jest.mock('react-native/Libraries/Utilities/PixelRatio', () => ({
   getPixelSizeForLayoutSize: jest.fn((size) => size * 2),
   roundToNearestPixel: jest.fn((size) => Math.round(size)),
 }));
-
-// Mock Platform at the top level
-global.Platform = {
-  OS: 'ios',
-  select: jest.fn((obj) => obj.ios || obj.default),
-  Version: '14.0',
-};
 
 // Mock Detox device for E2E tests
 global.device = {
@@ -147,8 +113,6 @@ global.by = {
   and: jest.fn(),
   not: jest.fn(),
 };
-
-// Detox matchers will be added in jest.setup.after.js
 
 // Mock global variables that might be missing in test environment
 global.requestAnimationFrame =

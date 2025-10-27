@@ -1,5 +1,5 @@
 module.exports = {
-  setupFiles: ['<rootDir>/jest.setup.js'],
+  setupFiles: ['<rootDir>/jest.setup.js', '<rootDir>/__tests__/setup.ts'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.after.js'],
   globals: {
     $RefreshReg$: () => {},
@@ -31,7 +31,7 @@ module.exports = {
     '^@services/(.*)$': '<rootDir>/services/$1',
     '^@types/(.*)$': '<rootDir>/types/$1',
   },
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testMatch: ['**/__tests__/**/*.(ts|tsx|js)', '**/*.(test|spec).(ts|tsx|js)'],
 };
