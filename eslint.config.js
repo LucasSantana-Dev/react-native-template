@@ -198,5 +198,42 @@ export default [
     },
   },
 
+  // Jest configuration
+  {
+    files: [
+      '**/*.test.{js,jsx,ts,tsx}',
+      '**/*.spec.{js,jsx,ts,tsx}',
+      'jest.setup.js',
+      '**/__tests__/**/*.{js,jsx,ts,tsx}',
+    ],
+    languageOptions: {
+      globals: {
+        global: 'readonly',
+        console: 'readonly',
+        process: 'readonly',
+        Buffer: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+        exports: 'readonly',
+        beforeAll: 'readonly',
+        beforeEach: 'readonly',
+        afterAll: 'readonly',
+        afterEach: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        jest: 'readonly',
+      },
+    },
+    rules: {
+      'no-console': 'off', // Allow console in tests
+      'max-lines': 'off', // Allow longer test files
+      'max-lines-per-function': 'off', // Allow longer test functions
+    },
+  },
+
   prettierConfig,
 ];
