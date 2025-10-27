@@ -27,10 +27,4 @@ global.Platform = {
   Version: '14.0',
 };
 
-// Setup file - add minimal test to satisfy Jest requirement
-describe('Test Setup', () => {
-  it('should have Platform.OS mocked', () => {
-    // This test ensures the setup file is valid
-    expect(true).toBe(true);
-  });
-});
+// Setup file - configuration only, no tests
