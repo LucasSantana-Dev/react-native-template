@@ -3,6 +3,9 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "type": "module",
+  "overrides": {
+    "react-test-renderer": "$react"
+  },
   "scripts": {
     "prepare": "husky",
     "start": "expo start",
