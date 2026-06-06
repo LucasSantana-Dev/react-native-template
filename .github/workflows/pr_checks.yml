@@ -37,13 +37,15 @@ jobs:
           echo "SHA: ${{ github.sha }}"
 
           # Initialize all outputs to false
-          echo "source=false" >> $GITHUB_OUTPUT
-          echo "native-ios=false" >> $GITHUB_OUTPUT
-          echo "native-android=false" >> $GITHUB_OUTPUT
-          echo "dependencies=false" >> $GITHUB_OUTPUT
-          echo "config=false" >> $GITHUB_OUTPUT
-          echo "docs=false" >> $GITHUB_OUTPUT
-          echo "ci=false" >> $GITHUB_OUTPUT
+          {
+            echo "source=false"
+            echo "native-ios=false"
+            echo "native-android=false"
+            echo "dependencies=false"
+            echo "config=false"
+            echo "docs=false"
+            echo "ci=false"
+          } >> "$GITHUB_OUTPUT"
 
           # Get list of changed files with error handling
           CHANGED_FILES=""
@@ -66,66 +68,62 @@ jobs:
           # If no changes detected, assume all changes for safety
           if [ -z "$CHANGED_FILES" ]; then
             echo "⚠️ No changed files detected, assuming all changes for safety"
-            echo "source=true" >> $GITHUB_OUTPUT
-            echo "native-ios=true" >> $GITHUB_OUTPUT
-            echo "native-android=true" >> $GITHUB_OUTPUT
-            echo "dependencies=true" >> $GITHUB_OUTPUT
-            echo "config=true" >> $GITHUB_OUTPUT
-            echo "docs=true" >> $GITHUB_OUTPUT
-            echo "ci=true" >> $GITHUB_OUTPUT
+            {
+              echo "source=true"
+              echo "native-ios=true"
+              echo "native-android=true"
+              echo "dependencies=true"
+              echo "config=true"
+              echo "docs=true"
+              echo "ci=true"
+            } >> "$GITHUB_OUTPUT"
           else
             # Check for source changes
             if echo "$CHANGED_FILES" | grep -q "src/\|index\.js\|\.js$\|\.ts$\|\.tsx$"; then
-              echo "source=true" >> $GITHUB_OUTPUT
+              echo "source=true" >> "$GITHUB_OUTPUT"
               echo "✅ Source files changed"
             fi
 
             # Check for iOS changes
             if echo "$CHANGED_FILES" | grep -q "ios/\|Podfile\|Podfile\.lock"; then
-              echo "native-ios=true" >> $GITHUB_OUTPUT
+              echo "native-ios=true" >> "$GITHUB_OUTPUT"
               echo "✅ iOS files changed"
             fi
 
             # Check for Android changes
             if echo "$CHANGED_FILES" | grep -q "android/\|\.gradle\|gradle-wrapper\.properties"; then
-              echo "native-android=true" >> $GITHUB_OUTPUT
+              echo "native-android=true" >> "$GITHUB_OUTPUT"
               echo "✅ Android files changed"
             fi
 
             # Check for dependency changes
             if echo "$CHANGED_FILES" | grep -q "package\.json\|package-lock\.json"; then
-              echo "dependencies=true" >> $GITHUB_OUTPUT
+              echo "dependencies=true" >> "$GITHUB_OUTPUT"
               echo "✅ Dependency files changed"
             fi
 
             # Check for config changes
             if echo "$CHANGED_FILES" | grep -q "\.config\.\|tsconfig\.json\|babel\.config\.js\|\.eslintrc\.js\|\.prettierrc\.js"; then
-              echo "config=true" >> $GITHUB_OUTPUT
+              echo "config=true" >> "$GITHUB_OUTPUT"
               echo "✅ Config files changed"
             fi
 
             # Check for docs changes
             if echo "$CHANGED_FILES" | grep -q "\.md$\|docs/"; then
-              echo "docs=true" >> $GITHUB_OUTPUT
+              echo "docs=true" >> "$GITHUB_OUTPUT"
               echo "✅ Documentation files changed"
             fi
 
             # Check for CI changes
             if echo "$CHANGED_FILES" | grep -q "\.github/"; then
-              echo "ci=true" >> $GITHUB_OUTPUT
+              echo "ci=true" >> "$GITHUB_OUTPUT"
               echo "✅ CI files changed"
             fi
           fi
 
           echo ""
-          echo "📊 Change Detection Summary:"
-          echo "  Source: ${{ steps.changes.outputs.source }}"
-          echo "  iOS: ${{ steps.changes.outputs.native-ios }}"
-          echo "  Android: ${{ steps.changes.outputs.native-android }}"
-          echo "  Dependencies: ${{ steps.changes.outputs.dependencies }}"
-          echo "  Config: ${{ steps.changes.outputs.config }}"
-          echo "  Docs: ${{ steps.changes.outputs.docs }}"
-          echo "  CI: ${{ steps.changes.outputs.ci }}"
+          echo "📊 Change detection complete — per-flag results logged above."
+          echo "   (Outputs are consumed by downstream jobs via needs.detect-changes.outputs.*)"
   # Base setup job - all other jobs depend on this
   # Context-specific installation jobs for optimal parallel execution
   install-node-deps:
@@ -336,7 +334,7 @@ jobs:
           # Validate each commit message
           for commit in $COMMITS; do
             echo "Validating commit: $commit"
-            git log --format=%B -n 1 $commit | npx commitlint
+            git log --format=%B -n 1 "$commit" | npx commitlint
           done
 
   pr-size-check:
@@ -387,13 +385,13 @@ jobs:
           # Check thresholds
           FAILED=false
 
-          if [ $CHANGED_FILES -gt $MAX_FILES ]; then
+          if [ "$CHANGED_FILES" -gt "$MAX_FILES" ]; then
             echo "❌ Too many files changed: $CHANGED_FILES > $MAX_FILES"
             echo "   Consider splitting this PR into smaller ones"
             FAILED=true
           fi
 
-          if [ $LINES_CHANGED -gt $MAX_LINES ]; then
+          if [ "$LINES_CHANGED" -gt "$MAX_LINES" ]; then
             echo "❌ Too many lines changed: $LINES_CHANGED > $MAX_LINES"
             echo "   Consider splitting this PR into smaller ones"
             FAILED=true
@@ -770,6 +768,7 @@ jobs:
           if [ -d "Pods/BVLinearGradient" ]; then
             echo "✅ BVLinearGradient installed"
           fi
+          # shellcheck disable=SC2012  # counting pod dirs by name; ls is fine here
           echo "Total pods installed: $(ls -1 Pods | wc -l)"
 
           # Clean derived data again after CocoaPods installation
@@ -813,6 +812,7 @@ jobs:
           else
             echo "❌ BVLinearGradient not found in Pods directory"
             echo "Available pods:"
+            # shellcheck disable=SC2010  # diagnostic listing of known pod names; ls|grep is fine here
             ls -la Pods/ | grep -i linear || echo "No linear gradient pods found"
           fi
 
@@ -845,6 +845,7 @@ jobs:
 
           # Check if bundles exist
           if [ -f "android/app/src/main/assets/index.android.bundle" ]; then
+            # shellcheck disable=SC2012  # fixed bundle path, need ls -lh for human-readable size
             ANDROID_SIZE=$(ls -lh android/app/src/main/assets/index.android.bundle | awk '{print $5}')
             ANDROID_BYTES=$(stat -f%z android/app/src/main/assets/index.android.bundle)
             echo "🤖 Android Bundle: $ANDROID_SIZE ($ANDROID_BYTES bytes)"
@@ -853,6 +854,7 @@ jobs:
           fi
 
           if [ -f "ios/main.jsbundle" ]; then
+            # shellcheck disable=SC2012  # fixed bundle path, need ls -lh for human-readable size
             IOS_SIZE=$(ls -lh ios/main.jsbundle | awk '{print $5}')
             IOS_BYTES=$(stat -f%z ios/main.jsbundle)
             echo "🍎 iOS Bundle: $IOS_SIZE ($IOS_BYTES bytes)"
